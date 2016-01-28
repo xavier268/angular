@@ -350,7 +350,6 @@ export class ChangeDetectorJITGenerator {
     var condition = `!${pipe}.pure || (${contexOrArgCheck.join(" || ")})`;
 
     var check = `
-      ${this._genThrowOnChangeCheck(oldValue, newValue)}
       if (${this.changeDetectionUtilVarName}.looseNotIdentical(${oldValue}, ${newValue})) {
         ${newValue} = ${this.changeDetectionUtilVarName}.unwrapValue(${newValue})
         ${this._genChangeMarker(r)}
@@ -378,7 +377,6 @@ export class ChangeDetectorJITGenerator {
     `;
 
     var check = `
-      ${this._genThrowOnChangeCheck(oldValue, newValue)}
       if (${this.changeDetectionUtilVarName}.looseNotIdentical(${oldValue}, ${newValue})) {
         ${this._genChangeMarker(r)}
         ${this._genUpdateDirectiveOrElement(r)}
@@ -411,6 +409,7 @@ export class ChangeDetectorJITGenerator {
     if (!r.lastInBinding) return "";
 
     var newValue = this._names.getLocalName(r.selfIndex);
+    var oldValue = this._names.getFieldName(r.selfIndex);
     var notifyDebug = this.genConfig.logBindingUpdate ? `this.logBindingUpdate(${newValue});` : "";
 
     var br = r.bindingRecord;
@@ -418,12 +417,14 @@ export class ChangeDetectorJITGenerator {
       var directiveProperty =
           `${this._names.getDirectiveName(br.directiveRecord.directiveIndex)}.${br.target.name}`;
       return `
+        ${this._genThrowOnChangeCheck(oldValue, newValue)}
         ${directiveProperty} = ${newValue};
         ${notifyDebug}
         ${IS_CHANGED_LOCAL} = true;
       `;
     } else {
       return `
+        ${this._genThrowOnChangeCheck(oldValue, newValue)}
         this.notifyDispatcher(${newValue});
         ${notifyDebug}
       `;
@@ -434,7 +435,7 @@ export class ChangeDetectorJITGenerator {
   _genThrowOnChangeCheck(oldValue: string, newValue: string): string {
     if (assertionsEnabled()) {
       return `
-        if (throwOnChange && !${this.changeDetectionUtilVarName}.devModeEqual(${oldValue}, ${newValue})) {
+        if(throwOnChange) {
           this.throwOnChangeError(${oldValue}, ${newValue});
         }
         `;

@@ -4,17 +4,10 @@ import {
   isBlank,
   Type,
   StringWrapper,
-  looseIdentical,
-  isPrimitive
+  looseIdentical
 } from 'angular2/src/facade/lang';
 import {BaseException} from 'angular2/src/facade/exceptions';
-import {
-  ListWrapper,
-  MapWrapper,
-  StringMapWrapper,
-  isListLikeIterable,
-  areIterablesEqual
-} from 'angular2/src/facade/collection';
+import {ListWrapper, MapWrapper, StringMapWrapper} from 'angular2/src/facade/collection';
 import {ProtoRecord} from './proto_record';
 import {ChangeDetectionStrategy, isDefaultChangeDetectionStrategy} from './constants';
 import {implementsOnDestroy} from './pipe_lifecycle_reflector';
@@ -221,17 +214,4 @@ export class ChangeDetectionUtil {
   }
 
   static looseNotIdentical(a: any, b: any): boolean { return !looseIdentical(a, b); }
-
-  static devModeEqual(a: any, b: any): boolean {
-    if (isListLikeIterable(a) && isListLikeIterable(b)) {
-      return areIterablesEqual(a, b, ChangeDetectionUtil.devModeEqual);
-
-    } else if (!isListLikeIterable(a) && !isPrimitive(a) && !isListLikeIterable(b) &&
-               !isPrimitive(b)) {
-      return true;
-
-    } else {
-      return looseIdentical(a, b);
-    }
-  }
 }

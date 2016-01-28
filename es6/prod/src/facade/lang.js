@@ -342,6 +342,3 @@ export function evalExpression(sourceUrl, expr, declarations, vars) {
     }
     return new Function(...fnArgNames.concat(fnBody))(...fnArgValues);
 }
-export function isPrimitive(obj) {
-    return !isJsObject(obj);
-}
