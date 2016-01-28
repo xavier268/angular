@@ -139,6 +139,36 @@ main() {
             });
           }));
       it(
+          "should contain the first view child accross embedded views",
+          inject([TestComponentBuilder, AsyncTestCompleter],
+              (TestComponentBuilder tcb, async) {
+            var template = "<needs-view-child #q></needs-view-child>";
+            tcb
+                .overrideTemplate(MyComp, template)
+                .overrideTemplate(NeedsViewChild,
+                    "<div *ngIf=\"true\"><div *ngIf=\"shouldShow\" text=\"foo\"></div></div>")
+                .createAsync(MyComp)
+                .then((view) {
+              view.detectChanges();
+              var q = view.debugElement.componentViewChildren[0].getLocal("q");
+              expect(q.log).toEqual([
+                ["setter", "foo"],
+                ["init", "foo"],
+                ["check", "foo"]
+              ]);
+              q.shouldShow = false;
+              view.detectChanges();
+              expect(q.log).toEqual([
+                ["setter", "foo"],
+                ["init", "foo"],
+                ["check", "foo"],
+                ["setter", null],
+                ["check", null]
+              ]);
+              async.done();
+            });
+          }));
+      it(
           "should contain all directives in the light dom when descendants flag is used",
           inject([TestComponentBuilder, AsyncTestCompleter],
               (TestComponentBuilder tcb, async) {

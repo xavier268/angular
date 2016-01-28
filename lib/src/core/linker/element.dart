@@ -531,7 +531,12 @@ class AppElement implements DependencyProvider, ElementRef, AfterViewChecked {
     AppElement inj = this;
     while (isPresent(inj)) {
       inj._setQueriesAsDirty();
-      inj = inj.parent;
+      if (isBlank(inj.parent) &&
+          isPresent(inj.parentView.containerAppElement)) {
+        inj = inj.parentView.containerAppElement;
+      } else {
+        inj = inj.parent;
+      }
     }
   }
 
