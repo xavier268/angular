@@ -14466,7 +14466,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var inj = this;
 	        while (lang_1.isPresent(inj)) {
 	            inj._setQueriesAsDirty();
-	            if (lang_1.isBlank(inj.parent) && lang_1.isPresent(inj.parentView.containerAppElement)) {
+	            if (lang_1.isBlank(inj.parent) && inj.parentView.proto.type === view_type_1.ViewType.EMBEDDED) {
 	                inj = inj.parentView.containerAppElement;
 	            }
 	            else {

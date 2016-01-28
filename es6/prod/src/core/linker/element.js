@@ -376,7 +376,7 @@ export class AppElement {
         var inj = this;
         while (isPresent(inj)) {
             inj._setQueriesAsDirty();
-            if (isBlank(inj.parent) && isPresent(inj.parentView.containerAppElement)) {
+            if (isBlank(inj.parent) && inj.parentView.proto.type === ViewType.EMBEDDED) {
                 inj = inj.parentView.containerAppElement;
             }
             else {
