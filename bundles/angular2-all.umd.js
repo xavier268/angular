@@ -70,9 +70,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	exports.http = __webpack_require__(204);
 	exports.router = __webpack_require__(219);
-	exports.router_link_dsl = __webpack_require__(243);
-	exports.instrumentation = __webpack_require__(245);
-	exports.upgrade = __webpack_require__(246);
+	exports.router_link_dsl = __webpack_require__(246);
+	exports.instrumentation = __webpack_require__(248);
+	exports.upgrade = __webpack_require__(249);
 
 
 /***/ },
@@ -1865,6 +1865,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return new (Function.bind.apply(Function, [void 0].concat(fnArgNames.concat(fnBody))))().apply(void 0, fnArgValues);
 	}
 	exports.evalExpression = evalExpression;
+	function isPrimitive(obj) {
+	    return !isJsObject(obj);
+	}
+	exports.isPrimitive = isPrimitive;
 
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
@@ -3766,6 +3770,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	            lang_1.getSymbolIterator() in obj); // JS Iterable have a Symbol.iterator prop
 	}
 	exports.isListLikeIterable = isListLikeIterable;
+	function areIterablesEqual(a, b, comparator) {
+	    var iterator1 = a[lang_1.getSymbolIterator()]();
+	    var iterator2 = b[lang_1.getSymbolIterator()]();
+	    while (true) {
+	        var item1 = iterator1.next();
+	        var item2 = iterator2.next();
+	        if (item1.done && item2.done)
+	            return true;
+	        if (item1.done || item2.done)
+	            return false;
+	        if (!comparator(item1.value, item2.value))
+	            return false;
+	    }
+	}
+	exports.areIterablesEqual = areIterablesEqual;
 	function iterateListLike(obj, fn) {
 	    if (lang_1.isArray(obj)) {
 	        for (var i = 0; i < obj.length; i++) {
@@ -9960,6 +9979,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return new directive_record_1.DirectiveIndex(elementIndex, directiveIndex);
 	    };
 	    ChangeDetectionUtil.looseNotIdentical = function (a, b) { return !lang_1.looseIdentical(a, b); };
+	    ChangeDetectionUtil.devModeEqual = function (a, b) {
+	        if (collection_1.isListLikeIterable(a) && collection_1.isListLikeIterable(b)) {
+	            return collection_1.areIterablesEqual(a, b, ChangeDetectionUtil.devModeEqual);
+	        }
+	        else if (!collection_1.isListLikeIterable(a) && !lang_1.isPrimitive(a) && !collection_1.isListLikeIterable(b) &&
+	            !lang_1.isPrimitive(b)) {
+	            return true;
+	        }
+	        else {
+	            return lang_1.looseIdentical(a, b);
+	        }
+	    };
 	    ChangeDetectionUtil.uninitialized = lang_1.CONST_EXPR(new Object());
 	    return ChangeDetectionUtil;
 	})();
@@ -10402,7 +10433,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        if (proto.shouldBeChecked()) {
 	            var prevValue = this._readSelf(proto, values);
-	            if (change_detection_util_1.ChangeDetectionUtil.looseNotIdentical(prevValue, currValue)) {
+	            var detectedChange = throwOnChange ?
+	                !change_detection_util_1.ChangeDetectionUtil.devModeEqual(prevValue, currValue) :
+	                change_detection_util_1.ChangeDetectionUtil.looseNotIdentical(prevValue, currValue);
+	            if (detectedChange) {
 	                if (proto.lastInBinding) {
 	                    var change = change_detection_util_1.ChangeDetectionUtil.simpleChange(prevValue, currValue);
 	                    if (throwOnChange)
@@ -10488,7 +10522,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var currValue = selectedPipe.pipe.transform(context, args);
 	            if (proto.shouldBeChecked()) {
 	                var prevValue = this._readSelf(proto, values);
-	                if (change_detection_util_1.ChangeDetectionUtil.looseNotIdentical(prevValue, currValue)) {
+	                var detectedChange = throwOnChange ?
+	                    !change_detection_util_1.ChangeDetectionUtil.devModeEqual(prevValue, currValue) :
+	                    change_detection_util_1.ChangeDetectionUtil.looseNotIdentical(prevValue, currValue);
+	                if (detectedChange) {
 	                    currValue = change_detection_util_1.ChangeDetectionUtil.unwrapValue(currValue);
 	                    if (proto.lastInBinding) {
 	                        var change = change_detection_util_1.ChangeDetectionUtil.simpleChange(prevValue, currValue);
@@ -11760,7 +11797,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var contexOrArgCheck = r.args.map(function (a) { return _this._names.getChangeName(a); });
 	        contexOrArgCheck.push(this._names.getChangeName(r.contextIndex));
 	        var condition = "!" + pipe + ".pure || (" + contexOrArgCheck.join(" || ") + ")";
-	        var check = "\n      if (" + this.changeDetectionUtilVarName + ".looseNotIdentical(" + oldValue + ", " + newValue + ")) {\n        " + newValue + " = " + this.changeDetectionUtilVarName + ".unwrapValue(" + newValue + ")\n        " + this._genChangeMarker(r) + "\n        " + this._genUpdateDirectiveOrElement(r) + "\n        " + this._genAddToChanges(r) + "\n        " + oldValue + " = " + newValue + ";\n      }\n    ";
+	        var check = "\n      " + this._genThrowOnChangeCheck(oldValue, newValue) + "\n      if (" + this.changeDetectionUtilVarName + ".looseNotIdentical(" + oldValue + ", " + newValue + ")) {\n        " + newValue + " = " + this.changeDetectionUtilVarName + ".unwrapValue(" + newValue + ")\n        " + this._genChangeMarker(r) + "\n        " + this._genUpdateDirectiveOrElement(r) + "\n        " + this._genAddToChanges(r) + "\n        " + oldValue + " = " + newValue + ";\n      }\n    ";
 	        var genCode = r.shouldBeChecked() ? "" + read + check : read;
 	        if (r.isUsedByOtherRecord()) {
 	            return init + " if (" + condition + ") { " + genCode + " } else { " + newValue + " = " + oldValue + "; }";
@@ -11775,7 +11812,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var oldValue = this._names.getFieldName(r.selfIndex);
 	        var newValue = this._names.getLocalName(r.selfIndex);
 	        var read = "\n      " + this._logic.genPropertyBindingEvalValue(r) + "\n    ";
-	        var check = "\n      if (" + this.changeDetectionUtilVarName + ".looseNotIdentical(" + oldValue + ", " + newValue + ")) {\n        " + this._genChangeMarker(r) + "\n        " + this._genUpdateDirectiveOrElement(r) + "\n        " + this._genAddToChanges(r) + "\n        " + oldValue + " = " + newValue + ";\n      }\n    ";
+	        var check = "\n      " + this._genThrowOnChangeCheck(oldValue, newValue) + "\n      if (" + this.changeDetectionUtilVarName + ".looseNotIdentical(" + oldValue + ", " + newValue + ")) {\n        " + this._genChangeMarker(r) + "\n        " + this._genUpdateDirectiveOrElement(r) + "\n        " + this._genAddToChanges(r) + "\n        " + oldValue + " = " + newValue + ";\n      }\n    ";
 	        var genCode = r.shouldBeChecked() ? "" + read + check : read;
 	        if (r.isPureFunction()) {
 	            var condition = r.args.map(function (a) { return _this._names.getChangeName(a); }).join(" || ");
@@ -11799,21 +11836,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (!r.lastInBinding)
 	            return "";
 	        var newValue = this._names.getLocalName(r.selfIndex);
-	        var oldValue = this._names.getFieldName(r.selfIndex);
 	        var notifyDebug = this.genConfig.logBindingUpdate ? "this.logBindingUpdate(" + newValue + ");" : "";
 	        var br = r.bindingRecord;
 	        if (br.target.isDirective()) {
 	            var directiveProperty = this._names.getDirectiveName(br.directiveRecord.directiveIndex) + "." + br.target.name;
-	            return "\n        " + this._genThrowOnChangeCheck(oldValue, newValue) + "\n        " + directiveProperty + " = " + newValue + ";\n        " + notifyDebug + "\n        " + IS_CHANGED_LOCAL + " = true;\n      ";
+	            return "\n        " + directiveProperty + " = " + newValue + ";\n        " + notifyDebug + "\n        " + IS_CHANGED_LOCAL + " = true;\n      ";
 	        }
 	        else {
-	            return "\n        " + this._genThrowOnChangeCheck(oldValue, newValue) + "\n        this.notifyDispatcher(" + newValue + ");\n        " + notifyDebug + "\n      ";
+	            return "\n        this.notifyDispatcher(" + newValue + ");\n        " + notifyDebug + "\n      ";
 	        }
 	    };
 	    /** @internal */
 	    ChangeDetectorJITGenerator.prototype._genThrowOnChangeCheck = function (oldValue, newValue) {
 	        if (lang_1.assertionsEnabled()) {
-	            return "\n        if(throwOnChange) {\n          this.throwOnChangeError(" + oldValue + ", " + newValue + ");\n        }\n        ";
+	            return "\n        if (throwOnChange && !" + this.changeDetectionUtilVarName + ".devModeEqual(" + oldValue + ", " + newValue + ")) {\n          this.throwOnChangeError(" + oldValue + ", " + newValue + ");\n        }\n        ";
 	        }
 	        else {
 	            return '';
@@ -31317,17 +31353,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.ComponentInstruction = instruction_2.ComponentInstruction;
 	var core_1 = __webpack_require__(2);
 	exports.OpaqueToken = core_1.OpaqueToken;
-	var platform_location_2 = __webpack_require__(239);
-	var location_strategy_2 = __webpack_require__(233);
-	var path_location_strategy_2 = __webpack_require__(241);
-	var router_2 = __webpack_require__(220);
+	var router_providers_common_1 = __webpack_require__(243);
+	exports.ROUTER_PROVIDERS_COMMON = router_providers_common_1.ROUTER_PROVIDERS_COMMON;
+	var router_providers_1 = __webpack_require__(244);
+	exports.ROUTER_PROVIDERS = router_providers_1.ROUTER_PROVIDERS;
+	exports.ROUTER_BINDINGS = router_providers_1.ROUTER_BINDINGS;
 	var router_outlet_2 = __webpack_require__(236);
 	var router_link_2 = __webpack_require__(238);
-	var route_registry_2 = __webpack_require__(221);
-	var location_2 = __webpack_require__(232);
-	var core_2 = __webpack_require__(2);
 	var lang_1 = __webpack_require__(5);
-	var exceptions_1 = __webpack_require__(14);
 	/**
 	 * A list of directives. To use the router directives like {@link RouterOutlet} and
 	 * {@link RouterLink}, add this to your `directives` array in the {@link View} decorator of your
@@ -31351,58 +31384,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * ```
 	 */
 	exports.ROUTER_DIRECTIVES = lang_1.CONST_EXPR([router_outlet_2.RouterOutlet, router_link_2.RouterLink]);
-	/**
-	 * A list of {@link Provider}s. To use the router, you must add this to your application.
-	 *
-	 * ### Example ([live demo](http://plnkr.co/edit/iRUP8B5OUbxCWQ3AcIDm))
-	 *
-	 * ```
-	 * import {Component} from 'angular2/core';
-	 * import {
-	 *   ROUTER_DIRECTIVES,
-	 *   ROUTER_PROVIDERS,
-	 *   RouteConfig
-	 * } from 'angular2/router';
-	 *
-	 * @Component({directives: [ROUTER_DIRECTIVES]})
-	 * @RouteConfig([
-	 *  {...},
-	 * ])
-	 * class AppCmp {
-	 *   // ...
-	 * }
-	 *
-	 * bootstrap(AppCmp, [ROUTER_PROVIDERS]);
-	 * ```
-	 */
-	exports.ROUTER_PROVIDERS = lang_1.CONST_EXPR([
-	    route_registry_2.RouteRegistry,
-	    lang_1.CONST_EXPR(new core_2.Provider(location_strategy_2.LocationStrategy, { useClass: path_location_strategy_2.PathLocationStrategy })),
-	    platform_location_2.PlatformLocation,
-	    location_2.Location,
-	    lang_1.CONST_EXPR(new core_2.Provider(router_2.Router, {
-	        useFactory: routerFactory,
-	        deps: lang_1.CONST_EXPR([route_registry_2.RouteRegistry, location_2.Location, route_registry_2.ROUTER_PRIMARY_COMPONENT, core_2.ApplicationRef])
-	    })),
-	    lang_1.CONST_EXPR(new core_2.Provider(route_registry_2.ROUTER_PRIMARY_COMPONENT, { useFactory: routerPrimaryComponentFactory, deps: lang_1.CONST_EXPR([core_2.ApplicationRef]) }))
-	]);
-	/**
-	 * Use {@link ROUTER_PROVIDERS} instead.
-	 *
-	 * @deprecated
-	 */
-	exports.ROUTER_BINDINGS = exports.ROUTER_PROVIDERS;
-	function routerFactory(registry, location, primaryComponent, appRef) {
-	    var rootRouter = new router_2.RootRouter(registry, location, primaryComponent);
-	    appRef.registerDisposeListener(function () { return rootRouter.dispose(); });
-	    return rootRouter;
-	}
-	function routerPrimaryComponentFactory(app) {
-	    if (app.componentTypes.length == 0) {
-	        throw new exceptions_1.BaseException("Bootstrap at least one component before injecting Router.");
-	    }
-	    return app.componentTypes[0];
-	}
 
 
 /***/ },
@@ -34397,69 +34378,35 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 239 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var dom_adapter_1 = __webpack_require__(173);
-	var core_1 = __webpack_require__(2);
 	/**
-	 * `PlatformLocation` encapsulates all of the direct calls to platform APIs.
 	 * This class should not be used directly by an application developer. Instead, use
 	 * {@link Location}.
+	 *
+	 * `PlatformLocation` encapsulates all calls to DOM apis, which allows the Router to be platform
+	 * agnostic.
+	 * This means that we can have different implementation of `PlatformLocation` for the different
+	 * platforms
+	 * that angular supports. For example, the default `PlatformLocation` is {@link
+	 * BrowserPlatformLocation},
+	 * however when you run your app in a WebWorker you use {@link WebWorkerPlatformLocation}.
+	 *
+	 * The `PlatformLocation` class is used directly by all implementations of {@link LocationStrategy}
+	 * when
+	 * they need to interact with the DOM apis like pushState, popState, etc...
+	 *
+	 * {@link LocationStrategy} in turn is used by the {@link Location} service which is used directly
+	 * by
+	 * the {@link Router} in order to navigate between routes. Since all interactions between {@link
+	 * Router} /
+	 * {@link Location} / {@link LocationStrategy} and DOM apis flow through the `PlatformLocation`
+	 * class
+	 * they are all platform independent.
 	 */
 	var PlatformLocation = (function () {
 	    function PlatformLocation() {
-	        this._init();
 	    }
-	    // This is moved to its own method so that `MockPlatformLocationStrategy` can overwrite it
-	    /** @internal */
-	    PlatformLocation.prototype._init = function () {
-	        this._location = dom_adapter_1.DOM.getLocation();
-	        this._history = dom_adapter_1.DOM.getHistory();
-	    };
-	    PlatformLocation.prototype.getBaseHrefFromDOM = function () { return dom_adapter_1.DOM.getBaseHref(); };
-	    PlatformLocation.prototype.onPopState = function (fn) {
-	        dom_adapter_1.DOM.getGlobalEventTarget('window').addEventListener('popstate', fn, false);
-	    };
-	    PlatformLocation.prototype.onHashChange = function (fn) {
-	        dom_adapter_1.DOM.getGlobalEventTarget('window').addEventListener('hashchange', fn, false);
-	    };
-	    Object.defineProperty(PlatformLocation.prototype, "pathname", {
-	        get: function () { return this._location.pathname; },
-	        set: function (newPath) { this._location.pathname = newPath; },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(PlatformLocation.prototype, "search", {
-	        get: function () { return this._location.search; },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(PlatformLocation.prototype, "hash", {
-	        get: function () { return this._location.hash; },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    PlatformLocation.prototype.pushState = function (state, title, url) {
-	        this._history.pushState(state, title, url);
-	    };
-	    PlatformLocation.prototype.replaceState = function (state, title, url) {
-	        this._history.replaceState(state, title, url);
-	    };
-	    PlatformLocation.prototype.forward = function () { this._history.forward(); };
-	    PlatformLocation.prototype.back = function () { this._history.back(); };
-	    PlatformLocation = __decorate([
-	        core_1.Injectable(), 
-	        __metadata('design:paramtypes', [])
-	    ], PlatformLocation);
 	    return PlatformLocation;
 	})();
 	exports.PlatformLocation = PlatformLocation;
@@ -34708,11 +34655,179 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var location_strategy_1 = __webpack_require__(233);
+	var path_location_strategy_1 = __webpack_require__(241);
+	var router_1 = __webpack_require__(220);
+	var route_registry_1 = __webpack_require__(221);
+	var location_1 = __webpack_require__(232);
+	var lang_1 = __webpack_require__(5);
+	var core_1 = __webpack_require__(2);
+	var exceptions_1 = __webpack_require__(14);
+	/**
+	 * The Platform agnostic ROUTER PROVIDERS
+	 */
+	exports.ROUTER_PROVIDERS_COMMON = lang_1.CONST_EXPR([
+	    route_registry_1.RouteRegistry,
+	    lang_1.CONST_EXPR(new core_1.Provider(location_strategy_1.LocationStrategy, { useClass: path_location_strategy_1.PathLocationStrategy })),
+	    location_1.Location,
+	    lang_1.CONST_EXPR(new core_1.Provider(router_1.Router, {
+	        useFactory: routerFactory,
+	        deps: lang_1.CONST_EXPR([route_registry_1.RouteRegistry, location_1.Location, route_registry_1.ROUTER_PRIMARY_COMPONENT, core_1.ApplicationRef])
+	    })),
+	    lang_1.CONST_EXPR(new core_1.Provider(route_registry_1.ROUTER_PRIMARY_COMPONENT, { useFactory: routerPrimaryComponentFactory, deps: lang_1.CONST_EXPR([core_1.ApplicationRef]) }))
+	]);
+	function routerFactory(registry, location, primaryComponent, appRef) {
+	    var rootRouter = new router_1.RootRouter(registry, location, primaryComponent);
+	    appRef.registerDisposeListener(function () { return rootRouter.dispose(); });
+	    return rootRouter;
+	}
+	function routerPrimaryComponentFactory(app) {
+	    if (app.componentTypes.length == 0) {
+	        throw new exceptions_1.BaseException("Bootstrap at least one component before injecting Router.");
+	    }
+	    return app.componentTypes[0];
+	}
+
+
+/***/ },
+/* 244 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// import {ROUTER_PROVIDERS_COMMON} from './router_providers_common';
+	var router_1 = __webpack_require__(219);
+	var core_1 = __webpack_require__(2);
+	var lang_1 = __webpack_require__(5);
+	var browser_platform_location_1 = __webpack_require__(245);
+	var platform_location_1 = __webpack_require__(239);
+	/**
+	 * A list of {@link Provider}s. To use the router, you must add this to your application.
+	 *
+	 * ### Example ([live demo](http://plnkr.co/edit/iRUP8B5OUbxCWQ3AcIDm))
+	 *
+	 * ```
+	 * import {Component} from 'angular2/core';
+	 * import {
+	 *   ROUTER_DIRECTIVES,
+	 *   ROUTER_PROVIDERS,
+	 *   RouteConfig
+	 * } from 'angular2/router';
+	 *
+	 * @Component({directives: [ROUTER_DIRECTIVES]})
+	 * @RouteConfig([
+	 *  {...},
+	 * ])
+	 * class AppCmp {
+	 *   // ...
+	 * }
+	 *
+	 * bootstrap(AppCmp, [ROUTER_PROVIDERS]);
+	 * ```
+	 */
+	exports.ROUTER_PROVIDERS = lang_1.CONST_EXPR([
+	    router_1.ROUTER_PROVIDERS_COMMON,
+	    lang_1.CONST_EXPR(new core_1.Provider(platform_location_1.PlatformLocation, { useClass: browser_platform_location_1.BrowserPlatformLocation })),
+	]);
+	/**
+	 * Use {@link ROUTER_PROVIDERS} instead.
+	 *
+	 * @deprecated
+	 */
+	exports.ROUTER_BINDINGS = exports.ROUTER_PROVIDERS;
+
+
+/***/ },
+/* 245 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(2);
+	var platform_location_1 = __webpack_require__(239);
+	var dom_adapter_1 = __webpack_require__(173);
+	/**
+	 * `PlatformLocation` encapsulates all of the direct calls to platform APIs.
+	 * This class should not be used directly by an application developer. Instead, use
+	 * {@link Location}.
+	 */
+	var BrowserPlatformLocation = (function (_super) {
+	    __extends(BrowserPlatformLocation, _super);
+	    function BrowserPlatformLocation() {
+	        _super.call(this);
+	        this._init();
+	    }
+	    // This is moved to its own method so that `MockPlatformLocationStrategy` can overwrite it
+	    /** @internal */
+	    BrowserPlatformLocation.prototype._init = function () {
+	        this._location = dom_adapter_1.DOM.getLocation();
+	        this._history = dom_adapter_1.DOM.getHistory();
+	    };
+	    Object.defineProperty(BrowserPlatformLocation.prototype, "location", {
+	        /** @internal */
+	        get: function () { return this._location; },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    BrowserPlatformLocation.prototype.getBaseHrefFromDOM = function () { return dom_adapter_1.DOM.getBaseHref(); };
+	    BrowserPlatformLocation.prototype.onPopState = function (fn) {
+	        dom_adapter_1.DOM.getGlobalEventTarget('window').addEventListener('popstate', fn, false);
+	    };
+	    BrowserPlatformLocation.prototype.onHashChange = function (fn) {
+	        dom_adapter_1.DOM.getGlobalEventTarget('window').addEventListener('hashchange', fn, false);
+	    };
+	    Object.defineProperty(BrowserPlatformLocation.prototype, "pathname", {
+	        get: function () { return this._location.pathname; },
+	        set: function (newPath) { this._location.pathname = newPath; },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Object.defineProperty(BrowserPlatformLocation.prototype, "search", {
+	        get: function () { return this._location.search; },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Object.defineProperty(BrowserPlatformLocation.prototype, "hash", {
+	        get: function () { return this._location.hash; },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    BrowserPlatformLocation.prototype.pushState = function (state, title, url) {
+	        this._history.pushState(state, title, url);
+	    };
+	    BrowserPlatformLocation.prototype.replaceState = function (state, title, url) {
+	        this._history.replaceState(state, title, url);
+	    };
+	    BrowserPlatformLocation.prototype.forward = function () { this._history.forward(); };
+	    BrowserPlatformLocation.prototype.back = function () { this._history.back(); };
+	    BrowserPlatformLocation = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [])
+	    ], BrowserPlatformLocation);
+	    return BrowserPlatformLocation;
+	})(platform_location_1.PlatformLocation);
+	exports.BrowserPlatformLocation = BrowserPlatformLocation;
+
+
+/***/ },
+/* 246 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var compiler_1 = __webpack_require__(141);
 	var core_1 = __webpack_require__(2);
-	var router_link_transform_1 = __webpack_require__(244);
+	var router_link_transform_1 = __webpack_require__(247);
 	var lang_1 = __webpack_require__(5);
-	var router_link_transform_2 = __webpack_require__(244);
+	var router_link_transform_2 = __webpack_require__(247);
 	exports.RouterLinkTransform = router_link_transform_2.RouterLinkTransform;
 	/**
 	 * Enables the router link DSL.
@@ -34744,7 +34859,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 244 */
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -34956,7 +35071,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 245 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var profile_1 = __webpack_require__(45);
@@ -34967,7 +35082,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 246 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -34975,24 +35090,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @description
 	 * Adapter allowing AngularJS v1 and Angular v2 to run side by side in the same application.
 	 */
-	var upgrade_adapter_1 = __webpack_require__(247);
+	var upgrade_adapter_1 = __webpack_require__(250);
 	exports.UpgradeAdapter = upgrade_adapter_1.UpgradeAdapter;
 	exports.UpgradeAdapterRef = upgrade_adapter_1.UpgradeAdapterRef;
 
 
 /***/ },
-/* 247 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var core_1 = __webpack_require__(2);
 	var async_1 = __webpack_require__(48);
 	var browser_1 = __webpack_require__(174);
-	var metadata_1 = __webpack_require__(248);
-	var util_1 = __webpack_require__(249);
-	var constants_1 = __webpack_require__(250);
-	var downgrade_ng2_adapter_1 = __webpack_require__(251);
-	var upgrade_ng1_adapter_1 = __webpack_require__(252);
-	var angular = __webpack_require__(253);
+	var metadata_1 = __webpack_require__(251);
+	var util_1 = __webpack_require__(252);
+	var constants_1 = __webpack_require__(253);
+	var downgrade_ng2_adapter_1 = __webpack_require__(254);
+	var upgrade_ng1_adapter_1 = __webpack_require__(255);
+	var angular = __webpack_require__(256);
 	var upgradeCount = 0;
 	/**
 	 * Use `UpgradeAdapter` to allow AngularJS v1 and Angular v2 to coexist in a single application.
@@ -35508,7 +35623,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 248 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var core_1 = __webpack_require__(2);
@@ -35556,7 +35671,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 249 */
+/* 252 */
 /***/ function(module, exports) {
 
 	function stringify(obj) {
@@ -35578,7 +35693,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 250 */
+/* 253 */
 /***/ function(module, exports) {
 
 	exports.NG2_APP_VIEW_MANAGER = 'ng2.AppViewManager';
@@ -35598,11 +35713,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 251 */
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var core_1 = __webpack_require__(2);
-	var constants_1 = __webpack_require__(250);
+	var constants_1 = __webpack_require__(253);
 	var INITIAL_VALUE = {
 	    __UNINITIALIZED__: true
 	};
@@ -35764,13 +35879,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 252 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var core_1 = __webpack_require__(2);
-	var constants_1 = __webpack_require__(250);
-	var util_1 = __webpack_require__(249);
-	var angular = __webpack_require__(253);
+	var constants_1 = __webpack_require__(253);
+	var util_1 = __webpack_require__(252);
+	var angular = __webpack_require__(256);
 	var CAMEL_CASE = /([A-Z])/g;
 	var INITIAL_VALUE = {
 	    __UNINITIALIZED__: true
@@ -36048,7 +36163,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 253 */
+/* 256 */
 /***/ function(module, exports) {
 
 	function noNg() {
