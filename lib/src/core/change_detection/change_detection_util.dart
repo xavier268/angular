@@ -1,15 +1,10 @@
 library angular2.src.core.change_detection.change_detection_util;
 
 import "package:angular2/src/facade/lang.dart"
-    show isPresent, isBlank, Type, StringWrapper, looseIdentical, isPrimitive;
+    show isPresent, isBlank, Type, StringWrapper, looseIdentical;
 import "package:angular2/src/facade/exceptions.dart" show BaseException;
 import "package:angular2/src/facade/collection.dart"
-    show
-        ListWrapper,
-        MapWrapper,
-        StringMapWrapper,
-        isListLikeIterable,
-        areIterablesEqual;
+    show ListWrapper, MapWrapper, StringMapWrapper;
 import "proto_record.dart" show ProtoRecord;
 import "constants.dart"
     show ChangeDetectionStrategy, isDefaultChangeDetectionStrategy;
@@ -295,18 +290,5 @@ class ChangeDetectionUtil {
 
   static bool looseNotIdentical(dynamic a, dynamic b) {
     return !looseIdentical(a, b);
-  }
-
-  static bool devModeEqual(dynamic a, dynamic b) {
-    if (isListLikeIterable(a) && isListLikeIterable(b)) {
-      return areIterablesEqual(a, b, ChangeDetectionUtil.devModeEqual);
-    } else if (!isListLikeIterable(a) &&
-        !isPrimitive(a) &&
-        !isListLikeIterable(b) &&
-        !isPrimitive(b)) {
-      return true;
-    } else {
-      return looseIdentical(a, b);
-    }
   }
 }

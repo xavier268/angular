@@ -19,13 +19,11 @@ class ChangeDetector0 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_literal0 = "\$";
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.literal0, l_literal0)) {
-      this.throwOnChangeError(this.literal0, l_literal0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_literal0, this.literal0)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.literal0, l_literal0);
+      }
+
       this.notifyDispatcher(l_literal0);
       this.logBindingUpdate(l_literal0);
 
@@ -70,13 +68,11 @@ class ChangeDetector1 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_literal0 = 10;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.literal0, l_literal0)) {
-      this.throwOnChangeError(this.literal0, l_literal0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_literal0, this.literal0)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.literal0, l_literal0);
+      }
+
       this.notifyDispatcher(l_literal0);
       this.logBindingUpdate(l_literal0);
 
@@ -121,13 +117,11 @@ class ChangeDetector2 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_literal0 = "str";
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.literal0, l_literal0)) {
-      this.throwOnChangeError(this.literal0, l_literal0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_literal0, this.literal0)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.literal0, l_literal0);
+      }
+
       this.notifyDispatcher(l_literal0);
       this.logBindingUpdate(l_literal0);
 
@@ -172,13 +166,11 @@ class ChangeDetector3 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_literal0 = "a\n\nb";
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.literal0, l_literal0)) {
-      this.throwOnChangeError(this.literal0, l_literal0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_literal0, this.literal0)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.literal0, l_literal0);
+      }
+
       this.notifyDispatcher(l_literal0);
       this.logBindingUpdate(l_literal0);
 
@@ -228,15 +220,12 @@ class ChangeDetector4 extends _gen.AbstractChangeDetector<dynamic> {
 
     l_operation_add2 =
         _gen.ChangeDetectionUtil.operation_add(l_literal0, l_literal1);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil
-            .devModeEqual(this.operation_add2, l_operation_add2)) {
-      this.throwOnChangeError(this.operation_add2, l_operation_add2);
-    }
-
     if (_gen.ChangeDetectionUtil
         .looseNotIdentical(l_operation_add2, this.operation_add2)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.operation_add2, l_operation_add2);
+      }
+
       this.notifyDispatcher(l_operation_add2);
       this.logBindingUpdate(l_operation_add2);
 
@@ -286,15 +275,13 @@ class ChangeDetector5 extends _gen.AbstractChangeDetector<dynamic> {
 
     l_operation_subtract2 =
         _gen.ChangeDetectionUtil.operation_subtract(l_literal0, l_literal1);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil
-            .devModeEqual(this.operation_subtract2, l_operation_subtract2)) {
-      this.throwOnChangeError(this.operation_subtract2, l_operation_subtract2);
-    }
-
     if (_gen.ChangeDetectionUtil
         .looseNotIdentical(l_operation_subtract2, this.operation_subtract2)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(
+            this.operation_subtract2, l_operation_subtract2);
+      }
+
       this.notifyDispatcher(l_operation_subtract2);
       this.logBindingUpdate(l_operation_subtract2);
 
@@ -344,15 +331,13 @@ class ChangeDetector6 extends _gen.AbstractChangeDetector<dynamic> {
 
     l_operation_multiply2 =
         _gen.ChangeDetectionUtil.operation_multiply(l_literal0, l_literal1);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil
-            .devModeEqual(this.operation_multiply2, l_operation_multiply2)) {
-      this.throwOnChangeError(this.operation_multiply2, l_operation_multiply2);
-    }
-
     if (_gen.ChangeDetectionUtil
         .looseNotIdentical(l_operation_multiply2, this.operation_multiply2)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(
+            this.operation_multiply2, l_operation_multiply2);
+      }
+
       this.notifyDispatcher(l_operation_multiply2);
       this.logBindingUpdate(l_operation_multiply2);
 
@@ -402,15 +387,12 @@ class ChangeDetector7 extends _gen.AbstractChangeDetector<dynamic> {
 
     l_operation_divide2 =
         _gen.ChangeDetectionUtil.operation_divide(l_literal0, l_literal1);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil
-            .devModeEqual(this.operation_divide2, l_operation_divide2)) {
-      this.throwOnChangeError(this.operation_divide2, l_operation_divide2);
-    }
-
     if (_gen.ChangeDetectionUtil
         .looseNotIdentical(l_operation_divide2, this.operation_divide2)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.operation_divide2, l_operation_divide2);
+      }
+
       this.notifyDispatcher(l_operation_divide2);
       this.logBindingUpdate(l_operation_divide2);
 
@@ -463,16 +445,13 @@ class ChangeDetector8 extends _gen.AbstractChangeDetector<dynamic> {
 
     l_operation_remainder2 =
         _gen.ChangeDetectionUtil.operation_remainder(l_literal0, l_literal1);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil
-            .devModeEqual(this.operation_remainder2, l_operation_remainder2)) {
-      this.throwOnChangeError(
-          this.operation_remainder2, l_operation_remainder2);
-    }
-
     if (_gen.ChangeDetectionUtil
         .looseNotIdentical(l_operation_remainder2, this.operation_remainder2)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(
+            this.operation_remainder2, l_operation_remainder2);
+      }
+
       this.notifyDispatcher(l_operation_remainder2);
       this.logBindingUpdate(l_operation_remainder2);
 
@@ -520,15 +499,12 @@ class ChangeDetector9 extends _gen.AbstractChangeDetector<dynamic> {
 
     l_operation_equals1 =
         _gen.ChangeDetectionUtil.operation_equals(l_literal0, l_literal0);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil
-            .devModeEqual(this.operation_equals1, l_operation_equals1)) {
-      this.throwOnChangeError(this.operation_equals1, l_operation_equals1);
-    }
-
     if (_gen.ChangeDetectionUtil
         .looseNotIdentical(l_operation_equals1, this.operation_equals1)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.operation_equals1, l_operation_equals1);
+      }
+
       this.notifyDispatcher(l_operation_equals1);
       this.logBindingUpdate(l_operation_equals1);
 
@@ -576,16 +552,13 @@ class ChangeDetector10 extends _gen.AbstractChangeDetector<dynamic> {
 
     l_operation_not_equals1 =
         _gen.ChangeDetectionUtil.operation_not_equals(l_literal0, l_literal0);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(
-            this.operation_not_equals1, l_operation_not_equals1)) {
-      this.throwOnChangeError(
-          this.operation_not_equals1, l_operation_not_equals1);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(
         l_operation_not_equals1, this.operation_not_equals1)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(
+            this.operation_not_equals1, l_operation_not_equals1);
+      }
+
       this.notifyDispatcher(l_operation_not_equals1);
       this.logBindingUpdate(l_operation_not_equals1);
 
@@ -635,15 +608,12 @@ class ChangeDetector11 extends _gen.AbstractChangeDetector<dynamic> {
 
     l_operation_equals2 =
         _gen.ChangeDetectionUtil.operation_equals(l_literal0, l_literal1);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil
-            .devModeEqual(this.operation_equals2, l_operation_equals2)) {
-      this.throwOnChangeError(this.operation_equals2, l_operation_equals2);
-    }
-
     if (_gen.ChangeDetectionUtil
         .looseNotIdentical(l_operation_equals2, this.operation_equals2)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.operation_equals2, l_operation_equals2);
+      }
+
       this.notifyDispatcher(l_operation_equals2);
       this.logBindingUpdate(l_operation_equals2);
 
@@ -691,16 +661,13 @@ class ChangeDetector12 extends _gen.AbstractChangeDetector<dynamic> {
 
     l_operation_identical1 =
         _gen.ChangeDetectionUtil.operation_identical(l_literal0, l_literal0);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil
-            .devModeEqual(this.operation_identical1, l_operation_identical1)) {
-      this.throwOnChangeError(
-          this.operation_identical1, l_operation_identical1);
-    }
-
     if (_gen.ChangeDetectionUtil
         .looseNotIdentical(l_operation_identical1, this.operation_identical1)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(
+            this.operation_identical1, l_operation_identical1);
+      }
+
       this.notifyDispatcher(l_operation_identical1);
       this.logBindingUpdate(l_operation_identical1);
 
@@ -748,16 +715,13 @@ class ChangeDetector13 extends _gen.AbstractChangeDetector<dynamic> {
 
     l_operation_not_identical1 = _gen.ChangeDetectionUtil
         .operation_not_identical(l_literal0, l_literal0);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(
-            this.operation_not_identical1, l_operation_not_identical1)) {
-      this.throwOnChangeError(
-          this.operation_not_identical1, l_operation_not_identical1);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(
         l_operation_not_identical1, this.operation_not_identical1)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(
+            this.operation_not_identical1, l_operation_not_identical1);
+      }
+
       this.notifyDispatcher(l_operation_not_identical1);
       this.logBindingUpdate(l_operation_not_identical1);
 
@@ -810,16 +774,13 @@ class ChangeDetector14 extends _gen.AbstractChangeDetector<dynamic> {
 
     l_operation_identical2 =
         _gen.ChangeDetectionUtil.operation_identical(l_literal0, l_literal1);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil
-            .devModeEqual(this.operation_identical2, l_operation_identical2)) {
-      this.throwOnChangeError(
-          this.operation_identical2, l_operation_identical2);
-    }
-
     if (_gen.ChangeDetectionUtil
         .looseNotIdentical(l_operation_identical2, this.operation_identical2)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(
+            this.operation_identical2, l_operation_identical2);
+      }
+
       this.notifyDispatcher(l_operation_identical2);
       this.logBindingUpdate(l_operation_identical2);
 
@@ -872,16 +833,13 @@ class ChangeDetector15 extends _gen.AbstractChangeDetector<dynamic> {
 
     l_operation_less_then2 =
         _gen.ChangeDetectionUtil.operation_less_then(l_literal0, l_literal1);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil
-            .devModeEqual(this.operation_less_then2, l_operation_less_then2)) {
-      this.throwOnChangeError(
-          this.operation_less_then2, l_operation_less_then2);
-    }
-
     if (_gen.ChangeDetectionUtil
         .looseNotIdentical(l_operation_less_then2, this.operation_less_then2)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(
+            this.operation_less_then2, l_operation_less_then2);
+      }
+
       this.notifyDispatcher(l_operation_less_then2);
       this.logBindingUpdate(l_operation_less_then2);
 
@@ -934,16 +892,13 @@ class ChangeDetector16 extends _gen.AbstractChangeDetector<dynamic> {
 
     l_operation_less_then2 =
         _gen.ChangeDetectionUtil.operation_less_then(l_literal0, l_literal1);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil
-            .devModeEqual(this.operation_less_then2, l_operation_less_then2)) {
-      this.throwOnChangeError(
-          this.operation_less_then2, l_operation_less_then2);
-    }
-
     if (_gen.ChangeDetectionUtil
         .looseNotIdentical(l_operation_less_then2, this.operation_less_then2)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(
+            this.operation_less_then2, l_operation_less_then2);
+      }
+
       this.notifyDispatcher(l_operation_less_then2);
       this.logBindingUpdate(l_operation_less_then2);
 
@@ -996,16 +951,13 @@ class ChangeDetector17 extends _gen.AbstractChangeDetector<dynamic> {
 
     l_operation_greater_then2 =
         _gen.ChangeDetectionUtil.operation_greater_then(l_literal0, l_literal1);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(
-            this.operation_greater_then2, l_operation_greater_then2)) {
-      this.throwOnChangeError(
-          this.operation_greater_then2, l_operation_greater_then2);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(
         l_operation_greater_then2, this.operation_greater_then2)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(
+            this.operation_greater_then2, l_operation_greater_then2);
+      }
+
       this.notifyDispatcher(l_operation_greater_then2);
       this.logBindingUpdate(l_operation_greater_then2);
 
@@ -1058,16 +1010,13 @@ class ChangeDetector18 extends _gen.AbstractChangeDetector<dynamic> {
 
     l_operation_greater_then2 =
         _gen.ChangeDetectionUtil.operation_greater_then(l_literal0, l_literal1);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(
-            this.operation_greater_then2, l_operation_greater_then2)) {
-      this.throwOnChangeError(
-          this.operation_greater_then2, l_operation_greater_then2);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(
         l_operation_greater_then2, this.operation_greater_then2)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(
+            this.operation_greater_then2, l_operation_greater_then2);
+      }
+
       this.notifyDispatcher(l_operation_greater_then2);
       this.logBindingUpdate(l_operation_greater_then2);
 
@@ -1120,18 +1069,14 @@ class ChangeDetector19 extends _gen.AbstractChangeDetector<dynamic> {
 
     l_operation_less_or_equals_then2 = _gen.ChangeDetectionUtil
         .operation_less_or_equals_then(l_literal0, l_literal1);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(
-            this.operation_less_or_equals_then2,
-            l_operation_less_or_equals_then2)) {
-      this.throwOnChangeError(this.operation_less_or_equals_then2,
-          l_operation_less_or_equals_then2);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(
         l_operation_less_or_equals_then2,
         this.operation_less_or_equals_then2)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.operation_less_or_equals_then2,
+            l_operation_less_or_equals_then2);
+      }
+
       this.notifyDispatcher(l_operation_less_or_equals_then2);
       this.logBindingUpdate(l_operation_less_or_equals_then2);
 
@@ -1180,18 +1125,14 @@ class ChangeDetector20 extends _gen.AbstractChangeDetector<dynamic> {
 
     l_operation_less_or_equals_then1 = _gen.ChangeDetectionUtil
         .operation_less_or_equals_then(l_literal0, l_literal0);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(
-            this.operation_less_or_equals_then1,
-            l_operation_less_or_equals_then1)) {
-      this.throwOnChangeError(this.operation_less_or_equals_then1,
-          l_operation_less_or_equals_then1);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(
         l_operation_less_or_equals_then1,
         this.operation_less_or_equals_then1)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.operation_less_or_equals_then1,
+            l_operation_less_or_equals_then1);
+      }
+
       this.notifyDispatcher(l_operation_less_or_equals_then1);
       this.logBindingUpdate(l_operation_less_or_equals_then1);
 
@@ -1245,18 +1186,14 @@ class ChangeDetector21 extends _gen.AbstractChangeDetector<dynamic> {
 
     l_operation_less_or_equals_then2 = _gen.ChangeDetectionUtil
         .operation_less_or_equals_then(l_literal0, l_literal1);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(
-            this.operation_less_or_equals_then2,
-            l_operation_less_or_equals_then2)) {
-      this.throwOnChangeError(this.operation_less_or_equals_then2,
-          l_operation_less_or_equals_then2);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(
         l_operation_less_or_equals_then2,
         this.operation_less_or_equals_then2)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.operation_less_or_equals_then2,
+            l_operation_less_or_equals_then2);
+      }
+
       this.notifyDispatcher(l_operation_less_or_equals_then2);
       this.logBindingUpdate(l_operation_less_or_equals_then2);
 
@@ -1310,18 +1247,14 @@ class ChangeDetector22 extends _gen.AbstractChangeDetector<dynamic> {
 
     l_operation_greater_or_equals_then2 = _gen.ChangeDetectionUtil
         .operation_greater_or_equals_then(l_literal0, l_literal1);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(
-            this.operation_greater_or_equals_then2,
-            l_operation_greater_or_equals_then2)) {
-      this.throwOnChangeError(this.operation_greater_or_equals_then2,
-          l_operation_greater_or_equals_then2);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(
         l_operation_greater_or_equals_then2,
         this.operation_greater_or_equals_then2)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.operation_greater_or_equals_then2,
+            l_operation_greater_or_equals_then2);
+      }
+
       this.notifyDispatcher(l_operation_greater_or_equals_then2);
       this.logBindingUpdate(l_operation_greater_or_equals_then2);
 
@@ -1373,18 +1306,14 @@ class ChangeDetector23 extends _gen.AbstractChangeDetector<dynamic> {
 
     l_operation_greater_or_equals_then1 = _gen.ChangeDetectionUtil
         .operation_greater_or_equals_then(l_literal0, l_literal0);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(
-            this.operation_greater_or_equals_then1,
-            l_operation_greater_or_equals_then1)) {
-      this.throwOnChangeError(this.operation_greater_or_equals_then1,
-          l_operation_greater_or_equals_then1);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(
         l_operation_greater_or_equals_then1,
         this.operation_greater_or_equals_then1)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.operation_greater_or_equals_then1,
+            l_operation_greater_or_equals_then1);
+      }
+
       this.notifyDispatcher(l_operation_greater_or_equals_then1);
       this.logBindingUpdate(l_operation_greater_or_equals_then1);
 
@@ -1439,18 +1368,14 @@ class ChangeDetector24 extends _gen.AbstractChangeDetector<dynamic> {
 
     l_operation_greater_or_equals_then2 = _gen.ChangeDetectionUtil
         .operation_greater_or_equals_then(l_literal0, l_literal1);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(
-            this.operation_greater_or_equals_then2,
-            l_operation_greater_or_equals_then2)) {
-      this.throwOnChangeError(this.operation_greater_or_equals_then2,
-          l_operation_greater_or_equals_then2);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(
         l_operation_greater_or_equals_then2,
         this.operation_greater_or_equals_then2)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.operation_greater_or_equals_then2,
+            l_operation_greater_or_equals_then2);
+      }
+
       this.notifyDispatcher(l_operation_greater_or_equals_then2);
       this.logBindingUpdate(l_operation_greater_or_equals_then2);
 
@@ -1499,13 +1424,11 @@ class ChangeDetector25 extends _gen.AbstractChangeDetector<dynamic> {
     l_literal0 = true;
 
     l_cond1 = _gen.ChangeDetectionUtil.cond(l_literal0, l_literal0, l_literal0);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.cond1, l_cond1)) {
-      this.throwOnChangeError(this.cond1, l_cond1);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_cond1, this.cond1)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.cond1, l_cond1);
+      }
+
       this.notifyDispatcher(l_cond1);
       this.logBindingUpdate(l_cond1);
 
@@ -1560,13 +1483,11 @@ class ChangeDetector26 extends _gen.AbstractChangeDetector<dynamic> {
     }
 
     l_cond3 = _gen.ChangeDetectionUtil.cond(l_literal0, l_literal2, l_literal0);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.cond3, l_cond3)) {
-      this.throwOnChangeError(this.cond3, l_cond3);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_cond3, this.cond3)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.cond3, l_cond3);
+      }
+
       this.notifyDispatcher(l_cond3);
       this.logBindingUpdate(l_cond3);
 
@@ -1621,13 +1542,11 @@ class ChangeDetector27 extends _gen.AbstractChangeDetector<dynamic> {
     }
 
     l_cond3 = _gen.ChangeDetectionUtil.cond(l_literal0, l_literal0, l_literal2);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.cond3, l_cond3)) {
-      this.throwOnChangeError(this.cond3, l_cond3);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_cond3, this.cond3)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.cond3, l_cond3);
+      }
+
       this.notifyDispatcher(l_cond3);
       this.logBindingUpdate(l_cond3);
 
@@ -1674,13 +1593,11 @@ class ChangeDetector28 extends _gen.AbstractChangeDetector<dynamic> {
     l_literal0 = false;
 
     l_cond1 = _gen.ChangeDetectionUtil.cond(l_literal0, l_literal0, l_literal0);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.cond1, l_cond1)) {
-      this.throwOnChangeError(this.cond1, l_cond1);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_cond1, this.cond1)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.cond1, l_cond1);
+      }
+
       this.notifyDispatcher(l_cond1);
       this.logBindingUpdate(l_cond1);
 
@@ -1727,15 +1644,12 @@ class ChangeDetector29 extends _gen.AbstractChangeDetector<dynamic> {
     l_literal0 = true;
 
     l_operation_negate1 = _gen.ChangeDetectionUtil.operation_negate(l_literal0);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil
-            .devModeEqual(this.operation_negate1, l_operation_negate1)) {
-      this.throwOnChangeError(this.operation_negate1, l_operation_negate1);
-    }
-
     if (_gen.ChangeDetectionUtil
         .looseNotIdentical(l_operation_negate1, this.operation_negate1)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.operation_negate1, l_operation_negate1);
+      }
+
       this.notifyDispatcher(l_operation_negate1);
       this.logBindingUpdate(l_operation_negate1);
 
@@ -1788,15 +1702,12 @@ class ChangeDetector30 extends _gen.AbstractChangeDetector<dynamic> {
 
     l_operation_negate2 =
         _gen.ChangeDetectionUtil.operation_negate(l_operation_negate1);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil
-            .devModeEqual(this.operation_negate2, l_operation_negate2)) {
-      this.throwOnChangeError(this.operation_negate2, l_operation_negate2);
-    }
-
     if (_gen.ChangeDetectionUtil
         .looseNotIdentical(l_operation_negate2, this.operation_negate2)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.operation_negate2, l_operation_negate2);
+      }
+
       this.notifyDispatcher(l_operation_negate2);
       this.logBindingUpdate(l_operation_negate2);
 
@@ -1853,13 +1764,11 @@ class ChangeDetector31 extends _gen.AbstractChangeDetector<dynamic> {
 
     l_cond3 = _gen.ChangeDetectionUtil
         .cond(l_operation_less_then2, l_literal0, l_literal1);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.cond3, l_cond3)) {
-      this.throwOnChangeError(this.cond3, l_cond3);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_cond3, this.cond3)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.cond3, l_cond3);
+      }
+
       this.notifyDispatcher(l_cond3);
       this.logBindingUpdate(l_cond3);
 
@@ -1916,13 +1825,11 @@ class ChangeDetector32 extends _gen.AbstractChangeDetector<dynamic> {
 
     l_cond3 = _gen.ChangeDetectionUtil
         .cond(l_operation_greater_then2, l_literal0, l_literal1);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.cond3, l_cond3)) {
-      this.throwOnChangeError(this.cond3, l_cond3);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_cond3, this.cond3)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.cond3, l_cond3);
+      }
+
       this.notifyDispatcher(l_cond3);
       this.logBindingUpdate(l_cond3);
 
@@ -1979,12 +1886,6 @@ class ChangeDetector33 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_literal0 = "foo";
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.literal0, l_literal0)) {
-      this.throwOnChangeError(this.literal0, l_literal0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_literal0, this.literal0)) {
       c_literal0 = true;
 
@@ -1992,12 +1893,6 @@ class ChangeDetector33 extends _gen.AbstractChangeDetector<dynamic> {
     }
 
     l_literal1 = "bar";
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.literal1, l_literal1)) {
-      this.throwOnChangeError(this.literal1, l_literal1);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_literal1, this.literal1)) {
       c_literal1 = true;
 
@@ -2006,12 +1901,6 @@ class ChangeDetector33 extends _gen.AbstractChangeDetector<dynamic> {
 
     if (c_literal0 || c_literal1) {
       l_arrayFn22 = _gen.ChangeDetectionUtil.arrayFn2(l_literal0, l_literal1);
-      if (_gen.assertionsEnabled() &&
-          throwOnChange &&
-          !_gen.ChangeDetectionUtil.devModeEqual(this.arrayFn22, l_arrayFn22)) {
-        this.throwOnChangeError(this.arrayFn22, l_arrayFn22);
-      }
-
       if (_gen.ChangeDetectionUtil
           .looseNotIdentical(l_arrayFn22, this.arrayFn22)) {
         this.arrayFn22 = l_arrayFn22;
@@ -2023,15 +1912,12 @@ class ChangeDetector33 extends _gen.AbstractChangeDetector<dynamic> {
     l_literal3 = 0;
 
     l_keyedAccess4 = l_arrayFn22[l_literal3];
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil
-            .devModeEqual(this.keyedAccess4, l_keyedAccess4)) {
-      this.throwOnChangeError(this.keyedAccess4, l_keyedAccess4);
-    }
-
     if (_gen.ChangeDetectionUtil
         .looseNotIdentical(l_keyedAccess4, this.keyedAccess4)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.keyedAccess4, l_keyedAccess4);
+      }
+
       this.notifyDispatcher(l_keyedAccess4);
       this.logBindingUpdate(l_keyedAccess4);
 
@@ -2087,12 +1973,6 @@ class ChangeDetector34 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_literal0 = "bar";
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.literal0, l_literal0)) {
-      this.throwOnChangeError(this.literal0, l_literal0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_literal0, this.literal0)) {
       c_literal0 = true;
 
@@ -2101,12 +1981,6 @@ class ChangeDetector34 extends _gen.AbstractChangeDetector<dynamic> {
 
     if (c_literal0) {
       l_mapFnfoo1 = _gen.ChangeDetectionUtil.mapFn(["foo"])(l_literal0);
-      if (_gen.assertionsEnabled() &&
-          throwOnChange &&
-          !_gen.ChangeDetectionUtil.devModeEqual(this.mapFnfoo1, l_mapFnfoo1)) {
-        this.throwOnChangeError(this.mapFnfoo1, l_mapFnfoo1);
-      }
-
       if (_gen.ChangeDetectionUtil
           .looseNotIdentical(l_mapFnfoo1, this.mapFnfoo1)) {
         this.mapFnfoo1 = l_mapFnfoo1;
@@ -2118,15 +1992,12 @@ class ChangeDetector34 extends _gen.AbstractChangeDetector<dynamic> {
     l_literal2 = "foo";
 
     l_keyedAccess3 = l_mapFnfoo1[l_literal2];
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil
-            .devModeEqual(this.keyedAccess3, l_keyedAccess3)) {
-      this.throwOnChangeError(this.keyedAccess3, l_keyedAccess3);
-    }
-
     if (_gen.ChangeDetectionUtil
         .looseNotIdentical(l_keyedAccess3, this.keyedAccess3)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.keyedAccess3, l_keyedAccess3);
+      }
+
       this.notifyDispatcher(l_keyedAccess3);
       this.logBindingUpdate(l_keyedAccess3);
 
@@ -2172,13 +2043,11 @@ class ChangeDetector35 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_name0 = l_context.name;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.name0, l_name0)) {
-      this.throwOnChangeError(this.name0, l_name0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_name0, this.name0)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.name0, l_name0);
+      }
+
       this.notifyDispatcher(l_name0);
       this.logBindingUpdate(l_name0);
 
@@ -2229,12 +2098,6 @@ class ChangeDetector36 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_literal0 = 1;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.literal0, l_literal0)) {
-      this.throwOnChangeError(this.literal0, l_literal0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_literal0, this.literal0)) {
       c_literal0 = true;
 
@@ -2242,12 +2105,6 @@ class ChangeDetector36 extends _gen.AbstractChangeDetector<dynamic> {
     }
 
     l_literal1 = 2;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.literal1, l_literal1)) {
-      this.throwOnChangeError(this.literal1, l_literal1);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_literal1, this.literal1)) {
       c_literal1 = true;
 
@@ -2256,14 +2113,12 @@ class ChangeDetector36 extends _gen.AbstractChangeDetector<dynamic> {
 
     if (c_literal0 || c_literal1) {
       l_arrayFn22 = _gen.ChangeDetectionUtil.arrayFn2(l_literal0, l_literal1);
-      if (_gen.assertionsEnabled() &&
-          throwOnChange &&
-          !_gen.ChangeDetectionUtil.devModeEqual(this.arrayFn22, l_arrayFn22)) {
-        this.throwOnChangeError(this.arrayFn22, l_arrayFn22);
-      }
-
       if (_gen.ChangeDetectionUtil
           .looseNotIdentical(l_arrayFn22, this.arrayFn22)) {
+        if (_gen.assertionsEnabled() && throwOnChange) {
+          this.throwOnChangeError(this.arrayFn22, l_arrayFn22);
+        }
+
         this.notifyDispatcher(l_arrayFn22);
         this.logBindingUpdate(l_arrayFn22);
 
@@ -2315,12 +2170,6 @@ class ChangeDetector37 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_literal0 = 1;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.literal0, l_literal0)) {
-      this.throwOnChangeError(this.literal0, l_literal0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_literal0, this.literal0)) {
       c_literal0 = true;
 
@@ -2328,12 +2177,6 @@ class ChangeDetector37 extends _gen.AbstractChangeDetector<dynamic> {
     }
 
     l_a1 = l_context.a;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.a1, l_a1)) {
-      this.throwOnChangeError(this.a1, l_a1);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_a1, this.a1)) {
       c_a1 = true;
 
@@ -2342,14 +2185,12 @@ class ChangeDetector37 extends _gen.AbstractChangeDetector<dynamic> {
 
     if (c_literal0 || c_a1) {
       l_arrayFn22 = _gen.ChangeDetectionUtil.arrayFn2(l_literal0, l_a1);
-      if (_gen.assertionsEnabled() &&
-          throwOnChange &&
-          !_gen.ChangeDetectionUtil.devModeEqual(this.arrayFn22, l_arrayFn22)) {
-        this.throwOnChangeError(this.arrayFn22, l_arrayFn22);
-      }
-
       if (_gen.ChangeDetectionUtil
           .looseNotIdentical(l_arrayFn22, this.arrayFn22)) {
+        if (_gen.assertionsEnabled() && throwOnChange) {
+          this.throwOnChangeError(this.arrayFn22, l_arrayFn22);
+        }
+
         this.notifyDispatcher(l_arrayFn22);
         this.logBindingUpdate(l_arrayFn22);
 
@@ -2396,12 +2237,6 @@ class ChangeDetector38 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_literal0 = 1;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.literal0, l_literal0)) {
-      this.throwOnChangeError(this.literal0, l_literal0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_literal0, this.literal0)) {
       c_literal0 = true;
 
@@ -2410,13 +2245,11 @@ class ChangeDetector38 extends _gen.AbstractChangeDetector<dynamic> {
 
     if (c_literal0) {
       l_mapFnz1 = _gen.ChangeDetectionUtil.mapFn(["z"])(l_literal0);
-      if (_gen.assertionsEnabled() &&
-          throwOnChange &&
-          !_gen.ChangeDetectionUtil.devModeEqual(this.mapFnz1, l_mapFnz1)) {
-        this.throwOnChangeError(this.mapFnz1, l_mapFnz1);
-      }
-
       if (_gen.ChangeDetectionUtil.looseNotIdentical(l_mapFnz1, this.mapFnz1)) {
+        if (_gen.assertionsEnabled() && throwOnChange) {
+          this.throwOnChangeError(this.mapFnz1, l_mapFnz1);
+        }
+
         this.notifyDispatcher(l_mapFnz1);
         this.logBindingUpdate(l_mapFnz1);
 
@@ -2462,12 +2295,6 @@ class ChangeDetector39 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_a0 = l_context.a;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.a0, l_a0)) {
-      this.throwOnChangeError(this.a0, l_a0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_a0, this.a0)) {
       c_a0 = true;
 
@@ -2476,13 +2303,11 @@ class ChangeDetector39 extends _gen.AbstractChangeDetector<dynamic> {
 
     if (c_a0) {
       l_mapFnz1 = _gen.ChangeDetectionUtil.mapFn(["z"])(l_a0);
-      if (_gen.assertionsEnabled() &&
-          throwOnChange &&
-          !_gen.ChangeDetectionUtil.devModeEqual(this.mapFnz1, l_mapFnz1)) {
-        this.throwOnChangeError(this.mapFnz1, l_mapFnz1);
-      }
-
       if (_gen.ChangeDetectionUtil.looseNotIdentical(l_mapFnz1, this.mapFnz1)) {
+        if (_gen.assertionsEnabled() && throwOnChange) {
+          this.throwOnChangeError(this.mapFnz1, l_mapFnz1);
+        }
+
         this.notifyDispatcher(l_mapFnz1);
         this.logBindingUpdate(l_mapFnz1);
 
@@ -2528,12 +2353,6 @@ class ChangeDetector40 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_name0 = l_context.name;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.name0, l_name0)) {
-      this.throwOnChangeError(this.name0, l_name0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_name0, this.name0)) {
       c_name0 = true;
 
@@ -2545,14 +2364,12 @@ class ChangeDetector40 extends _gen.AbstractChangeDetector<dynamic> {
     }
     if (!this.pipe1_pipe.pure || (c_name0)) {
       l_pipe1 = this.pipe1_pipe.pipe.transform(l_name0, []);
-      if (_gen.assertionsEnabled() &&
-          throwOnChange &&
-          !_gen.ChangeDetectionUtil.devModeEqual(this.pipe1, l_pipe1)) {
-        this.throwOnChangeError(this.pipe1, l_pipe1);
-      }
-
       if (_gen.ChangeDetectionUtil.looseNotIdentical(this.pipe1, l_pipe1)) {
         l_pipe1 = _gen.ChangeDetectionUtil.unwrapValue(l_pipe1);
+
+        if (_gen.assertionsEnabled() && throwOnChange) {
+          this.throwOnChangeError(this.pipe1, l_pipe1);
+        }
 
         this.notifyDispatcher(l_pipe1);
         this.logBindingUpdate(l_pipe1);
@@ -2606,12 +2423,6 @@ class ChangeDetector41 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_name0 = l_context.name;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.name0, l_name0)) {
-      this.throwOnChangeError(this.name0, l_name0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_name0, this.name0)) {
       c_name0 = true;
 
@@ -2623,12 +2434,6 @@ class ChangeDetector41 extends _gen.AbstractChangeDetector<dynamic> {
     }
     if (!this.pipe1_pipe.pure || (c_name0)) {
       l_pipe1 = this.pipe1_pipe.pipe.transform(l_name0, []);
-      if (_gen.assertionsEnabled() &&
-          throwOnChange &&
-          !_gen.ChangeDetectionUtil.devModeEqual(this.pipe1, l_pipe1)) {
-        this.throwOnChangeError(this.pipe1, l_pipe1);
-      }
-
       if (_gen.ChangeDetectionUtil.looseNotIdentical(this.pipe1, l_pipe1)) {
         l_pipe1 = _gen.ChangeDetectionUtil.unwrapValue(l_pipe1);
 
@@ -2639,13 +2444,11 @@ class ChangeDetector41 extends _gen.AbstractChangeDetector<dynamic> {
     }
 
     l_length2 = l_pipe1.length;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.length2, l_length2)) {
-      this.throwOnChangeError(this.length2, l_length2);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_length2, this.length2)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.length2, l_length2);
+      }
+
       this.notifyDispatcher(l_length2);
       this.logBindingUpdate(l_length2);
 
@@ -2706,12 +2509,6 @@ class ChangeDetector42 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_name0 = l_context.name;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.name0, l_name0)) {
-      this.throwOnChangeError(this.name0, l_name0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_name0, this.name0)) {
       c_name0 = true;
 
@@ -2719,12 +2516,6 @@ class ChangeDetector42 extends _gen.AbstractChangeDetector<dynamic> {
     }
 
     l_literal1 = "one";
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.literal1, l_literal1)) {
-      this.throwOnChangeError(this.literal1, l_literal1);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_literal1, this.literal1)) {
       c_literal1 = true;
 
@@ -2734,12 +2525,6 @@ class ChangeDetector42 extends _gen.AbstractChangeDetector<dynamic> {
     l_address2 = l_context.address;
 
     l_city3 = l_address2.city;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.city3, l_city3)) {
-      this.throwOnChangeError(this.city3, l_city3);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_city3, this.city3)) {
       c_city3 = true;
 
@@ -2751,14 +2536,12 @@ class ChangeDetector42 extends _gen.AbstractChangeDetector<dynamic> {
     }
     if (!this.pipe4_pipe.pure || (c_literal1 || c_city3 || c_name0)) {
       l_pipe4 = this.pipe4_pipe.pipe.transform(l_name0, [l_literal1, l_city3]);
-      if (_gen.assertionsEnabled() &&
-          throwOnChange &&
-          !_gen.ChangeDetectionUtil.devModeEqual(this.pipe4, l_pipe4)) {
-        this.throwOnChangeError(this.pipe4, l_pipe4);
-      }
-
       if (_gen.ChangeDetectionUtil.looseNotIdentical(this.pipe4, l_pipe4)) {
         l_pipe4 = _gen.ChangeDetectionUtil.unwrapValue(l_pipe4);
+
+        if (_gen.assertionsEnabled() && throwOnChange) {
+          this.throwOnChangeError(this.pipe4, l_pipe4);
+        }
 
         this.notifyDispatcher(l_pipe4);
         this.logBindingUpdate(l_pipe4);
@@ -2837,12 +2620,6 @@ class ChangeDetector43 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_name0 = l_context.name;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.name0, l_name0)) {
-      this.throwOnChangeError(this.name0, l_name0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_name0, this.name0)) {
       c_name0 = true;
 
@@ -2850,12 +2627,6 @@ class ChangeDetector43 extends _gen.AbstractChangeDetector<dynamic> {
     }
 
     l_literal1 = "a";
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.literal1, l_literal1)) {
-      this.throwOnChangeError(this.literal1, l_literal1);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_literal1, this.literal1)) {
       c_literal1 = true;
 
@@ -2863,12 +2634,6 @@ class ChangeDetector43 extends _gen.AbstractChangeDetector<dynamic> {
     }
 
     l_literal2 = "b";
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.literal2, l_literal2)) {
-      this.throwOnChangeError(this.literal2, l_literal2);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_literal2, this.literal2)) {
       c_literal2 = true;
 
@@ -2881,12 +2646,6 @@ class ChangeDetector43 extends _gen.AbstractChangeDetector<dynamic> {
     if (!this.pipe3_pipe.pure || (c_literal1 || c_literal2 || c_name0)) {
       l_pipe3 =
           this.pipe3_pipe.pipe.transform(l_name0, [l_literal1, l_literal2]);
-      if (_gen.assertionsEnabled() &&
-          throwOnChange &&
-          !_gen.ChangeDetectionUtil.devModeEqual(this.pipe3, l_pipe3)) {
-        this.throwOnChangeError(this.pipe3, l_pipe3);
-      }
-
       if (_gen.ChangeDetectionUtil.looseNotIdentical(this.pipe3, l_pipe3)) {
         l_pipe3 = _gen.ChangeDetectionUtil.unwrapValue(l_pipe3);
         c_pipe3 = true;
@@ -2898,12 +2657,6 @@ class ChangeDetector43 extends _gen.AbstractChangeDetector<dynamic> {
     }
 
     l_literal4 = 0;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.literal4, l_literal4)) {
-      this.throwOnChangeError(this.literal4, l_literal4);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_literal4, this.literal4)) {
       c_literal4 = true;
 
@@ -2911,12 +2664,6 @@ class ChangeDetector43 extends _gen.AbstractChangeDetector<dynamic> {
     }
 
     l_literal5 = 1;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.literal5, l_literal5)) {
-      this.throwOnChangeError(this.literal5, l_literal5);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_literal5, this.literal5)) {
       c_literal5 = true;
 
@@ -2924,12 +2671,6 @@ class ChangeDetector43 extends _gen.AbstractChangeDetector<dynamic> {
     }
 
     l_literal6 = 2;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.literal6, l_literal6)) {
-      this.throwOnChangeError(this.literal6, l_literal6);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_literal6, this.literal6)) {
       c_literal6 = true;
 
@@ -2945,14 +2686,12 @@ class ChangeDetector43 extends _gen.AbstractChangeDetector<dynamic> {
           .pipe7_pipe
           .pipe
           .transform(l_pipe3, [l_literal4, l_literal5, l_literal6]);
-      if (_gen.assertionsEnabled() &&
-          throwOnChange &&
-          !_gen.ChangeDetectionUtil.devModeEqual(this.pipe7, l_pipe7)) {
-        this.throwOnChangeError(this.pipe7, l_pipe7);
-      }
-
       if (_gen.ChangeDetectionUtil.looseNotIdentical(this.pipe7, l_pipe7)) {
         l_pipe7 = _gen.ChangeDetectionUtil.unwrapValue(l_pipe7);
+
+        if (_gen.assertionsEnabled() && throwOnChange) {
+          this.throwOnChangeError(this.pipe7, l_pipe7);
+        }
 
         this.notifyDispatcher(l_pipe7);
         this.logBindingUpdate(l_pipe7);
@@ -3003,13 +2742,11 @@ class ChangeDetector44 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_value0 = l_context.value;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.value0, l_value0)) {
-      this.throwOnChangeError(this.value0, l_value0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_value0, this.value0)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.value0, l_value0);
+      }
+
       this.notifyDispatcher(l_value0);
       this.logBindingUpdate(l_value0);
 
@@ -3054,13 +2791,11 @@ class ChangeDetector45 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_a0 = l_context.a;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.a0, l_a0)) {
-      this.throwOnChangeError(this.a0, l_a0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_a0, this.a0)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.a0, l_a0);
+      }
+
       this.notifyDispatcher(l_a0);
       this.logBindingUpdate(l_a0);
 
@@ -3107,13 +2842,11 @@ class ChangeDetector46 extends _gen.AbstractChangeDetector<dynamic> {
     l_address0 = l_context.address;
 
     l_city1 = l_address0.city;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.city1, l_city1)) {
-      this.throwOnChangeError(this.city1, l_city1);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_city1, this.city1)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.city1, l_city1);
+      }
+
       this.notifyDispatcher(l_city1);
       this.logBindingUpdate(l_city1);
 
@@ -3162,13 +2895,11 @@ class ChangeDetector47 extends _gen.AbstractChangeDetector<dynamic> {
     l_city1 = _gen.ChangeDetectionUtil.isValueBlank(l_address0)
         ? null
         : l_address0.city;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.city1, l_city1)) {
-      this.throwOnChangeError(this.city1, l_city1);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_city1, this.city1)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.city1, l_city1);
+      }
+
       this.notifyDispatcher(l_city1);
       this.logBindingUpdate(l_city1);
 
@@ -3221,14 +2952,12 @@ class ChangeDetector48 extends _gen.AbstractChangeDetector<dynamic> {
     l_toString1 = _gen.ChangeDetectionUtil.isValueBlank(l_address0)
         ? null
         : l_address0.toString();
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.toString1, l_toString1)) {
-      this.throwOnChangeError(this.toString1, l_toString1);
-    }
-
     if (_gen.ChangeDetectionUtil
         .looseNotIdentical(l_toString1, this.toString1)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.toString1, l_toString1);
+      }
+
       this.notifyDispatcher(l_toString1);
       this.logBindingUpdate(l_toString1);
 
@@ -3275,13 +3004,11 @@ class ChangeDetector49 extends _gen.AbstractChangeDetector<dynamic> {
     l_literal0 = "Jim";
 
     l_sayHi1 = l_context.sayHi(l_literal0);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.sayHi1, l_sayHi1)) {
-      this.throwOnChangeError(this.sayHi1, l_sayHi1);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_sayHi1, this.sayHi1)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.sayHi1, l_sayHi1);
+      }
+
       this.notifyDispatcher(l_sayHi1);
       this.logBindingUpdate(l_sayHi1);
 
@@ -3330,13 +3057,11 @@ class ChangeDetector50 extends _gen.AbstractChangeDetector<dynamic> {
     l_literal1 = 99;
 
     l_closure2 = l_a0(l_literal1);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.closure2, l_closure2)) {
-      this.throwOnChangeError(this.closure2, l_closure2);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_closure2, this.closure2)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.closure2, l_closure2);
+      }
+
       this.notifyDispatcher(l_closure2);
       this.logBindingUpdate(l_closure2);
 
@@ -3389,13 +3114,11 @@ class ChangeDetector51 extends _gen.AbstractChangeDetector<dynamic> {
     l_literal1 = "Jim";
 
     l_sayHi2 = l_a0.sayHi(l_literal1);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.sayHi2, l_sayHi2)) {
-      this.throwOnChangeError(this.sayHi2, l_sayHi2);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_sayHi2, this.sayHi2)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.sayHi2, l_sayHi2);
+      }
+
       this.notifyDispatcher(l_sayHi2);
       this.logBindingUpdate(l_sayHi2);
 
@@ -3449,12 +3172,6 @@ class ChangeDetector52 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_literal0 = 12;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.literal0, l_literal0)) {
-      this.throwOnChangeError(this.literal0, l_literal0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_literal0, this.literal0)) {
       c_literal0 = true;
 
@@ -3463,12 +3180,6 @@ class ChangeDetector52 extends _gen.AbstractChangeDetector<dynamic> {
 
     if (c_literal0) {
       l_arrayFn11 = _gen.ChangeDetectionUtil.arrayFn1(l_literal0);
-      if (_gen.assertionsEnabled() &&
-          throwOnChange &&
-          !_gen.ChangeDetectionUtil.devModeEqual(this.arrayFn11, l_arrayFn11)) {
-        this.throwOnChangeError(this.arrayFn11, l_arrayFn11);
-      }
-
       if (_gen.ChangeDetectionUtil
           .looseNotIdentical(l_arrayFn11, this.arrayFn11)) {
         this.arrayFn11 = l_arrayFn11;
@@ -3478,15 +3189,12 @@ class ChangeDetector52 extends _gen.AbstractChangeDetector<dynamic> {
     }
 
     l_passThrough2 = l_context.passThrough(l_arrayFn11);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil
-            .devModeEqual(this.passThrough2, l_passThrough2)) {
-      this.throwOnChangeError(this.passThrough2, l_passThrough2);
-    }
-
     if (_gen.ChangeDetectionUtil
         .looseNotIdentical(l_passThrough2, this.passThrough2)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.passThrough2, l_passThrough2);
+      }
+
       this.notifyDispatcher(l_passThrough2);
       this.logBindingUpdate(l_passThrough2);
 
@@ -3534,14 +3242,12 @@ class ChangeDetector53 extends _gen.AbstractChangeDetector<dynamic> {
     l_literal0 = 1;
 
     l_invalidFn1 = l_context.invalidFn(l_literal0);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.invalidFn1, l_invalidFn1)) {
-      this.throwOnChangeError(this.invalidFn1, l_invalidFn1);
-    }
-
     if (_gen.ChangeDetectionUtil
         .looseNotIdentical(l_invalidFn1, this.invalidFn1)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.invalidFn1, l_invalidFn1);
+      }
+
       this.notifyDispatcher(l_invalidFn1);
       this.logBindingUpdate(l_invalidFn1);
 
@@ -3586,13 +3292,11 @@ class ChangeDetector54 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_age0 = l_context.age;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.age0, l_age0)) {
-      this.throwOnChangeError(this.age0, l_age0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_age0, this.age0)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.age0, l_age0);
+      }
+
       this.notifyDispatcher(l_age0);
       this.logBindingUpdate(l_age0);
 
@@ -3655,13 +3359,11 @@ class ChangeDetector55 extends _gen.AbstractChangeDetector<dynamic> {
     }
 
     l_cond5 = _gen.ChangeDetectionUtil.cond(l_literal0, l_city2, l_zipcode4);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.cond5, l_cond5)) {
-      this.throwOnChangeError(this.cond5, l_cond5);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_cond5, this.cond5)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.cond5, l_cond5);
+      }
+
       this.notifyDispatcher(l_cond5);
       this.logBindingUpdate(l_cond5);
 
@@ -3724,13 +3426,11 @@ class ChangeDetector56 extends _gen.AbstractChangeDetector<dynamic> {
     }
 
     l_cond5 = _gen.ChangeDetectionUtil.cond(l_literal0, l_city2, l_zipcode4);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.cond5, l_cond5)) {
-      this.throwOnChangeError(this.cond5, l_cond5);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_cond5, this.cond5)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.cond5, l_cond5);
+      }
+
       this.notifyDispatcher(l_cond5);
       this.logBindingUpdate(l_cond5);
 
@@ -3789,13 +3489,11 @@ class ChangeDetector57 extends _gen.AbstractChangeDetector<dynamic> {
     }
 
     l_cond3 = _gen.ChangeDetectionUtil.cond(l_getTrue0, l_getTrue2, l_getTrue0);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.cond3, l_cond3)) {
-      this.throwOnChangeError(this.cond3, l_cond3);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_cond3, this.cond3)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.cond3, l_cond3);
+      }
+
       this.notifyDispatcher(l_cond3);
       this.logBindingUpdate(l_cond3);
 
@@ -3855,13 +3553,11 @@ class ChangeDetector58 extends _gen.AbstractChangeDetector<dynamic> {
 
     l_cond3 =
         _gen.ChangeDetectionUtil.cond(l_getFalse0, l_getTrue2, l_getFalse0);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.cond3, l_cond3)) {
-      this.throwOnChangeError(this.cond3, l_cond3);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_cond3, this.cond3)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.cond3, l_cond3);
+      }
+
       this.notifyDispatcher(l_cond3);
       this.logBindingUpdate(l_cond3);
 
@@ -3921,13 +3617,11 @@ class ChangeDetector59 extends _gen.AbstractChangeDetector<dynamic> {
 
     l_cond3 =
         _gen.ChangeDetectionUtil.cond(l_getFalse0, l_getFalse0, l_getFalse2);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.cond3, l_cond3)) {
-      this.throwOnChangeError(this.cond3, l_cond3);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_cond3, this.cond3)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.cond3, l_cond3);
+      }
+
       this.notifyDispatcher(l_cond3);
       this.logBindingUpdate(l_cond3);
 
@@ -3987,13 +3681,11 @@ class ChangeDetector60 extends _gen.AbstractChangeDetector<dynamic> {
 
     l_cond3 =
         _gen.ChangeDetectionUtil.cond(l_getTrue0, l_getTrue0, l_getFalse2);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.cond3, l_cond3)) {
-      this.throwOnChangeError(this.cond3, l_cond3);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_cond3, this.cond3)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.cond3, l_cond3);
+      }
+
       this.notifyDispatcher(l_cond3);
       this.logBindingUpdate(l_cond3);
 
@@ -4087,13 +3779,11 @@ class ChangeDetector61 extends _gen.AbstractChangeDetector<dynamic> {
 
     l_cond15 = _gen.ChangeDetectionUtil
         .cond(l_operation_equals2, l_cond11, l_zipcode14);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.cond15, l_cond15)) {
-      this.throwOnChangeError(this.cond15, l_cond15);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_cond15, this.cond15)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.cond15, l_cond15);
+      }
+
       this.notifyDispatcher(l_cond15);
       this.logBindingUpdate(l_cond15);
 
@@ -4146,13 +3836,11 @@ class ChangeDetector62 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_key0 = this.locals.get(r'key');
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.key0, l_key0)) {
-      this.throwOnChangeError(this.key0, l_key0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_key0, this.key0)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.key0, l_key0);
+      }
+
       this.notifyDispatcher(l_key0);
       this.logBindingUpdate(l_key0);
 
@@ -4203,13 +3891,11 @@ class ChangeDetector63 extends _gen.AbstractChangeDetector<dynamic> {
     l_key0 = this.locals.get(r'key');
 
     l_closure1 = l_key0();
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.closure1, l_closure1)) {
-      this.throwOnChangeError(this.closure1, l_closure1);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_closure1, this.closure1)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.closure1, l_closure1);
+      }
+
       this.notifyDispatcher(l_closure1);
       this.logBindingUpdate(l_closure1);
 
@@ -4254,13 +3940,11 @@ class ChangeDetector64 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_key0 = this.locals.get(r'key');
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.key0, l_key0)) {
-      this.throwOnChangeError(this.key0, l_key0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_key0, this.key0)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.key0, l_key0);
+      }
+
       this.notifyDispatcher(l_key0);
       this.logBindingUpdate(l_key0);
 
@@ -4305,13 +3989,11 @@ class ChangeDetector65 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_name0 = l_context.name;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.name0, l_name0)) {
-      this.throwOnChangeError(this.name0, l_name0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_name0, this.name0)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.name0, l_name0);
+      }
+
       this.notifyDispatcher(l_name0);
       this.logBindingUpdate(l_name0);
 
@@ -4362,13 +4044,11 @@ class ChangeDetector66 extends _gen.AbstractChangeDetector<dynamic> {
     l_address0 = l_context.address;
 
     l_city1 = l_address0.city;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.city1, l_city1)) {
-      this.throwOnChangeError(this.city1, l_city1);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_city1, this.city1)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.city1, l_city1);
+      }
+
       this.notifyDispatcher(l_city1);
       this.logBindingUpdate(l_city1);
 
@@ -4417,13 +4097,11 @@ class ChangeDetector67 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_city0 = this.locals.get(r'city');
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.city0, l_city0)) {
-      this.throwOnChangeError(this.city0, l_city0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_city0, this.city0)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.city0, l_city0);
+      }
+
       this.notifyDispatcher(l_city0);
       this.logBindingUpdate(l_city0);
 
@@ -4524,13 +4202,11 @@ class ChangeDetector70 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_literal0 = 42;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.literal0, l_literal0)) {
-      this.throwOnChangeError(this.literal0, l_literal0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_literal0, this.literal0)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.literal0, l_literal0);
+      }
+
       this.directive_0_0.a = l_literal0;
       this.logBindingUpdate(l_literal0);
       isChanged = true;
@@ -4544,13 +4220,11 @@ class ChangeDetector70 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 1;
     l_self1 = l_literal0;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.self1, l_self1)) {
-      this.throwOnChangeError(this.self1, l_self1);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_self1, this.self1)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.self1, l_self1);
+      }
+
       this.directive_0_1.a = l_self1;
       this.logBindingUpdate(l_self1);
       isChanged = true;
@@ -4741,13 +4415,11 @@ class ChangeDetector73 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_literal0 = 42;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.literal0, l_literal0)) {
-      this.throwOnChangeError(this.literal0, l_literal0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_literal0, this.literal0)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.literal0, l_literal0);
+      }
+
       this.directive_0_0.a = l_literal0;
       this.logBindingUpdate(l_literal0);
       isChanged = true;
@@ -4830,13 +4502,11 @@ class ChangeDetector74 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_literal0 = 1;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.literal0, l_literal0)) {
-      this.throwOnChangeError(this.literal0, l_literal0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_literal0, this.literal0)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.literal0, l_literal0);
+      }
+
       this.directive_0_0.a = l_literal0;
       this.logBindingUpdate(l_literal0);
       isChanged = true;
@@ -4847,13 +4517,11 @@ class ChangeDetector74 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 1;
     l_literal1 = 2;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.literal1, l_literal1)) {
-      this.throwOnChangeError(this.literal1, l_literal1);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_literal1, this.literal1)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.literal1, l_literal1);
+      }
+
       this.directive_0_0.b = l_literal1;
       this.logBindingUpdate(l_literal1);
       isChanged = true;
@@ -4870,13 +4538,11 @@ class ChangeDetector74 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 3;
     l_literal3 = 3;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.literal3, l_literal3)) {
-      this.throwOnChangeError(this.literal3, l_literal3);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_literal3, this.literal3)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.literal3, l_literal3);
+      }
+
       this.directive_0_1.a = l_literal3;
       this.logBindingUpdate(l_literal3);
       isChanged = true;
@@ -5170,13 +4836,11 @@ class ChangeDetector78 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_literal0 = 1;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.literal0, l_literal0)) {
-      this.throwOnChangeError(this.literal0, l_literal0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_literal0, this.literal0)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.literal0, l_literal0);
+      }
+
       this.directive_0_0.a = l_literal0;
       this.logBindingUpdate(l_literal0);
       isChanged = true;
@@ -5232,13 +4896,11 @@ class ChangeDetector79 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_a0 = this.directive_0_0.a;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.a0, l_a0)) {
-      this.throwOnChangeError(this.a0, l_a0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_a0, this.a0)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.a0, l_a0);
+      }
+
       this.notifyDispatcher(l_a0);
       this.logBindingUpdate(l_a0);
 
@@ -5309,12 +4971,6 @@ class ChangeDetector80 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_a0 = l_context.a;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.a0, l_a0)) {
-      this.throwOnChangeError(this.a0, l_a0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_a0, this.a0)) {
       c_a0 = true;
 
@@ -5323,15 +4979,12 @@ class ChangeDetector80 extends _gen.AbstractChangeDetector<dynamic> {
 
     if (c_a0) {
       l_interpolate1 = "${"B"}${_gen.ChangeDetectionUtil.s(l_a0)}${"A"}";
-      if (_gen.assertionsEnabled() &&
-          throwOnChange &&
-          !_gen.ChangeDetectionUtil
-              .devModeEqual(this.interpolate1, l_interpolate1)) {
-        this.throwOnChangeError(this.interpolate1, l_interpolate1);
-      }
-
       if (_gen.ChangeDetectionUtil
           .looseNotIdentical(l_interpolate1, this.interpolate1)) {
+        if (_gen.assertionsEnabled() && throwOnChange) {
+          this.throwOnChangeError(this.interpolate1, l_interpolate1);
+        }
+
         this.notifyDispatcher(l_interpolate1);
         this.logBindingUpdate(l_interpolate1);
 
@@ -5831,13 +5484,11 @@ class ChangeDetector90 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_a0 = this.observeValue(l_context.a, 1);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.a0, l_a0)) {
-      this.throwOnChangeError(this.a0, l_a0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_a0, this.a0)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.a0, l_a0);
+      }
+
       this.notifyDispatcher(l_a0);
       this.logBindingUpdate(l_a0);
 
@@ -5952,13 +5603,11 @@ class ChangeDetector93 extends _gen.AbstractChangeDetector<dynamic> {
 
     this.propertyBindingIndex = 0;
     l_name0 = l_context.name;
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.name0, l_name0)) {
-      this.throwOnChangeError(this.name0, l_name0);
-    }
-
     if (_gen.ChangeDetectionUtil.looseNotIdentical(l_name0, this.name0)) {
+      if (_gen.assertionsEnabled() && throwOnChange) {
+        this.throwOnChangeError(this.name0, l_name0);
+      }
+
       this.notifyDispatcher(l_name0);
 
       this.name0 = l_name0;

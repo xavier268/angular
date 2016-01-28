@@ -314,10 +314,7 @@ class DynamicChangeDetector extends AbstractChangeDetector<dynamic> {
     }
     if (proto.shouldBeChecked()) {
       var prevValue = this._readSelf(proto, values);
-      var detectedChange = throwOnChange
-          ? !ChangeDetectionUtil.devModeEqual(prevValue, currValue)
-          : ChangeDetectionUtil.looseNotIdentical(prevValue, currValue);
-      if (detectedChange) {
+      if (ChangeDetectionUtil.looseNotIdentical(prevValue, currValue)) {
         if (proto.lastInBinding) {
           var change = ChangeDetectionUtil.simpleChange(prevValue, currValue);
           if (throwOnChange) this.throwOnChangeError(prevValue, currValue);
@@ -403,10 +400,7 @@ class DynamicChangeDetector extends AbstractChangeDetector<dynamic> {
       var currValue = selectedPipe.pipe.transform(context, args);
       if (proto.shouldBeChecked()) {
         var prevValue = this._readSelf(proto, values);
-        var detectedChange = throwOnChange
-            ? !ChangeDetectionUtil.devModeEqual(prevValue, currValue)
-            : ChangeDetectionUtil.looseNotIdentical(prevValue, currValue);
-        if (detectedChange) {
+        if (ChangeDetectionUtil.looseNotIdentical(prevValue, currValue)) {
           currValue = ChangeDetectionUtil.unwrapValue(currValue);
           if (proto.lastInBinding) {
             var change = ChangeDetectionUtil.simpleChange(prevValue, currValue);
