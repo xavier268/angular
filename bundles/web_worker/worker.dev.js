@@ -21649,7 +21649,11 @@ System.register("angular2/src/core/linker/element", ["angular2/src/facade/lang",
       var inj = this;
       while (lang_1.isPresent(inj)) {
         inj._setQueriesAsDirty();
-        inj = inj.parent;
+        if (lang_1.isBlank(inj.parent) && lang_1.isPresent(inj.parentView.containerAppElement)) {
+          inj = inj.parentView.containerAppElement;
+        } else {
+          inj = inj.parent;
+        }
       }
     };
     AppElement.prototype._setQueriesAsDirty = function() {
