@@ -31,10 +31,12 @@ main() {
           .toEqual(false);
       expect(matched).toEqual([]);
       expect(matcher.match(
-          CssSelector.parse("SOMETAG")[0], selectableCollector)).toEqual(false);
+              CssSelector.parse("SOMETAG")[0], selectableCollector))
+          .toEqual(false);
       expect(matched).toEqual([]);
       expect(matcher.match(
-          CssSelector.parse("someTag")[0], selectableCollector)).toEqual(true);
+              CssSelector.parse("someTag")[0], selectableCollector))
+          .toEqual(true);
       expect(matched).toEqual([s1[0], 1]);
     });
     it("should select by class name case insensitive", () {
@@ -68,25 +70,30 @@ main() {
           .toEqual(false);
       expect(matched).toEqual([]);
       expect(matcher.match(CssSelector.parse("[SOMEATTR=someValue]")[0],
-          selectableCollector)).toEqual(false);
+              selectableCollector))
+          .toEqual(false);
       expect(matched).toEqual([]);
       expect(matcher.match(CssSelector.parse("[someAttr][someAttr2]")[0],
-          selectableCollector)).toEqual(true);
+              selectableCollector))
+          .toEqual(true);
       expect(matched).toEqual([s1[0], 1, s2[0], 2]);
       reset();
       expect(matcher.match(
-          CssSelector.parse("[someAttr=someValue][someAttr2]")[0],
-          selectableCollector)).toEqual(true);
+              CssSelector.parse("[someAttr=someValue][someAttr2]")[0],
+              selectableCollector))
+          .toEqual(true);
       expect(matched).toEqual([s1[0], 1, s2[0], 2]);
       reset();
       expect(matcher.match(
-          CssSelector.parse("[someAttr2][someAttr=someValue]")[0],
-          selectableCollector)).toEqual(true);
+              CssSelector.parse("[someAttr2][someAttr=someValue]")[0],
+              selectableCollector))
+          .toEqual(true);
       expect(matched).toEqual([s1[0], 1, s2[0], 2]);
       reset();
       expect(matcher.match(
-          CssSelector.parse("[someAttr2=someValue][someAttr]")[0],
-          selectableCollector)).toEqual(true);
+              CssSelector.parse("[someAttr2=someValue][someAttr]")[0],
+              selectableCollector))
+          .toEqual(true);
       expect(matched).toEqual([s1[0], 1, s2[0], 2]);
     });
     it("should select by attr name only once if the value is from the DOM", () {
@@ -102,13 +109,16 @@ main() {
         () {
       matcher.addSelectables(s1 = CssSelector.parse("[someAttr=someValue]"), 1);
       expect(matcher.match(CssSelector.parse("[SOMEATTR=SOMEOTHERATTR]")[0],
-          selectableCollector)).toEqual(false);
+              selectableCollector))
+          .toEqual(false);
       expect(matched).toEqual([]);
       expect(matcher.match(CssSelector.parse("[SOMEATTR=SOMEVALUE]")[0],
-          selectableCollector)).toEqual(false);
+              selectableCollector))
+          .toEqual(false);
       expect(matched).toEqual([]);
       expect(matcher.match(CssSelector.parse("[someAttr=SOMEVALUE]")[0],
-          selectableCollector)).toEqual(true);
+              selectableCollector))
+          .toEqual(true);
       expect(matched).toEqual([s1[0], 1]);
     });
     it("should select by element name, class name and attribute name with value",
@@ -116,23 +126,29 @@ main() {
       matcher.addSelectables(
           s1 = CssSelector.parse("someTag.someClass[someAttr=someValue]"), 1);
       expect(matcher.match(
-          CssSelector.parse("someOtherTag.someOtherClass[someOtherAttr]")[0],
-          selectableCollector)).toEqual(false);
+              CssSelector.parse("someOtherTag.someOtherClass[someOtherAttr]")[
+                  0],
+              selectableCollector))
+          .toEqual(false);
       expect(matched).toEqual([]);
       expect(matcher.match(
-          CssSelector.parse("someTag.someOtherClass[someOtherAttr]")[0],
-          selectableCollector)).toEqual(false);
+              CssSelector.parse("someTag.someOtherClass[someOtherAttr]")[0],
+              selectableCollector))
+          .toEqual(false);
       expect(matched).toEqual([]);
       expect(matcher.match(
-          CssSelector.parse("someTag.someClass[someOtherAttr]")[0],
-          selectableCollector)).toEqual(false);
+              CssSelector.parse("someTag.someClass[someOtherAttr]")[0],
+              selectableCollector))
+          .toEqual(false);
       expect(matched).toEqual([]);
       expect(matcher.match(CssSelector.parse("someTag.someClass[someAttr]")[0],
-          selectableCollector)).toEqual(false);
+              selectableCollector))
+          .toEqual(false);
       expect(matched).toEqual([]);
       expect(matcher.match(
-          CssSelector.parse("someTag.someClass[someAttr=someValue]")[0],
-          selectableCollector)).toEqual(true);
+              CssSelector.parse("someTag.someClass[someAttr=someValue]")[0],
+              selectableCollector))
+          .toEqual(true);
       expect(matched).toEqual([s1[0], 1]);
     });
     it("should select by many attributes and independent of the value", () {
@@ -151,11 +167,13 @@ main() {
       matcher.addSelectables(s3 = CssSelector.parse(".class1.class2"), 3);
       matcher.addSelectables(s4 = CssSelector.parse(".class2.class1"), 4);
       expect(matcher.match(CssSelector.parse("[someAttr].someClass")[0],
-          selectableCollector)).toEqual(true);
+              selectableCollector))
+          .toEqual(true);
       expect(matched).toEqual([s1[0], 1, s2[0], 2]);
       reset();
       expect(matcher.match(CssSelector.parse(".someClass[someAttr]")[0],
-          selectableCollector)).toEqual(true);
+              selectableCollector))
+          .toEqual(true);
       expect(matched).toEqual([s1[0], 1, s2[0], 2]);
       reset();
       expect(matcher.match(
@@ -175,7 +193,8 @@ main() {
       matcher.addSelectables(CssSelector.parse(":not(p)"), 4);
       matcher.addSelectables(CssSelector.parse(":not(p[someAttr])"), 5);
       expect(matcher.match(CssSelector.parse("p.someClass[someAttr]")[0],
-          selectableCollector)).toEqual(false);
+              selectableCollector))
+          .toEqual(false);
       expect(matched).toEqual([]);
     });
     it("should select with a non matching :not selector", () {
@@ -186,8 +205,9 @@ main() {
       matcher.addSelectables(
           s4 = CssSelector.parse(":not(.someOtherClass[someAttr])"), 4);
       expect(matcher.match(
-          CssSelector.parse("p[someOtherAttr].someOtherClass")[0],
-          selectableCollector)).toEqual(true);
+              CssSelector.parse("p[someOtherAttr].someOtherClass")[0],
+              selectableCollector))
+          .toEqual(true);
       expect(matched).toEqual([s1[0], 1, s2[0], 2, s3[0], 3, s4[0], 4]);
     });
     it("should match with multiple :not selectors", () {
@@ -204,7 +224,8 @@ main() {
       matcher.addSelectables(
           s1 = CssSelector.parse("input[type=text], textbox"), 1);
       expect(matcher.match(
-          CssSelector.parse("textbox")[0], selectableCollector)).toEqual(true);
+              CssSelector.parse("textbox")[0], selectableCollector))
+          .toEqual(true);
       expect(matched).toEqual([s1[1], 1]);
       reset();
       expect(matcher.match(

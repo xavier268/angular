@@ -102,8 +102,8 @@ class LegacyHtmlAstTransformer implements HtmlAstVisitor {
     if (name.toLowerCase() == "template") {
       name = "template";
       // rewrite the directive selector
-      value = StringWrapper.replaceAllMapped(value, TEMPLATE_SELECTOR_REGEXP,
-          (m) {
+      value =
+          StringWrapper.replaceAllMapped(value, TEMPLATE_SELECTOR_REGEXP, (m) {
         return dashCaseToCamelCase(m[1]);
       });
       // rewrite the var declarations
@@ -128,8 +128,8 @@ class LegacyHtmlAstTransformer implements HtmlAstVisitor {
       } else if (isPresent(m[2])) {
         attrName = '''[(${ dashCaseToCamelCase ( m [ 2 ] )})]''';
       } else if (isPresent(m[3])) {
-        var prop = StringWrapper.replaceAllMapped(m[3], SPECIAL_PREFIXES_REGEXP,
-            (m) {
+        var prop =
+            StringWrapper.replaceAllMapped(m[3], SPECIAL_PREFIXES_REGEXP, (m) {
           return m[1].toLowerCase() + ".";
         });
         if (prop.startsWith("class.") ||
@@ -155,8 +155,8 @@ class LegacyHtmlAstTransformer implements HtmlAstVisitor {
     if (attrName[0] == "*") {
       attrName = dashCaseToCamelCase(attrName);
       // rewrite the var declarations
-      attrValue = StringWrapper.replaceAllMapped(
-          attrValue, VARIABLE_TPL_BINDING_REGEXP, (m) {
+      attrValue = StringWrapper
+          .replaceAllMapped(attrValue, VARIABLE_TPL_BINDING_REGEXP, (m) {
         return '''${ m [ 1 ] . toLowerCase ( )}${ dashCaseToCamelCase ( m [ 2 ] )}''';
       });
     }

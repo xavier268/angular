@@ -156,9 +156,9 @@ declareTests() {
                 .then((fixture) {
               fixture.debugElement.componentInstance.ctxProp = "Hello World!";
               fixture.detectChanges();
-              expect(fixture.debugElement.componentViewChildren[0]
-                  .nativeElement
-                  .id).toEqual("Hello World!");
+              expect(fixture
+                      .debugElement.componentViewChildren[0].nativeElement.id)
+                  .toEqual("Hello World!");
               async.done();
             });
           }));
@@ -177,14 +177,18 @@ declareTests() {
                   "Initial aria label";
               fixture.detectChanges();
               expect(DOM.getAttribute(
-                  fixture.debugElement.componentViewChildren[0].nativeElement,
-                  "aria-label")).toEqual("Initial aria label");
+                      fixture
+                          .debugElement.componentViewChildren[0].nativeElement,
+                      "aria-label"))
+                  .toEqual("Initial aria label");
               fixture.debugElement.componentInstance.ctxProp =
                   "Changed aria label";
               fixture.detectChanges();
               expect(DOM.getAttribute(
-                  fixture.debugElement.componentViewChildren[0].nativeElement,
-                  "aria-label")).toEqual("Changed aria label");
+                      fixture
+                          .debugElement.componentViewChildren[0].nativeElement,
+                      "aria-label"))
+                  .toEqual("Changed aria label");
               async.done();
             });
           }));
@@ -202,13 +206,17 @@ declareTests() {
               fixture.debugElement.componentInstance.ctxProp = "bar";
               fixture.detectChanges();
               expect(DOM.getAttribute(
-                  fixture.debugElement.componentViewChildren[0].nativeElement,
-                  "foo")).toEqual("bar");
+                      fixture
+                          .debugElement.componentViewChildren[0].nativeElement,
+                      "foo"))
+                  .toEqual("bar");
               fixture.debugElement.componentInstance.ctxProp = null;
               fixture.detectChanges();
               expect(DOM.hasAttribute(
-                  fixture.debugElement.componentViewChildren[0].nativeElement,
-                  "foo")).toBeFalsy();
+                      fixture
+                          .debugElement.componentViewChildren[0].nativeElement,
+                      "foo"))
+                  .toBeFalsy();
               async.done();
             });
           }));
@@ -226,13 +234,17 @@ declareTests() {
               fixture.debugElement.componentInstance.ctxProp = "10";
               fixture.detectChanges();
               expect(DOM.getStyle(
-                  fixture.debugElement.componentViewChildren[0].nativeElement,
-                  "height")).toEqual("10px");
+                      fixture
+                          .debugElement.componentViewChildren[0].nativeElement,
+                      "height"))
+                  .toEqual("10px");
               fixture.debugElement.componentInstance.ctxProp = null;
               fixture.detectChanges();
               expect(DOM.getStyle(
-                  fixture.debugElement.componentViewChildren[0].nativeElement,
-                  "height")).toEqual("");
+                      fixture
+                          .debugElement.componentViewChildren[0].nativeElement,
+                      "height"))
+                  .toEqual("");
               async.done();
             });
           }));
@@ -248,14 +260,14 @@ declareTests() {
                 .createAsync(MyComp)
                 .then((fixture) {
               fixture.detectChanges();
-              expect(fixture.debugElement.componentViewChildren[0]
-                  .nativeElement
-                  .tabIndex).toEqual(0);
+              expect(fixture.debugElement.componentViewChildren[0].nativeElement
+                      .tabIndex)
+                  .toEqual(0);
               fixture.debugElement.componentInstance.ctxNumProp = 5;
               fixture.detectChanges();
-              expect(fixture.debugElement.componentViewChildren[0]
-                  .nativeElement
-                  .tabIndex).toEqual(5);
+              expect(fixture.debugElement.componentViewChildren[0].nativeElement
+                      .tabIndex)
+                  .toEqual(5);
               async.done();
             });
           }));
@@ -271,14 +283,14 @@ declareTests() {
                 .createAsync(MyComp)
                 .then((fixture) {
               fixture.detectChanges();
-              expect(fixture.debugElement.componentViewChildren[0]
-                  .nativeElement
-                  .readOnly).toBeFalsy();
+              expect(fixture.debugElement.componentViewChildren[0].nativeElement
+                      .readOnly)
+                  .toBeFalsy();
               fixture.debugElement.componentInstance.ctxBoolProp = true;
               fixture.detectChanges();
-              expect(fixture.debugElement.componentViewChildren[0]
-                  .nativeElement
-                  .readOnly).toBeTruthy();
+              expect(fixture.debugElement.componentViewChildren[0].nativeElement
+                      .readOnly)
+                  .toBeTruthy();
               async.done();
             });
           }));
@@ -296,15 +308,15 @@ declareTests() {
               fixture.debugElement.componentInstance.ctxProp =
                   "Some <span>HTML</span>";
               fixture.detectChanges();
-              expect(DOM.getInnerHTML(
-                  fixture.debugElement.componentViewChildren[0]
-                      .nativeElement)).toEqual("Some <span>HTML</span>");
+              expect(DOM.getInnerHTML(fixture
+                      .debugElement.componentViewChildren[0].nativeElement))
+                  .toEqual("Some <span>HTML</span>");
               fixture.debugElement.componentInstance.ctxProp =
                   "Some other <div>HTML</div>";
               fixture.detectChanges();
-              expect(DOM.getInnerHTML(
-                  fixture.debugElement.componentViewChildren[0]
-                      .nativeElement)).toEqual("Some other <div>HTML</div>");
+              expect(DOM.getInnerHTML(fixture
+                      .debugElement.componentViewChildren[0].nativeElement))
+                  .toEqual("Some other <div>HTML</div>");
               async.done();
             });
           }));
@@ -348,17 +360,21 @@ declareTests() {
               fixture.debugElement.componentInstance.ctxProp = "Hello World!";
               fixture.detectChanges();
               expect(fixture.debugElement.componentViewChildren[0]
-                  .inject(MyDir)
-                  .dirProp).toEqual("Hello World!");
+                      .inject(MyDir)
+                      .dirProp)
+                  .toEqual("Hello World!");
               expect(fixture.debugElement.componentViewChildren[1]
-                  .inject(MyDir)
-                  .dirProp).toEqual("Hi there!");
+                      .inject(MyDir)
+                      .dirProp)
+                  .toEqual("Hi there!");
               expect(fixture.debugElement.componentViewChildren[2]
-                  .inject(MyDir)
-                  .dirProp).toEqual("Hi there!");
+                      .inject(MyDir)
+                      .dirProp)
+                  .toEqual("Hi there!");
               expect(fixture.debugElement.componentViewChildren[3]
-                  .inject(MyDir)
-                  .dirProp).toEqual("One more Hello World!");
+                      .inject(MyDir)
+                      .dirProp)
+                  .toEqual("One more Hello World!");
               async.done();
             });
           }));
@@ -603,7 +619,8 @@ declareTests() {
                   .createAsync(MyComp)
                   .then((fixture) {
                 expect(fixture.debugElement.componentViewChildren[0]
-                    .getLocal("alice")).toBeAnInstanceOf(ChildComp);
+                        .getLocal("alice"))
+                    .toBeAnInstanceOf(ChildComp);
                 async.done();
               });
             }));
@@ -621,7 +638,8 @@ declareTests() {
                   .createAsync(MyComp)
                   .then((fixture) {
                 expect(fixture.debugElement.componentViewChildren[0]
-                    .getLocal("localdir")).toBeAnInstanceOf(ExportDir);
+                        .getLocal("localdir"))
+                    .toBeAnInstanceOf(ExportDir);
                 async.done();
               });
             }));
@@ -661,12 +679,16 @@ declareTests() {
                   .createAsync(MyComp)
                   .then((fixture) {
                 expect(fixture.debugElement.componentViewChildren[0]
-                    .getLocal("alice")).toBeAnInstanceOf(ChildComp);
+                        .getLocal("alice"))
+                    .toBeAnInstanceOf(ChildComp);
                 expect(fixture.debugElement.componentViewChildren[0]
-                    .getLocal("bob")).toBeAnInstanceOf(ChildComp);
+                        .getLocal("bob"))
+                    .toBeAnInstanceOf(ChildComp);
                 expect(fixture.debugElement.componentViewChildren[0]
-                    .getLocal("alice")).not.toBe(fixture
-                    .debugElement.componentViewChildren[0].getLocal("bob"));
+                        .getLocal("alice"))
+                    .not
+                    .toBe(fixture.debugElement.componentViewChildren[0]
+                        .getLocal("bob"));
                 async.done();
               });
             }));
@@ -683,7 +705,8 @@ declareTests() {
                   .createAsync(MyComp)
                   .then((fixture) {
                 expect(fixture.debugElement.componentViewChildren[0]
-                    .getLocal("alice")).toBeAnInstanceOf(ChildComp);
+                        .getLocal("alice"))
+                    .toBeAnInstanceOf(ChildComp);
                 async.done();
               });
             }));
@@ -720,7 +743,8 @@ declareTests() {
                   .createAsync(MyComp)
                   .then((fixture) {
                 expect(fixture.debugElement.componentViewChildren[0]
-                    .getLocal("superAlice")).toBeAnInstanceOf(ChildComp);
+                        .getLocal("superAlice"))
+                    .toBeAnInstanceOf(ChildComp);
                 async.done();
               });
             }));
@@ -1071,8 +1095,10 @@ declareTests() {
                 .then((fixture) {
               fixture.detectChanges();
               expect(DOM.getAttribute(
-                  fixture.debugElement.componentViewChildren[0].nativeElement,
-                  "role")).toEqual("button");
+                      fixture
+                          .debugElement.componentViewChildren[0].nativeElement,
+                      "role"))
+                  .toEqual("button");
               async.done();
             });
           }));
@@ -1123,10 +1149,12 @@ declareTests() {
                     dispatchedEvent2);
                 expect(DOM.isPrevented(dispatchedEvent)).toBe(true);
                 expect(DOM.isPrevented(dispatchedEvent2)).toBe(false);
-                expect(DOM.getChecked(fixture.debugElement
-                    .componentViewChildren[0].nativeElement)).toBeFalsy();
-                expect(DOM.getChecked(fixture.debugElement
-                    .componentViewChildren[1].nativeElement)).toBeTruthy();
+                expect(DOM.getChecked(fixture
+                        .debugElement.componentViewChildren[0].nativeElement))
+                    .toBeFalsy();
+                expect(DOM.getChecked(fixture
+                        .debugElement.componentViewChildren[1].nativeElement))
+                    .toBeTruthy();
                 async.done();
               });
             }));
@@ -1189,8 +1217,9 @@ declareTests() {
                 var dynamicVp = tc.inject(DynamicViewport);
                 dynamicVp.done.then((_) {
                   fixture.detectChanges();
-                  expect(fixture.debugElement.componentViewChildren[1]
-                      .nativeElement).toHaveText("dynamic greet");
+                  expect(fixture
+                          .debugElement.componentViewChildren[1].nativeElement)
+                      .toHaveText("dynamic greet");
                   async.done();
                 });
               });
@@ -1381,9 +1410,10 @@ declareTests() {
                 .createAsync(MyComp)
                 .then((fixture) {
               expect(DOM
-                  .querySelectorAll(
-                      fixture.debugElement.nativeElement, "script")
-                  .length).toEqual(0);
+                      .querySelectorAll(
+                          fixture.debugElement.nativeElement, "script")
+                      .length)
+                  .toEqual(0);
               async.done();
             });
           }));
@@ -1869,9 +1899,9 @@ Can\'t bind to \'unknown\' since it isn\'t a known native property ("<div [ERROR
                   .inject(DirectiveWithPropDecorators);
               dir.myAttr = "aaa";
               fixture.detectChanges();
-              expect(DOM.getOuterHTML(
-                  fixture.debugElement.componentViewChildren[0]
-                      .nativeElement)).toContain("my-attr=\"aaa\"");
+              expect(DOM.getOuterHTML(fixture
+                      .debugElement.componentViewChildren[0].nativeElement))
+                  .toContain("my-attr=\"aaa\"");
               async.done();
             });
           }));
@@ -2238,14 +2268,12 @@ class DirectiveListeningEvent {
   }
 }
 
-@Directive(
-    selector: "[listener]",
-    host: const {
-      "(domEvent)": "onEvent(\$event.type)",
-      "(window:domEvent)": "onWindowEvent(\$event.type)",
-      "(document:domEvent)": "onDocumentEvent(\$event.type)",
-      "(body:domEvent)": "onBodyEvent(\$event.type)"
-    })
+@Directive(selector: "[listener]", host: const {
+  "(domEvent)": "onEvent(\$event.type)",
+  "(window:domEvent)": "onWindowEvent(\$event.type)",
+  "(document:domEvent)": "onDocumentEvent(\$event.type)",
+  "(body:domEvent)": "onBodyEvent(\$event.type)"
+})
 @Injectable()
 class DirectiveListeningDomEvent {
   List<String> eventTypes = [];
@@ -2327,11 +2355,9 @@ class NeedsAttribute {
 @Injectable()
 class PublicApi {}
 
-@Directive(
-    selector: "[public-api]",
-    providers: const [
-      const Provider(PublicApi, useExisting: PrivateImpl, deps: const [])
-    ])
+@Directive(selector: "[public-api]", providers: const [
+  const Provider(PublicApi, useExisting: PrivateImpl, deps: const [])
+])
 @Injectable()
 class PrivateImpl extends PublicApi {}
 
@@ -2413,19 +2439,15 @@ class ComponentProvidingLoggingInjectable {
   bool created = false;
 }
 
-@Directive(
-    selector: "directive-providing-injectable",
-    providers: const [
-      const [InjectableService]
-    ])
+@Directive(selector: "directive-providing-injectable", providers: const [
+  const [InjectableService]
+])
 @Injectable()
 class DirectiveProvidingInjectable {}
 
-@Component(
-    selector: "directive-providing-injectable",
-    viewProviders: const [
-      const [InjectableService]
-    ])
+@Component(selector: "directive-providing-injectable", viewProviders: const [
+  const [InjectableService]
+])
 @View(template: "")
 @Injectable()
 class DirectiveProvidingInjectableInView {}
@@ -2474,11 +2496,9 @@ class EventBus {
         name = name;
 }
 
-@Directive(
-    selector: "grand-parent-providing-event-bus",
-    providers: const [
-      const Provider(EventBus, useValue: const EventBus(null, "grandparent"))
-    ])
+@Directive(selector: "grand-parent-providing-event-bus", providers: const [
+  const Provider(EventBus, useValue: const EventBus(null, "grandparent"))
+])
 class GrandParentProvidingEventBus {
   EventBus bus;
   GrandParentProvidingEventBus(EventBus bus) {
@@ -2490,15 +2510,11 @@ createParentBus(peb) {
   return new EventBus(peb, "parent");
 }
 
-@Component(
-    selector: "parent-providing-event-bus",
-    providers: const [
-      const Provider(EventBus,
-          useFactory: createParentBus,
-          deps: const [
-            const [EventBus, const SkipSelfMetadata()]
-          ])
-    ])
+@Component(selector: "parent-providing-event-bus", providers: const [
+  const Provider(EventBus, useFactory: createParentBus, deps: const [
+    const [EventBus, const SkipSelfMetadata()]
+  ])
+])
 @View(
     directives: const [ChildConsumingEventBus],
     template: '''

@@ -36,7 +36,8 @@ main() {
       describe("ngOnInit", () {
         it("should be true when the directive has the ngOnInit method", () {
           expect(hasLifecycleHook(
-              LifecycleHooks.OnInit, DirectiveImplementingOnInit)).toBe(true);
+                  LifecycleHooks.OnInit, DirectiveImplementingOnInit))
+              .toBe(true);
         });
 
         it("should be false otherwise", () {
@@ -48,7 +49,8 @@ main() {
       describe("ngDoCheck", () {
         it("should be true when the directive has the ngDoCheck method", () {
           expect(hasLifecycleHook(
-              LifecycleHooks.DoCheck, DirectiveImplementingOnCheck)).toBe(true);
+                  LifecycleHooks.DoCheck, DirectiveImplementingOnCheck))
+              .toBe(true);
         });
 
         it("should be false otherwise", () {
@@ -61,12 +63,14 @@ main() {
         it("should be true when the directive has the ngAfterContentInit method",
             () {
           expect(hasLifecycleHook(LifecycleHooks.AfterContentInit,
-              DirectiveImplementingAfterContentInit)).toBe(true);
+                  DirectiveImplementingAfterContentInit))
+              .toBe(true);
         });
 
         it("should be false otherwise", () {
           expect(hasLifecycleHook(
-              LifecycleHooks.AfterContentInit, DirectiveNoHooks)).toBe(false);
+                  LifecycleHooks.AfterContentInit, DirectiveNoHooks))
+              .toBe(false);
         });
       });
 
@@ -74,7 +78,8 @@ main() {
         it("should be true when the directive has the ngAfterContentChecked method",
             () {
           expect(hasLifecycleHook(LifecycleHooks.AfterContentChecked,
-              DirectiveImplementingAfterContentChecked)).toBe(true);
+                  DirectiveImplementingAfterContentChecked))
+              .toBe(true);
         });
 
         it("should be false otherwise", () {
@@ -88,12 +93,14 @@ main() {
         it("should be true when the directive has the ngAfterViewInit method",
             () {
           expect(hasLifecycleHook(LifecycleHooks.AfterViewInit,
-              DirectiveImplementingAfterViewInit)).toBe(true);
+                  DirectiveImplementingAfterViewInit))
+              .toBe(true);
         });
 
         it("should be false otherwise", () {
           expect(hasLifecycleHook(
-              LifecycleHooks.AfterViewInit, DirectiveNoHooks)).toBe(false);
+                  LifecycleHooks.AfterViewInit, DirectiveNoHooks))
+              .toBe(false);
         });
       });
 
@@ -101,12 +108,14 @@ main() {
         it("should be true when the directive has the ngAfterViewChecked method",
             () {
           expect(hasLifecycleHook(LifecycleHooks.AfterViewChecked,
-              DirectiveImplementingAfterViewChecked)).toBe(true);
+                  DirectiveImplementingAfterViewChecked))
+              .toBe(true);
         });
 
         it("should be false otherwise", () {
           expect(hasLifecycleHook(
-              LifecycleHooks.AfterViewChecked, DirectiveNoHooks)).toBe(false);
+                  LifecycleHooks.AfterViewChecked, DirectiveNoHooks))
+              .toBe(false);
         });
       });
     });

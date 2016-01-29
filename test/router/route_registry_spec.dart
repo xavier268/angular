@@ -238,8 +238,9 @@ main() {
         }));
     it("should throw when a parent config is missing the `...` suffix any of its children add routes",
         () {
-      expect(() => registry.config(RootHostCmp,
-          new Route(path: "/", component: DummyParentCmp))).toThrowError(
+      expect(() =>
+          registry.config(RootHostCmp,
+              new Route(path: "/", component: DummyParentCmp))).toThrowError(
           "Child routes are not allowed for \"/\". Use \"...\" on the parent's route path.");
     });
     it("should throw when a parent config uses `...` suffix before the end of the route",
@@ -252,11 +253,13 @@ main() {
     });
     it("should throw if a config has a component that is not defined", () {
       expect(() => registry.config(
-          RootHostCmp, new Route(path: "/", component: null))).toThrowError(
-          "Component for route \"/\" is not defined, or is not a class.");
+              RootHostCmp, new Route(path: "/", component: null)))
+          .toThrowError(
+              "Component for route \"/\" is not defined, or is not a class.");
       expect(() => registry.config(
-          RootHostCmp, new AuxRoute(path: "/", component: null))).toThrowError(
-          "Component for route \"/\" is not defined, or is not a class.");
+              RootHostCmp, new AuxRoute(path: "/", component: null)))
+          .toThrowError(
+              "Component for route \"/\" is not defined, or is not a class.");
       // This would never happen in Dart
       if (!IS_DART) {
         expect(() => registry.config(RootHostCmp,
@@ -280,8 +283,8 @@ main() {
         inject([AsyncTestCompleter], (async) {
           registry.config(RootHostCmp,
               new Route(path: "/first/...", component: DummyParentCmp));
-          registry.recognize("/first/second;filter=odd?comments=all", [])
-              .then((instruction) {
+          registry.recognize("/first/second;filter=odd?comments=all", []).then(
+              (instruction) {
             expect(instruction.component.componentType).toBe(DummyParentCmp);
             expect(instruction.component.params).toEqual({"comments": "all"});
             expect(instruction.child.component.componentType).toBe(DummyCmpB);

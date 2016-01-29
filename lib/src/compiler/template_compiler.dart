@@ -129,9 +129,9 @@ class TemplateCompiler {
           createHostComponentMeta(compMeta.type, compMeta.selector);
       this._compileComponentRuntime(hostCacheKey, hostMeta, [compMeta], [], []);
     }
-    return this._compiledTemplateDone[
-        hostCacheKey].then((CompiledTemplate compiledTemplate) =>
-        new HostViewFactory(compMeta.selector, compiledTemplate.viewFactory));
+    return this._compiledTemplateDone[hostCacheKey].then(
+        (CompiledTemplate compiledTemplate) => new HostViewFactory(
+            compMeta.selector, compiledTemplate.viewFactory));
   }
 
   clearCache() {
@@ -415,7 +415,8 @@ List<CompileMetadataWithType> removeDuplicates(
   var res = [];
   items.forEach((item) {
     var hasMatch = res
-            .where((r) => r.type.name == item.type.name &&
+            .where((r) =>
+                r.type.name == item.type.name &&
                 r.type.moduleUrl == item.type.moduleUrl &&
                 r.type.runtime == item.type.runtime)
             .toList()

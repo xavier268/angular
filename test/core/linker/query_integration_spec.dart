@@ -279,11 +279,13 @@ main() {
               NeedsTpl needsTpl =
                   view.debugElement.componentViewChildren[0].inject(NeedsTpl);
               expect(needsTpl.vc
-                  .createEmbeddedView(needsTpl.query.first)
-                  .hasLocal("light")).toBe(true);
+                      .createEmbeddedView(needsTpl.query.first)
+                      .hasLocal("light"))
+                  .toBe(true);
               expect(needsTpl.vc
-                  .createEmbeddedView(needsTpl.viewQuery.first)
-                  .hasLocal("shadow")).toBe(true);
+                      .createEmbeddedView(needsTpl.viewQuery.first)
+                      .hasLocal("shadow"))
+                  .toBe(true);
               async.done();
             });
           }));
@@ -812,8 +814,9 @@ class NeedsViewQueryByLabel {
 @Injectable()
 class NeedsQueryByTwoLabels {
   QueryList<dynamic> query;
-  NeedsQueryByTwoLabels(@Query("textLabel1,textLabel2", descendants: true)
-      QueryList<dynamic> query) {
+  NeedsQueryByTwoLabels(
+      @Query("textLabel1,textLabel2", descendants: true)
+          QueryList<dynamic> query) {
     this.query = query;
   }
 }

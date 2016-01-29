@@ -48,9 +48,8 @@ _createChangeDetectorGenConfig() {
  * A set of providers that provide `RuntimeCompiler` and its dependencies to use for
  * template compilation.
  */
-const List<
-        dynamic /* Type | Provider | List < dynamic > */ > COMPILER_PROVIDERS =
-    const [
+const List<dynamic /* Type | Provider | List < dynamic > */ >
+    COMPILER_PROVIDERS = const [
   Lexer,
   Parser,
   HtmlParser,

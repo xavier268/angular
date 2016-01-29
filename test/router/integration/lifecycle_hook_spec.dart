@@ -57,295 +57,319 @@ main() {
     it(
         "should call the routerOnActivate hook",
         inject([AsyncTestCompleter], (async) {
-          compile(tcb).then((rtc) {
-            fixture = rtc;
-          })
+          compile(tcb)
+              .then((rtc) {
+                fixture = rtc;
+              })
               .then((_) => rtr
                   .config([new Route(path: "/...", component: LifecycleCmp)]))
               .then((_) => rtr.navigateByUrl("/on-activate"))
               .then((_) {
-            fixture.detectChanges();
-            expect(fixture.debugElement.nativeElement)
-                .toHaveText("activate cmp");
-            expect(log).toEqual(["activate: null -> /on-activate"]);
-            async.done();
-          });
+                fixture.detectChanges();
+                expect(fixture.debugElement.nativeElement)
+                    .toHaveText("activate cmp");
+                expect(log).toEqual(["activate: null -> /on-activate"]);
+                async.done();
+              });
         }));
     it(
         "should wait for a parent component's routerOnActivate hook to resolve before calling its child's",
         inject([AsyncTestCompleter], (async) {
-          compile(tcb).then((rtc) {
-            fixture = rtc;
-          })
+          compile(tcb)
+              .then((rtc) {
+                fixture = rtc;
+              })
               .then((_) => rtr
                   .config([new Route(path: "/...", component: LifecycleCmp)]))
               .then((_) {
-            ObservableWrapper.subscribe(eventBus, (ev) {
-              if (ev.startsWith("parent activate")) {
-                completer.resolve(true);
-              }
-            });
-            rtr.navigateByUrl("/parent-activate/child-activate").then((_) {
-              fixture.detectChanges();
-              expect(fixture.debugElement.nativeElement)
-                  .toHaveText("parent {activate cmp}");
-              expect(log).toEqual([
-                "parent activate: null -> /parent-activate",
-                "activate: null -> /child-activate"
-              ]);
-              async.done();
-            });
-          });
+                ObservableWrapper.subscribe(eventBus, (ev) {
+                  if (ev.startsWith("parent activate")) {
+                    completer.resolve(true);
+                  }
+                });
+                rtr.navigateByUrl("/parent-activate/child-activate").then((_) {
+                  fixture.detectChanges();
+                  expect(fixture.debugElement.nativeElement)
+                      .toHaveText("parent {activate cmp}");
+                  expect(log).toEqual([
+                    "parent activate: null -> /parent-activate",
+                    "activate: null -> /child-activate"
+                  ]);
+                  async.done();
+                });
+              });
         }));
     it(
         "should call the routerOnDeactivate hook",
         inject([AsyncTestCompleter], (async) {
-          compile(tcb).then((rtc) {
-            fixture = rtc;
-          })
+          compile(tcb)
+              .then((rtc) {
+                fixture = rtc;
+              })
               .then((_) => rtr
                   .config([new Route(path: "/...", component: LifecycleCmp)]))
               .then((_) => rtr.navigateByUrl("/on-deactivate"))
               .then((_) => rtr.navigateByUrl("/a"))
               .then((_) {
-            fixture.detectChanges();
-            expect(fixture.debugElement.nativeElement).toHaveText("A");
-            expect(log).toEqual(["deactivate: /on-deactivate -> /a"]);
-            async.done();
-          });
+                fixture.detectChanges();
+                expect(fixture.debugElement.nativeElement).toHaveText("A");
+                expect(log).toEqual(["deactivate: /on-deactivate -> /a"]);
+                async.done();
+              });
         }));
     it(
         "should wait for a child component's routerOnDeactivate hook to resolve before calling its parent's",
         inject([AsyncTestCompleter], (async) {
-          compile(tcb).then((rtc) {
-            fixture = rtc;
-          })
+          compile(tcb)
+              .then((rtc) {
+                fixture = rtc;
+              })
               .then((_) => rtr
                   .config([new Route(path: "/...", component: LifecycleCmp)]))
               .then((_) =>
                   rtr.navigateByUrl("/parent-deactivate/child-deactivate"))
               .then((_) {
-            ObservableWrapper.subscribe(eventBus, (ev) {
-              if (ev.startsWith("deactivate")) {
-                completer.resolve(true);
-                fixture.detectChanges();
-                expect(fixture.debugElement.nativeElement)
-                    .toHaveText("parent {deactivate cmp}");
-              }
-            });
-            rtr.navigateByUrl("/a").then((_) {
-              fixture.detectChanges();
-              expect(fixture.debugElement.nativeElement).toHaveText("A");
-              expect(log).toEqual([
-                "deactivate: /child-deactivate -> null",
-                "parent deactivate: /parent-deactivate -> /a"
-              ]);
-              async.done();
-            });
-          });
+                ObservableWrapper.subscribe(eventBus, (ev) {
+                  if (ev.startsWith("deactivate")) {
+                    completer.resolve(true);
+                    fixture.detectChanges();
+                    expect(fixture.debugElement.nativeElement)
+                        .toHaveText("parent {deactivate cmp}");
+                  }
+                });
+                rtr.navigateByUrl("/a").then((_) {
+                  fixture.detectChanges();
+                  expect(fixture.debugElement.nativeElement).toHaveText("A");
+                  expect(log).toEqual([
+                    "deactivate: /child-deactivate -> null",
+                    "parent deactivate: /parent-deactivate -> /a"
+                  ]);
+                  async.done();
+                });
+              });
         }));
     it(
         "should reuse a component when the routerCanReuse hook returns true",
         inject([AsyncTestCompleter], (async) {
-          compile(tcb).then((rtc) {
-            fixture = rtc;
-          })
+          compile(tcb)
+              .then((rtc) {
+                fixture = rtc;
+              })
               .then((_) => rtr
                   .config([new Route(path: "/...", component: LifecycleCmp)]))
               .then((_) => rtr.navigateByUrl("/on-reuse/1/a"))
               .then((_) {
-            fixture.detectChanges();
-            expect(log).toEqual([]);
-            expect(fixture.debugElement.nativeElement).toHaveText("reuse {A}");
-            expect(cmpInstanceCount).toBe(1);
-          }).then((_) => rtr.navigateByUrl("/on-reuse/2/b")).then((_) {
-            fixture.detectChanges();
-            expect(log).toEqual(["reuse: /on-reuse/1 -> /on-reuse/2"]);
-            expect(fixture.debugElement.nativeElement).toHaveText("reuse {B}");
-            expect(cmpInstanceCount).toBe(1);
-            async.done();
-          });
+                fixture.detectChanges();
+                expect(log).toEqual([]);
+                expect(fixture.debugElement.nativeElement)
+                    .toHaveText("reuse {A}");
+                expect(cmpInstanceCount).toBe(1);
+              })
+              .then((_) => rtr.navigateByUrl("/on-reuse/2/b"))
+              .then((_) {
+                fixture.detectChanges();
+                expect(log).toEqual(["reuse: /on-reuse/1 -> /on-reuse/2"]);
+                expect(fixture.debugElement.nativeElement)
+                    .toHaveText("reuse {B}");
+                expect(cmpInstanceCount).toBe(1);
+                async.done();
+              });
         }));
     it(
         "should not reuse a component when the routerCanReuse hook returns false",
         inject([AsyncTestCompleter], (async) {
-          compile(tcb).then((rtc) {
-            fixture = rtc;
-          })
+          compile(tcb)
+              .then((rtc) {
+                fixture = rtc;
+              })
               .then((_) => rtr
                   .config([new Route(path: "/...", component: LifecycleCmp)]))
               .then((_) => rtr.navigateByUrl("/never-reuse/1/a"))
               .then((_) {
-            fixture.detectChanges();
-            expect(log).toEqual([]);
-            expect(fixture.debugElement.nativeElement).toHaveText("reuse {A}");
-            expect(cmpInstanceCount).toBe(1);
-          }).then((_) => rtr.navigateByUrl("/never-reuse/2/b")).then((_) {
-            fixture.detectChanges();
-            expect(log).toEqual([]);
-            expect(fixture.debugElement.nativeElement).toHaveText("reuse {B}");
-            expect(cmpInstanceCount).toBe(2);
-            async.done();
-          });
+                fixture.detectChanges();
+                expect(log).toEqual([]);
+                expect(fixture.debugElement.nativeElement)
+                    .toHaveText("reuse {A}");
+                expect(cmpInstanceCount).toBe(1);
+              })
+              .then((_) => rtr.navigateByUrl("/never-reuse/2/b"))
+              .then((_) {
+                fixture.detectChanges();
+                expect(log).toEqual([]);
+                expect(fixture.debugElement.nativeElement)
+                    .toHaveText("reuse {B}");
+                expect(cmpInstanceCount).toBe(2);
+                async.done();
+              });
         }));
     it(
         "should navigate when routerCanActivate returns true",
         inject([AsyncTestCompleter], (async) {
-          compile(tcb).then((rtc) {
-            fixture = rtc;
-          })
+          compile(tcb)
+              .then((rtc) {
+                fixture = rtc;
+              })
               .then((_) => rtr
                   .config([new Route(path: "/...", component: LifecycleCmp)]))
               .then((_) {
-            ObservableWrapper.subscribe(eventBus, (ev) {
-              if (ev.startsWith("routerCanActivate")) {
-                completer.resolve(true);
-              }
-            });
-            rtr.navigateByUrl("/can-activate/a").then((_) {
-              fixture.detectChanges();
-              expect(fixture.debugElement.nativeElement)
-                  .toHaveText("routerCanActivate {A}");
-              expect(log).toEqual(["routerCanActivate: null -> /can-activate"]);
-              async.done();
-            });
-          });
+                ObservableWrapper.subscribe(eventBus, (ev) {
+                  if (ev.startsWith("routerCanActivate")) {
+                    completer.resolve(true);
+                  }
+                });
+                rtr.navigateByUrl("/can-activate/a").then((_) {
+                  fixture.detectChanges();
+                  expect(fixture.debugElement.nativeElement)
+                      .toHaveText("routerCanActivate {A}");
+                  expect(log)
+                      .toEqual(["routerCanActivate: null -> /can-activate"]);
+                  async.done();
+                });
+              });
         }));
     it(
         "should not navigate when routerCanActivate returns false",
         inject([AsyncTestCompleter], (async) {
-          compile(tcb).then((rtc) {
-            fixture = rtc;
-          })
+          compile(tcb)
+              .then((rtc) {
+                fixture = rtc;
+              })
               .then((_) => rtr
                   .config([new Route(path: "/...", component: LifecycleCmp)]))
               .then((_) {
-            ObservableWrapper.subscribe(eventBus, (ev) {
-              if (ev.startsWith("routerCanActivate")) {
-                completer.resolve(false);
-              }
-            });
-            rtr.navigateByUrl("/can-activate/a").then((_) {
-              fixture.detectChanges();
-              expect(fixture.debugElement.nativeElement).toHaveText("");
-              expect(log).toEqual(["routerCanActivate: null -> /can-activate"]);
-              async.done();
-            });
-          });
+                ObservableWrapper.subscribe(eventBus, (ev) {
+                  if (ev.startsWith("routerCanActivate")) {
+                    completer.resolve(false);
+                  }
+                });
+                rtr.navigateByUrl("/can-activate/a").then((_) {
+                  fixture.detectChanges();
+                  expect(fixture.debugElement.nativeElement).toHaveText("");
+                  expect(log)
+                      .toEqual(["routerCanActivate: null -> /can-activate"]);
+                  async.done();
+                });
+              });
         }));
     it(
         "should navigate away when routerCanDeactivate returns true",
         inject([AsyncTestCompleter], (async) {
-          compile(tcb).then((rtc) {
-            fixture = rtc;
-          })
+          compile(tcb)
+              .then((rtc) {
+                fixture = rtc;
+              })
               .then((_) => rtr
                   .config([new Route(path: "/...", component: LifecycleCmp)]))
               .then((_) => rtr.navigateByUrl("/can-deactivate/a"))
               .then((_) {
-            fixture.detectChanges();
-            expect(fixture.debugElement.nativeElement)
-                .toHaveText("routerCanDeactivate {A}");
-            expect(log).toEqual([]);
-            ObservableWrapper.subscribe(eventBus, (ev) {
-              if (ev.startsWith("routerCanDeactivate")) {
-                completer.resolve(true);
-              }
-            });
-            rtr.navigateByUrl("/a").then((_) {
-              fixture.detectChanges();
-              expect(fixture.debugElement.nativeElement).toHaveText("A");
-              expect(log)
-                  .toEqual(["routerCanDeactivate: /can-deactivate -> /a"]);
-              async.done();
-            });
-          });
+                fixture.detectChanges();
+                expect(fixture.debugElement.nativeElement)
+                    .toHaveText("routerCanDeactivate {A}");
+                expect(log).toEqual([]);
+                ObservableWrapper.subscribe(eventBus, (ev) {
+                  if (ev.startsWith("routerCanDeactivate")) {
+                    completer.resolve(true);
+                  }
+                });
+                rtr.navigateByUrl("/a").then((_) {
+                  fixture.detectChanges();
+                  expect(fixture.debugElement.nativeElement).toHaveText("A");
+                  expect(log)
+                      .toEqual(["routerCanDeactivate: /can-deactivate -> /a"]);
+                  async.done();
+                });
+              });
         }));
     it(
         "should not navigate away when routerCanDeactivate returns false",
         inject([AsyncTestCompleter], (async) {
-          compile(tcb).then((rtc) {
-            fixture = rtc;
-          })
+          compile(tcb)
+              .then((rtc) {
+                fixture = rtc;
+              })
               .then((_) => rtr
                   .config([new Route(path: "/...", component: LifecycleCmp)]))
               .then((_) => rtr.navigateByUrl("/can-deactivate/a"))
               .then((_) {
-            fixture.detectChanges();
-            expect(fixture.debugElement.nativeElement)
-                .toHaveText("routerCanDeactivate {A}");
-            expect(log).toEqual([]);
-            ObservableWrapper.subscribe(eventBus, (ev) {
-              if (ev.startsWith("routerCanDeactivate")) {
-                completer.resolve(false);
-              }
-            });
-            rtr.navigateByUrl("/a").then((_) {
-              fixture.detectChanges();
-              expect(fixture.debugElement.nativeElement)
-                  .toHaveText("routerCanDeactivate {A}");
-              expect(log)
-                  .toEqual(["routerCanDeactivate: /can-deactivate -> /a"]);
-              async.done();
-            });
-          });
+                fixture.detectChanges();
+                expect(fixture.debugElement.nativeElement)
+                    .toHaveText("routerCanDeactivate {A}");
+                expect(log).toEqual([]);
+                ObservableWrapper.subscribe(eventBus, (ev) {
+                  if (ev.startsWith("routerCanDeactivate")) {
+                    completer.resolve(false);
+                  }
+                });
+                rtr.navigateByUrl("/a").then((_) {
+                  fixture.detectChanges();
+                  expect(fixture.debugElement.nativeElement)
+                      .toHaveText("routerCanDeactivate {A}");
+                  expect(log)
+                      .toEqual(["routerCanDeactivate: /can-deactivate -> /a"]);
+                  async.done();
+                });
+              });
         }));
     it(
         "should run activation and deactivation hooks in the correct order",
         inject([AsyncTestCompleter], (async) {
-          compile(tcb).then((rtc) {
-            fixture = rtc;
-          })
+          compile(tcb)
+              .then((rtc) {
+                fixture = rtc;
+              })
               .then((_) => rtr
                   .config([new Route(path: "/...", component: LifecycleCmp)]))
               .then((_) => rtr.navigateByUrl("/activation-hooks/child"))
               .then((_) {
-            expect(log).toEqual([
-              "routerCanActivate child: null -> /child",
-              "routerCanActivate parent: null -> /activation-hooks",
-              "routerOnActivate parent: null -> /activation-hooks",
-              "routerOnActivate child: null -> /child"
-            ]);
-            log = [];
-            return rtr.navigateByUrl("/a");
-          }).then((_) {
-            expect(log).toEqual([
-              "routerCanDeactivate parent: /activation-hooks -> /a",
-              "routerCanDeactivate child: /child -> null",
-              "routerOnDeactivate child: /child -> null",
-              "routerOnDeactivate parent: /activation-hooks -> /a"
-            ]);
-            async.done();
-          });
+                expect(log).toEqual([
+                  "routerCanActivate child: null -> /child",
+                  "routerCanActivate parent: null -> /activation-hooks",
+                  "routerOnActivate parent: null -> /activation-hooks",
+                  "routerOnActivate child: null -> /child"
+                ]);
+                log = [];
+                return rtr.navigateByUrl("/a");
+              })
+              .then((_) {
+                expect(log).toEqual([
+                  "routerCanDeactivate parent: /activation-hooks -> /a",
+                  "routerCanDeactivate child: /child -> null",
+                  "routerOnDeactivate child: /child -> null",
+                  "routerOnDeactivate parent: /activation-hooks -> /a"
+                ]);
+                async.done();
+              });
         }));
     it(
         "should only run reuse hooks when reusing",
         inject([AsyncTestCompleter], (async) {
-          compile(tcb).then((rtc) {
-            fixture = rtc;
-          })
+          compile(tcb)
+              .then((rtc) {
+                fixture = rtc;
+              })
               .then((_) => rtr
                   .config([new Route(path: "/...", component: LifecycleCmp)]))
               .then((_) => rtr.navigateByUrl("/reuse-hooks/1"))
               .then((_) {
-            expect(log).toEqual([
-              "routerCanActivate: null -> /reuse-hooks/1",
-              "routerOnActivate: null -> /reuse-hooks/1"
-            ]);
-            ObservableWrapper.subscribe(eventBus, (ev) {
-              if (ev.startsWith("routerCanReuse")) {
-                completer.resolve(true);
-              }
-            });
-            log = [];
-            return rtr.navigateByUrl("/reuse-hooks/2");
-          }).then((_) {
-            expect(log).toEqual([
-              "routerCanReuse: /reuse-hooks/1 -> /reuse-hooks/2",
-              "routerOnReuse: /reuse-hooks/1 -> /reuse-hooks/2"
-            ]);
-            async.done();
-          });
+                expect(log).toEqual([
+                  "routerCanActivate: null -> /reuse-hooks/1",
+                  "routerOnActivate: null -> /reuse-hooks/1"
+                ]);
+                ObservableWrapper.subscribe(eventBus, (ev) {
+                  if (ev.startsWith("routerCanReuse")) {
+                    completer.resolve(true);
+                  }
+                });
+                log = [];
+                return rtr.navigateByUrl("/reuse-hooks/2");
+              })
+              .then((_) {
+                expect(log).toEqual([
+                  "routerCanReuse: /reuse-hooks/1 -> /reuse-hooks/2",
+                  "routerOnReuse: /reuse-hooks/1 -> /reuse-hooks/2"
+                ]);
+                async.done();
+              });
         }));
     it(
         "should not run reuse hooks when not reusing",

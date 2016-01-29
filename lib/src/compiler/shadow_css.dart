@@ -411,20 +411,23 @@ class ShadowCss {
     for (var i = 0; i < splits.length; i++) {
       var sep = splits[i];
       var parts = scoped.split(sep);
-      scoped = parts.map((p) {
-        // remove :host since it should be unnecessary
-        var t = StringWrapper.replaceAll(p.trim(), _polyfillHostRe, "");
-        if (t.length > 0 &&
-            !ListWrapper.contains(splits, t) &&
-            !StringWrapper.contains(t, attrName)) {
-          var re = new RegExp(r'([^:]*)(:*)(.*)');
-          var m = RegExpWrapper.firstMatch(re, t);
-          if (isPresent(m)) {
-            p = m[1] + attrName + m[2] + m[3];
-          }
-        }
-        return p;
-      }).toList().join(sep);
+      scoped = parts
+          .map((p) {
+            // remove :host since it should be unnecessary
+            var t = StringWrapper.replaceAll(p.trim(), _polyfillHostRe, "");
+            if (t.length > 0 &&
+                !ListWrapper.contains(splits, t) &&
+                !StringWrapper.contains(t, attrName)) {
+              var re = new RegExp(r'([^:]*)(:*)(.*)');
+              var m = RegExpWrapper.firstMatch(re, t);
+              if (isPresent(m)) {
+                p = m[1] + attrName + m[2] + m[3];
+              }
+            }
+            return p;
+          })
+          .toList()
+          .join(sep);
     }
     return scoped;
   }
@@ -506,8 +509,8 @@ class CssRule {
 String processRules(String input, Function ruleCallback) {
   var inputWithEscapedBlocks = escapeBlocks(input);
   var nextBlockIndex = 0;
-  return StringWrapper.replaceAllMapped(
-      inputWithEscapedBlocks.escapedString, _ruleRe, (m) {
+  return StringWrapper
+      .replaceAllMapped(inputWithEscapedBlocks.escapedString, _ruleRe, (m) {
     var selector = m[2];
     var content = "";
     var suffix = m[4];

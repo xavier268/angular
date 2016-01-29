@@ -269,8 +269,8 @@ main() {
         inject([AsyncTestCompleter], (async) {
           var refPromise1 = bootstrap(HelloRootCmp, testProviders);
           var refPromise2 = bootstrap(HelloRootCmp2, testProviders);
-          PromiseWrapper.all([refPromise1, refPromise2])
-              .then((List<ApplicationRef> refs) {
+          PromiseWrapper.all([refPromise1, refPromise2]).then(
+              (List<ApplicationRef> refs) {
             var registry = refs[0].injector.get(TestabilityRegistry);
             var testabilities = [
               refs[0].injector.get(Testability),

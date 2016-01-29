@@ -255,8 +255,8 @@ List<List<String>> _collectNestedProtoViewsVariableNames(
   pvVisitors.forEach((pv) {
     List<String> parentVariableNames =
         isPresent(pv.parent) ? nestedPvVariableNames[pv.parent.viewIndex] : [];
-    nestedPvVariableNames[pv.viewIndex] = (new List.from(parentVariableNames)
-      ..addAll(pv.variableNames));
+    nestedPvVariableNames[pv.viewIndex] =
+        (new List.from(parentVariableNames)..addAll(pv.variableNames));
   });
   return nestedPvVariableNames;
 }

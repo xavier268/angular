@@ -216,12 +216,10 @@ class Dummy {
   dynamic value;
 }
 
-@Component(
-    selector: 'type-literal-component',
-    viewBindings: const [
-      const Binding(const TypeLiteral<List<String>>(),
-          toValue: const <String>['Hello', 'World'])
-    ])
+@Component(selector: 'type-literal-component', viewBindings: const [
+  const Binding(const TypeLiteral<List<String>>(),
+      toValue: const <String>['Hello', 'World'])
+])
 @View(template: '{{list}}')
 class TypeLiteralComponent {
   final List<String> list;
@@ -283,7 +281,9 @@ class OnChangeComponent implements OnChanges {
 @Component(
     selector: 'component-with-observable-list',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    inputs: const ['list'],
+    inputs: const [
+      'list'
+    ],
     bindings: const [
       const Binding(IterableDiffers,
           toValue: const IterableDiffers(const [

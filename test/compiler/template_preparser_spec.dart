@@ -43,7 +43,8 @@ main() {
           expect(preparse("<link rel=\"stylesheet\">").type)
               .toBe(PreparsedElementType.STYLESHEET);
           expect(preparse("<link rel=\"stylesheet\" href=\"someUrl\">")
-              .hrefAttr).toEqual("someUrl");
+                  .hrefAttr)
+              .toEqual("someUrl");
           expect(preparse("<link rel=\"someRel\">").type)
               .toBe(PreparsedElementType.OTHER);
         }));

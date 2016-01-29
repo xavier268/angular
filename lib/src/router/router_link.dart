@@ -35,14 +35,14 @@ import "instruction.dart" show Instruction;
  * children for the route. And if the route begins with `../`, the router will look at the
  * current component's parent.
  */
-@Directive(
-    selector: "[routerLink]",
-    inputs: const ["routeParams: routerLink", "target: target"],
-    host: const {
-      "(click)": "onClick()",
-      "[attr.href]": "visibleHref",
-      "[class.router-link-active]": "isRouteActive"
-    })
+@Directive(selector: "[routerLink]", inputs: const [
+  "routeParams: routerLink",
+  "target: target"
+], host: const {
+  "(click)": "onClick()",
+  "[attr.href]": "visibleHref",
+  "[class.router-link-active]": "isRouteActive"
+})
 class RouterLink {
   Router _router;
   Location _location;

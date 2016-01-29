@@ -545,12 +545,12 @@ main() {
               .createAsync(MainComp)
               .then((main) {
             expect(main.debugElement.nativeElement).toHaveText("MAIN()");
-            var viewportElement = main.debugElement.componentViewChildren[0]
-                .componentViewChildren[0];
+            var viewportElement = main
+                .debugElement.componentViewChildren[0].componentViewChildren[0];
             viewportElement.inject(ManualViewportDirective).show();
             expect(main.debugElement.nativeElement).toHaveText("MAIN(FIRST())");
-            viewportElement = main.debugElement.componentViewChildren[0]
-                .componentViewChildren[1];
+            viewportElement = main
+                .debugElement.componentViewChildren[0].componentViewChildren[1];
             viewportElement.inject(ManualViewportDirective).show();
             expect(main.debugElement.nativeElement)
                 .toHaveText("MAIN(FIRST(SECOND(a)))");

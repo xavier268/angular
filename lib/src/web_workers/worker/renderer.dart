@@ -48,8 +48,9 @@ class WebWorkerRootRenderer implements RootRenderer {
           .globalEvents
           .dispatchEvent(eventNameWithTarget(target, eventName), event);
     } else {
-      var element = (this._serializer.deserialize(
-          message["element"], RenderStoreObject) as WebWorkerRenderNode);
+      var element =
+          (this._serializer.deserialize(message["element"], RenderStoreObject)
+              as WebWorkerRenderNode);
       element.events.dispatchEvent(eventName, event);
     }
   }

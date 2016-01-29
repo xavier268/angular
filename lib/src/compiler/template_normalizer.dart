@@ -60,8 +60,8 @@ ${ errorString}''');
     }
     var visitor = new TemplatePreparseVisitor();
     htmlVisitAll(visitor, rootNodesAndErrors.rootNodes);
-    var allStyles = (new List.from(templateMeta.styles)
-      ..addAll(visitor.styles));
+    var allStyles =
+        (new List.from(templateMeta.styles)..addAll(visitor.styles));
     var allStyleAbsUrls = (new List.from(visitor.styleUrls
         .where(isStyleUrlResolvable)
         .toList()

@@ -116,7 +116,8 @@ ProtoRecord _findFirstMatch(
     ProtoRecord record, List<ProtoRecord> dstRecords, List<num> excludedIdxs) {
   return dstRecords.firstWhere(
       // TODO(vicb): optimize excludedIdxs.indexOf (sorted array)
-      (rr) => excludedIdxs.indexOf(rr.selfIndex) == -1 &&
+      (rr) =>
+          excludedIdxs.indexOf(rr.selfIndex) == -1 &&
           !identical(rr.mode, RecordType.DirectiveLifecycle) &&
           _haveSameDirIndex(rr, record) &&
           identical(rr.mode, record.mode) &&

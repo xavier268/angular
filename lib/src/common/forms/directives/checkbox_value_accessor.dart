@@ -23,7 +23,9 @@ const CHECKBOX_VALUE_ACCESSOR = const Provider(NG_VALUE_ACCESSOR,
       "(change)": "onChange(\$event.target.checked)",
       "(blur)": "onTouched()"
     },
-    bindings: const [CHECKBOX_VALUE_ACCESSOR])
+    bindings: const [
+      CHECKBOX_VALUE_ACCESSOR
+    ])
 class CheckboxControlValueAccessor implements ControlValueAccessor {
   Renderer _renderer;
   ElementRef _elementRef;

@@ -32,8 +32,8 @@ class ProtoPipes {
   }
   PipeProvider get(String name) {
     var provider = this.config[name];
-    if (isBlank(provider)) throw new BaseException(
-        '''Cannot find pipe \'${ name}\'.''');
+    if (isBlank(provider))
+      throw new BaseException('''Cannot find pipe \'${ name}\'.''');
     return provider;
   }
 }

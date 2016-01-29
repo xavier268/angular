@@ -297,8 +297,8 @@ abstract class AbstractHtml5LibAdapter implements DomAdapter {
 
   getAttribute(element, String attribute) {
     // `attributes` keys can be {@link AttributeName}s.
-    var key = element.attributes.keys.firstWhere((key) => '$key' == attribute,
-        orElse: () {});
+    var key = element.attributes.keys
+        .firstWhere((key) => '$key' == attribute, orElse: () {});
     return element.attributes[key];
   }
 

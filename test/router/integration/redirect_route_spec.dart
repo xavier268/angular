@@ -41,9 +41,10 @@ main() {
     it(
         "should apply when navigating by URL",
         inject([AsyncTestCompleter, Location], (async, location) {
-          compile(tcb).then((rtc) {
-            rootTC = rtc;
-          })
+          compile(tcb)
+              .then((rtc) {
+                rootTC = rtc;
+              })
               .then((_) => rtr.config([
                     new Redirect(path: "/original", redirectTo: ["Hello"]),
                     new Route(
@@ -51,18 +52,19 @@ main() {
                   ]))
               .then((_) => rtr.navigateByUrl("/original"))
               .then((_) {
-            rootTC.detectChanges();
-            expect(rootTC.debugElement.nativeElement).toHaveText("hello");
-            expect(location.urlChanges).toEqual(["/redirected"]);
-            async.done();
-          });
+                rootTC.detectChanges();
+                expect(rootTC.debugElement.nativeElement).toHaveText("hello");
+                expect(location.urlChanges).toEqual(["/redirected"]);
+                async.done();
+              });
         }));
     it(
         "should recognize and apply absolute redirects",
         inject([AsyncTestCompleter, Location], (async, location) {
-          compile(tcb).then((rtc) {
-            rootTC = rtc;
-          })
+          compile(tcb)
+              .then((rtc) {
+                rootTC = rtc;
+              })
               .then((_) => rtr.config([
                     new Redirect(path: "/original", redirectTo: ["/Hello"]),
                     new Route(
@@ -70,18 +72,19 @@ main() {
                   ]))
               .then((_) => rtr.navigateByUrl("/original"))
               .then((_) {
-            rootTC.detectChanges();
-            expect(rootTC.debugElement.nativeElement).toHaveText("hello");
-            expect(location.urlChanges).toEqual(["/redirected"]);
-            async.done();
-          });
+                rootTC.detectChanges();
+                expect(rootTC.debugElement.nativeElement).toHaveText("hello");
+                expect(location.urlChanges).toEqual(["/redirected"]);
+                async.done();
+              });
         }));
     it(
         "should recognize and apply relative child redirects",
         inject([AsyncTestCompleter, Location], (async, location) {
-          compile(tcb).then((rtc) {
-            rootTC = rtc;
-          })
+          compile(tcb)
+              .then((rtc) {
+                rootTC = rtc;
+              })
               .then((_) => rtr.config([
                     new Redirect(path: "/original", redirectTo: ["./Hello"]),
                     new Route(
@@ -89,18 +92,19 @@ main() {
                   ]))
               .then((_) => rtr.navigateByUrl("/original"))
               .then((_) {
-            rootTC.detectChanges();
-            expect(rootTC.debugElement.nativeElement).toHaveText("hello");
-            expect(location.urlChanges).toEqual(["/redirected"]);
-            async.done();
-          });
+                rootTC.detectChanges();
+                expect(rootTC.debugElement.nativeElement).toHaveText("hello");
+                expect(location.urlChanges).toEqual(["/redirected"]);
+                async.done();
+              });
         }));
     it(
         "should recognize and apply relative parent redirects",
         inject([AsyncTestCompleter, Location], (async, location) {
-          compile(tcb).then((rtc) {
-            rootTC = rtc;
-          })
+          compile(tcb)
+              .then((rtc) {
+                rootTC = rtc;
+              })
               .then((_) => rtr.config([
                     new Route(
                         path: "/original/...", component: RedirectToParentCmp),
@@ -111,18 +115,19 @@ main() {
                   ]))
               .then((_) => rtr.navigateByUrl("/original/child-redirect"))
               .then((_) {
-            rootTC.detectChanges();
-            expect(rootTC.debugElement.nativeElement).toHaveText("hello");
-            expect(location.urlChanges).toEqual(["/redirected"]);
-            async.done();
-          });
+                rootTC.detectChanges();
+                expect(rootTC.debugElement.nativeElement).toHaveText("hello");
+                expect(location.urlChanges).toEqual(["/redirected"]);
+                async.done();
+              });
         }));
     it(
         "should not redirect when redirect is less specific than other matching routes",
         inject([AsyncTestCompleter, Location], (async, location) {
-          compile(tcb).then((rtc) {
-            rootTC = rtc;
-          })
+          compile(tcb)
+              .then((rtc) {
+                rootTC = rtc;
+              })
               .then((_) => rtr.config([
                     new Route(path: "/foo", component: HelloCmp, name: "Hello"),
                     new Route(
@@ -133,11 +138,11 @@ main() {
                   ]))
               .then((_) => rtr.navigateByUrl("/bye"))
               .then((_) {
-            rootTC.detectChanges();
-            expect(rootTC.debugElement.nativeElement).toHaveText("goodbye");
-            expect(location.urlChanges).toEqual(["/bye"]);
-            async.done();
-          });
+                rootTC.detectChanges();
+                expect(rootTC.debugElement.nativeElement).toHaveText("goodbye");
+                expect(location.urlChanges).toEqual(["/bye"]);
+                async.done();
+              });
         }));
   });
 }

@@ -303,8 +303,8 @@ class Control extends AbstractControl {
     emitModelToViewChange =
         isPresent(emitModelToViewChange) ? emitModelToViewChange : true;
     this._value = value;
-    if (isPresent(this._onChange) && emitModelToViewChange) this
-        ._onChange(this._value);
+    if (isPresent(this._onChange) && emitModelToViewChange)
+      this._onChange(this._value);
     this.updateValueAndValidity(onlySelf: onlySelf, emitEvent: emitEvent);
   }
 

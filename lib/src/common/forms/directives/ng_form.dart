@@ -92,11 +92,14 @@ class NgForm extends ControlContainer implements Form {
   ControlGroup form;
   var ngSubmit = new EventEmitter();
   NgForm(
-      @Optional() @Self() @Inject(NG_VALIDATORS) List<dynamic> validators,
+      @Optional()
+      @Self()
+      @Inject(NG_VALIDATORS)
+          List<dynamic> validators,
       @Optional()
       @Self()
       @Inject(NG_ASYNC_VALIDATORS)
-      List<dynamic> asyncValidators)
+          List<dynamic> asyncValidators)
       : super() {
     /* super call moved to initializer */;
     this.form = new ControlGroup({}, null, composeValidators(validators),

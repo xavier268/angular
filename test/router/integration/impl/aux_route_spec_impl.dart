@@ -44,19 +44,19 @@ auxRoutes() {
         compile(tcb,
                 '''main {<router-outlet></router-outlet>} | aux {<router-outlet name="modal"></router-outlet>}''')
             .then((rtc) {
-          fixture = rtc;
-        })
+              fixture = rtc;
+            })
             .then((_) => rtr.config([
                   new Route(path: "/hello", component: HelloCmp, name: "Hello"),
                   new AuxRoute(path: "/modal", component: ModalCmp, name: "Aux")
                 ]))
             .then((_) => rtr.navigateByUrl("/(modal)"))
             .then((_) {
-          fixture.detectChanges();
-          expect(fixture.debugElement.nativeElement)
-              .toHaveText("main {} | aux {modal}");
-          async.done();
-        });
+              fixture.detectChanges();
+              expect(fixture.debugElement.nativeElement)
+                  .toHaveText("main {} | aux {modal}");
+              async.done();
+            });
       }));
   it(
       "should navigate via the link DSL",
@@ -64,8 +64,8 @@ auxRoutes() {
         compile(tcb,
                 '''main {<router-outlet></router-outlet>} | aux {<router-outlet name="modal"></router-outlet>}''')
             .then((rtc) {
-          fixture = rtc;
-        })
+              fixture = rtc;
+            })
             .then((_) => rtr.config([
                   new Route(path: "/hello", component: HelloCmp, name: "Hello"),
                   new AuxRoute(
@@ -76,11 +76,11 @@ auxRoutes() {
                   ["Modal"]
                 ]))
             .then((_) {
-          fixture.detectChanges();
-          expect(fixture.debugElement.nativeElement)
-              .toHaveText("main {} | aux {modal}");
-          async.done();
-        });
+              fixture.detectChanges();
+              expect(fixture.debugElement.nativeElement)
+                  .toHaveText("main {} | aux {modal}");
+              async.done();
+            });
       }));
   it(
       "should generate a link URL",
@@ -88,18 +88,18 @@ auxRoutes() {
         compile(tcb,
                 '''<a [routerLink]="[\'/\', [\'Modal\']]">open modal</a> | main {<router-outlet></router-outlet>} | aux {<router-outlet name="modal"></router-outlet>}''')
             .then((rtc) {
-          fixture = rtc;
-        })
+              fixture = rtc;
+            })
             .then((_) => rtr.config([
                   new Route(path: "/hello", component: HelloCmp, name: "Hello"),
                   new AuxRoute(
                       path: "/modal", component: ModalCmp, name: "Modal")
                 ]))
             .then((_) {
-          fixture.detectChanges();
-          expect(getHref(getLinkElement(fixture))).toEqual("/(modal)");
-          async.done();
-        });
+              fixture.detectChanges();
+              expect(getHref(getLinkElement(fixture))).toEqual("/(modal)");
+              async.done();
+            });
       }));
   it(
       "should navigate from a link click",
@@ -107,47 +107,48 @@ auxRoutes() {
         compile(tcb,
                 '''<a [routerLink]="[\'/\', [\'Modal\']]">open modal</a> | <a [routerLink]="[\'/Hello\']">hello</a> | main {<router-outlet></router-outlet>} | aux {<router-outlet name="modal"></router-outlet>}''')
             .then((rtc) {
-          fixture = rtc;
-        })
+              fixture = rtc;
+            })
             .then((_) => rtr.config([
                   new Route(path: "/hello", component: HelloCmp, name: "Hello"),
                   new AuxRoute(
                       path: "/modal", component: ModalCmp, name: "Modal")
                 ]))
             .then((_) {
-          fixture.detectChanges();
-          expect(fixture.debugElement.nativeElement)
-              .toHaveText("open modal | hello | main {} | aux {}");
-          var navCount = 0;
-          rtr.subscribe((_) {
-            navCount += 1;
-            fixture.detectChanges();
-            if (navCount == 1) {
+              fixture.detectChanges();
               expect(fixture.debugElement.nativeElement)
-                  .toHaveText("open modal | hello | main {} | aux {modal}");
-              expect(location.urlChanges).toEqual(["/(modal)"]);
-              expect(getHref(getLinkElement(fixture, 0))).toEqual("/(modal)");
-              expect(getHref(getLinkElement(fixture, 1)))
-                  .toEqual("/hello(modal)");
-              // click on primary route link
-              clickOnElement(getLinkElement(fixture, 1));
-            } else if (navCount == 2) {
-              expect(fixture.debugElement.nativeElement).toHaveText(
-                  "open modal | hello | main {hello} | aux {modal}");
-              expect(location.urlChanges)
-                  .toEqual(["/(modal)", "/hello(modal)"]);
-              expect(getHref(getLinkElement(fixture, 0)))
-                  .toEqual("/hello(modal)");
-              expect(getHref(getLinkElement(fixture, 1)))
-                  .toEqual("/hello(modal)");
-              async.done();
-            } else {
-              throw new BaseException(
-                  '''Unexpected route change #${ navCount}''');
-            }
-          });
-          clickOnElement(getLinkElement(fixture));
-        });
+                  .toHaveText("open modal | hello | main {} | aux {}");
+              var navCount = 0;
+              rtr.subscribe((_) {
+                navCount += 1;
+                fixture.detectChanges();
+                if (navCount == 1) {
+                  expect(fixture.debugElement.nativeElement)
+                      .toHaveText("open modal | hello | main {} | aux {modal}");
+                  expect(location.urlChanges).toEqual(["/(modal)"]);
+                  expect(getHref(getLinkElement(fixture, 0)))
+                      .toEqual("/(modal)");
+                  expect(getHref(getLinkElement(fixture, 1)))
+                      .toEqual("/hello(modal)");
+                  // click on primary route link
+                  clickOnElement(getLinkElement(fixture, 1));
+                } else if (navCount == 2) {
+                  expect(fixture.debugElement.nativeElement).toHaveText(
+                      "open modal | hello | main {hello} | aux {modal}");
+                  expect(location.urlChanges)
+                      .toEqual(["/(modal)", "/hello(modal)"]);
+                  expect(getHref(getLinkElement(fixture, 0)))
+                      .toEqual("/hello(modal)");
+                  expect(getHref(getLinkElement(fixture, 1)))
+                      .toEqual("/hello(modal)");
+                  async.done();
+                } else {
+                  throw new BaseException(
+                      '''Unexpected route change #${ navCount}''');
+                }
+              });
+              clickOnElement(getLinkElement(fixture));
+            });
       }));
 }
 
@@ -166,19 +167,19 @@ auxRoutesWithAPrimaryRoute() {
         compile(tcb,
                 '''main {<router-outlet></router-outlet>} | aux {<router-outlet name="modal"></router-outlet>}''')
             .then((rtc) {
-          fixture = rtc;
-        })
+              fixture = rtc;
+            })
             .then((_) => rtr.config([
                   new Route(path: "/hello", component: HelloCmp, name: "Hello"),
                   new AuxRoute(path: "/modal", component: ModalCmp, name: "Aux")
                 ]))
             .then((_) => rtr.navigateByUrl("/hello(modal)"))
             .then((_) {
-          fixture.detectChanges();
-          expect(fixture.debugElement.nativeElement)
-              .toHaveText("main {hello} | aux {modal}");
-          async.done();
-        });
+              fixture.detectChanges();
+              expect(fixture.debugElement.nativeElement)
+                  .toHaveText("main {hello} | aux {modal}");
+              async.done();
+            });
       }));
   it(
       "should navigate via the link DSL",
@@ -186,8 +187,8 @@ auxRoutesWithAPrimaryRoute() {
         compile(tcb,
                 '''main {<router-outlet></router-outlet>} | aux {<router-outlet name="modal"></router-outlet>}''')
             .then((rtc) {
-          fixture = rtc;
-        })
+              fixture = rtc;
+            })
             .then((_) => rtr.config([
                   new Route(path: "/hello", component: HelloCmp, name: "Hello"),
                   new AuxRoute(
@@ -198,11 +199,11 @@ auxRoutesWithAPrimaryRoute() {
                   ["Modal"]
                 ]))
             .then((_) {
-          fixture.detectChanges();
-          expect(fixture.debugElement.nativeElement)
-              .toHaveText("main {hello} | aux {modal}");
-          async.done();
-        });
+              fixture.detectChanges();
+              expect(fixture.debugElement.nativeElement)
+                  .toHaveText("main {hello} | aux {modal}");
+              async.done();
+            });
       }));
   it(
       "should generate a link URL",
@@ -210,18 +211,18 @@ auxRoutesWithAPrimaryRoute() {
         compile(tcb,
                 '''<a [routerLink]="[\'/Hello\', [\'Modal\']]">open modal</a> | main {<router-outlet></router-outlet>} | aux {<router-outlet name="modal"></router-outlet>}''')
             .then((rtc) {
-          fixture = rtc;
-        })
+              fixture = rtc;
+            })
             .then((_) => rtr.config([
                   new Route(path: "/hello", component: HelloCmp, name: "Hello"),
                   new AuxRoute(
                       path: "/modal", component: ModalCmp, name: "Modal")
                 ]))
             .then((_) {
-          fixture.detectChanges();
-          expect(getHref(getLinkElement(fixture))).toEqual("/hello(modal)");
-          async.done();
-        });
+              fixture.detectChanges();
+              expect(getHref(getLinkElement(fixture))).toEqual("/hello(modal)");
+              async.done();
+            });
       }));
   it(
       "should navigate from a link click",
@@ -229,26 +230,26 @@ auxRoutesWithAPrimaryRoute() {
         compile(tcb,
                 '''<a [routerLink]="[\'/Hello\', [\'Modal\']]">open modal</a> | main {<router-outlet></router-outlet>} | aux {<router-outlet name="modal"></router-outlet>}''')
             .then((rtc) {
-          fixture = rtc;
-        })
+              fixture = rtc;
+            })
             .then((_) => rtr.config([
                   new Route(path: "/hello", component: HelloCmp, name: "Hello"),
                   new AuxRoute(
                       path: "/modal", component: ModalCmp, name: "Modal")
                 ]))
             .then((_) {
-          fixture.detectChanges();
-          expect(fixture.debugElement.nativeElement)
-              .toHaveText("open modal | main {} | aux {}");
-          rtr.subscribe((_) {
-            fixture.detectChanges();
-            expect(fixture.debugElement.nativeElement)
-                .toHaveText("open modal | main {hello} | aux {modal}");
-            expect(location.urlChanges).toEqual(["/hello(modal)"]);
-            async.done();
-          });
-          clickOnElement(getLinkElement(fixture));
-        });
+              fixture.detectChanges();
+              expect(fixture.debugElement.nativeElement)
+                  .toHaveText("open modal | main {} | aux {}");
+              rtr.subscribe((_) {
+                fixture.detectChanges();
+                expect(fixture.debugElement.nativeElement)
+                    .toHaveText("open modal | main {hello} | aux {modal}");
+                expect(location.urlChanges).toEqual(["/hello(modal)"]);
+                async.done();
+              });
+              clickOnElement(getLinkElement(fixture));
+            });
       }));
 }
 

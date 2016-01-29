@@ -131,8 +131,8 @@ class AbstractChangeDetector<T> implements ChangeDetector {
     if (!throwOnChange) this.afterContentLifecycleCallbacks();
     this._detectChangesInViewChildren(throwOnChange);
     if (!throwOnChange) this.afterViewLifecycleCallbacks();
-    if (identical(this.mode, ChangeDetectionStrategy.CheckOnce)) this.mode =
-        ChangeDetectionStrategy.Checked;
+    if (identical(this.mode, ChangeDetectionStrategy.CheckOnce))
+      this.mode = ChangeDetectionStrategy.Checked;
     this.state = ChangeDetectorState.CheckedBefore;
     wtfLeave(s);
   }
@@ -264,8 +264,8 @@ class AbstractChangeDetector<T> implements ChangeDetector {
     ChangeDetector c = this;
     while (
         isPresent(c) && !identical(c.mode, ChangeDetectionStrategy.Detached)) {
-      if (identical(c.mode, ChangeDetectionStrategy.Checked)) c.mode =
-          ChangeDetectionStrategy.CheckOnce;
+      if (identical(c.mode, ChangeDetectionStrategy.Checked))
+        c.mode = ChangeDetectionStrategy.CheckOnce;
       c = c.parent;
     }
   }

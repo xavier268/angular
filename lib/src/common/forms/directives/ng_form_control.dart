@@ -90,12 +90,18 @@ class NgFormControl extends NgControl implements OnChanges {
   dynamic model;
   dynamic viewModel;
   NgFormControl(
-      @Optional() @Self() @Inject(NG_VALIDATORS) this._validators,
-      @Optional() @Self() @Inject(NG_ASYNC_VALIDATORS) this._asyncValidators,
+      @Optional()
+      @Self()
+      @Inject(NG_VALIDATORS)
+          this._validators,
+      @Optional()
+      @Self()
+      @Inject(NG_ASYNC_VALIDATORS)
+          this._asyncValidators,
       @Optional()
       @Self()
       @Inject(NG_VALUE_ACCESSOR)
-      List<ControlValueAccessor> valueAccessors)
+          List<ControlValueAccessor> valueAccessors)
       : super() {
     /* super call moved to initializer */;
     this.valueAccessor = selectValueAccessor(this, valueAccessors);

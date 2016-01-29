@@ -410,8 +410,8 @@ class RouteRegistry {
       if (componentInstruction.terminal) {
         if (linkParamIndex >= linkParams.length) {}
       } else {
-        var childAncestorComponents = (new List.from(ancestorInstructions)
-          ..addAll([instruction]));
+        var childAncestorComponents =
+            (new List.from(ancestorInstructions)..addAll([instruction]));
         var remainingLinkParams = ListWrapper.slice(linkParams, linkParamIndex);
         childInstruction = this._generate(remainingLinkParams,
             childAncestorComponents, null, false, _originalLink);

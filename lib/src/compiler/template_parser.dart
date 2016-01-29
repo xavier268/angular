@@ -111,8 +111,8 @@ class TemplateParser {
     var htmlAstWithErrors = this._htmlParser.parse(template, templateUrl);
     var result = htmlVisitAll(
         parseVisitor, htmlAstWithErrors.rootNodes, EMPTY_COMPONENT);
-    List<ParseError> errors = (new List.from(htmlAstWithErrors.errors)
-      ..addAll(parseVisitor.errors));
+    List<ParseError> errors =
+        (new List.from(htmlAstWithErrors.errors)..addAll(parseVisitor.errors));
     if (errors.length > 0) {
       var errorString = errors.join("\n");
       throw new BaseException('''Template parse errors:

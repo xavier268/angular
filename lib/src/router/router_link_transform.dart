@@ -56,8 +56,8 @@ class RouterLinkLexer {
   String exp;
   num index = 0;
   RouterLinkLexer(this.parser, this.exp) {}
-  List<
-      dynamic /* FixedPart | AuxiliaryStart | AuxiliaryEnd | Params */ > tokenize() {
+  List<dynamic /* FixedPart | AuxiliaryStart | AuxiliaryEnd | Params */ >
+      tokenize() {
     var tokens = [];
     while (this.index < this.exp.length) {
       tokens.add(this._parseToken());

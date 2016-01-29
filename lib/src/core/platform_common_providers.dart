@@ -16,9 +16,8 @@ Reflector _reflector() {
 /**
  * A default set of providers which should be included in any Angular platform.
  */
-const List<
-        dynamic /* Type | Provider | List < dynamic > */ > PLATFORM_COMMON_PROVIDERS =
-    const [
+const List<dynamic /* Type | Provider | List < dynamic > */ >
+    PLATFORM_COMMON_PROVIDERS = const [
   const Provider(Reflector, useFactory: _reflector, deps: const []),
   TestabilityRegistry,
   Console

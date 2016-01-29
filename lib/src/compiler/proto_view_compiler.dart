@@ -68,8 +68,7 @@ const STYLE_ATTR = "style";
 @Injectable()
 class ProtoViewCompiler {
   ProtoViewCompiler() {}
-  CompileProtoViews<AppProtoView, AppProtoElement,
-      dynamic> compileProtoViewRuntime(
+  CompileProtoViews<AppProtoView, AppProtoElement, dynamic> compileProtoViewRuntime(
       ResolvedMetadataCache metadataCache,
       CompileDirectiveMetadata component,
       List<TemplateAst> template,

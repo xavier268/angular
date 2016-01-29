@@ -897,12 +897,10 @@ main() {
   });
 }
 
-@Directive(
-    selector: "[wrapped-value]",
-    host: const {
-      "(input)": "handleOnInput(\$event.target.value)",
-      "[value]": "value"
-    })
+@Directive(selector: "[wrapped-value]", host: const {
+  "(input)": "handleOnInput(\$event.target.value)",
+  "[value]": "value"
+})
 class WrappedValue implements ControlValueAccessor {
   var value;
   Function onChange;
@@ -958,20 +956,16 @@ loginIsEmptyGroupValidator(ControlGroup c) {
   return c.controls["login"].value == "" ? {"loginIsEmpty": true} : null;
 }
 
-@Directive(
-    selector: "[login-is-empty-validator]",
-    providers: const [
-      const Provider(NG_VALIDATORS,
-          useValue: loginIsEmptyGroupValidator, multi: true)
-    ])
+@Directive(selector: "[login-is-empty-validator]", providers: const [
+  const Provider(NG_VALIDATORS,
+      useValue: loginIsEmptyGroupValidator, multi: true)
+])
 class LoginIsEmptyValidator {}
 
-@Directive(
-    selector: "[uniq-login-validator]",
-    providers: const [
-      const Provider(NG_ASYNC_VALIDATORS,
-          useExisting: UniqLoginValidator, multi: true)
-    ])
+@Directive(selector: "[uniq-login-validator]", providers: const [
+  const Provider(NG_ASYNC_VALIDATORS,
+      useExisting: UniqLoginValidator, multi: true)
+])
 class UniqLoginValidator implements Validator {
   @Input("uniq-login-validator") var expected;
   validate(c) {
@@ -979,18 +973,15 @@ class UniqLoginValidator implements Validator {
   }
 }
 
-@Component(
-    selector: "my-comp",
-    template: "",
-    directives: const [
-      FORM_DIRECTIVES,
-      WrappedValue,
-      MyInput,
-      NgIf,
-      NgFor,
-      LoginIsEmptyValidator,
-      UniqLoginValidator
-    ])
+@Component(selector: "my-comp", template: "", directives: const [
+  FORM_DIRECTIVES,
+  WrappedValue,
+  MyInput,
+  NgIf,
+  NgFor,
+  LoginIsEmptyValidator,
+  UniqLoginValidator
+])
 class MyComp {
   dynamic form;
   String name;

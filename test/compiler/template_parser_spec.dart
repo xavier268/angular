@@ -735,8 +735,8 @@ There is no directive with "exportAs" set to "dirA" ("<div [ERROR ->]#a="dirA"><
           expect(humanizeContentProjection(parse(
               "<div><ng-content x></ng-content><ng-content></ng-content></div>",
               [
-            createComp("div", ["ng-content[x]"])
-          ]))).toEqual([
+                createComp("div", ["ng-content[x]"])
+              ]))).toEqual([
             ["div", null],
             ["ng-content", 0],
             ["ng-content", null]

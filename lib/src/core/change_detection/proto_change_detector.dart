@@ -537,7 +537,8 @@ _interpolationFn(List<dynamic> strings) {
       return (a1, a2, a3, a4, a5) =>
           c0 + s(a1) + c1 + s(a2) + c2 + s(a3) + c3 + s(a4) + c4 + s(a5) + c5;
     case 6:
-      return (a1, a2, a3, a4, a5, a6) => c0 +
+      return (a1, a2, a3, a4, a5, a6) =>
+          c0 +
           s(a1) +
           c1 +
           s(a2) +
@@ -551,7 +552,8 @@ _interpolationFn(List<dynamic> strings) {
           s(a6) +
           c6;
     case 7:
-      return (a1, a2, a3, a4, a5, a6, a7) => c0 +
+      return (a1, a2, a3, a4, a5, a6, a7) =>
+          c0 +
           s(a1) +
           c1 +
           s(a2) +
@@ -567,7 +569,8 @@ _interpolationFn(List<dynamic> strings) {
           s(a7) +
           c7;
     case 8:
-      return (a1, a2, a3, a4, a5, a6, a7, a8) => c0 +
+      return (a1, a2, a3, a4, a5, a6, a7, a8) =>
+          c0 +
           s(a1) +
           c1 +
           s(a2) +
@@ -585,7 +588,8 @@ _interpolationFn(List<dynamic> strings) {
           s(a8) +
           c8;
     case 9:
-      return (a1, a2, a3, a4, a5, a6, a7, a8, a9) => c0 +
+      return (a1, a2, a3, a4, a5, a6, a7, a8, a9) =>
+          c0 +
           s(a1) +
           c1 +
           s(a2) +

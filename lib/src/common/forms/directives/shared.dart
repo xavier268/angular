@@ -89,12 +89,12 @@ ControlValueAccessor selectValueAccessor(
     } else if (v is CheckboxControlValueAccessor ||
         v is NumberValueAccessor ||
         v is SelectControlValueAccessor) {
-      if (isPresent(builtinAccessor)) _throwError(
-          dir, "More than one built-in value accessor matches");
+      if (isPresent(builtinAccessor))
+        _throwError(dir, "More than one built-in value accessor matches");
       builtinAccessor = v;
     } else {
-      if (isPresent(customAccessor)) _throwError(
-          dir, "More than one custom value accessor matches");
+      if (isPresent(customAccessor))
+        _throwError(dir, "More than one custom value accessor matches");
       customAccessor = v;
     }
   });

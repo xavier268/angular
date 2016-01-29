@@ -157,7 +157,8 @@ main() {
                     rootCompChildren[2].nativeElement, "child-comp-class"))
                 .toBe(true);
             expect(DOM.hasClass(rootCompChildren[3].nativeElement,
-                "cond-content-comp-class")).toBe(true);
+                    "cond-content-comp-class"))
+                .toBe(true);
             var nested = rootCompChildren[0].children;
             expect(nested.length).toEqual(1);
             expect(DOM.hasClass(nested[0].nativeElement, "parentnested"))

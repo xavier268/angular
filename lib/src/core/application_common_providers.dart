@@ -28,9 +28,8 @@ import "linker/dynamic_component_loader.dart" show DynamicComponentLoader_;
  * A default set of providers which should be included in any Angular
  * application, regardless of the platform it runs onto.
  */
-const List<
-        dynamic /* Type | Provider | List < dynamic > */ > APPLICATION_COMMON_PROVIDERS =
-    const [
+const List<dynamic /* Type | Provider | List < dynamic > */ >
+    APPLICATION_COMMON_PROVIDERS = const [
   const Provider(Compiler, useClass: Compiler_),
   APP_ID_RANDOM_PROVIDER,
   ResolvedMetadataCache,

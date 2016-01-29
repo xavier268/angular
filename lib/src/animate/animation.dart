@@ -55,10 +55,11 @@ class Animation {
    */
   void setup() {
     if (this.data.fromStyles != null) this.applyStyles(this.data.fromStyles);
-    if (this.data.duration != null) this.applyStyles(
-        {"transitionDuration": this.data.duration.toString() + "ms"});
-    if (this.data.delay != null) this
-        .applyStyles({"transitionDelay": this.data.delay.toString() + "ms"});
+    if (this.data.duration != null)
+      this.applyStyles(
+          {"transitionDuration": this.data.duration.toString() + "ms"});
+    if (this.data.delay != null)
+      this.applyStyles({"transitionDelay": this.data.delay.toString() + "ms"});
   }
 
   /**
@@ -108,9 +109,8 @@ class Animation {
    * @param classes
    */
   void addClasses(List<String> classes) {
-    for (var i = 0, len = classes.length;
-        i < len;
-        i++) DOM.addClass(this.element, classes[i]);
+    for (var i = 0, len = classes.length; i < len; i++)
+      DOM.addClass(this.element, classes[i]);
   }
 
   /**
@@ -118,9 +118,8 @@ class Animation {
    * @param classes
    */
   void removeClasses(List<String> classes) {
-    for (var i = 0, len = classes.length;
-        i < len;
-        i++) DOM.removeClass(this.element, classes[i]);
+    for (var i = 0, len = classes.length; i < len; i++)
+      DOM.removeClass(this.element, classes[i]);
   }
 
   /**
@@ -139,8 +138,8 @@ class Animation {
 
   void handleAnimationEvent(dynamic event) {
     var elapsedTime = Math.round(event.elapsedTime * 1000);
-    if (!this.browserDetails.elapsedTimeIncludesDelay) elapsedTime +=
-        this.computedDelay;
+    if (!this.browserDetails.elapsedTimeIncludesDelay)
+      elapsedTime += this.computedDelay;
     event.stopPropagation();
     if (elapsedTime >= this.totalTime) this.handleAnimationCompleted();
   }

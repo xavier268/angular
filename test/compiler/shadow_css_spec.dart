@@ -79,7 +79,8 @@ main() {
       expect(s("one ~ two {}", "a")).toEqual("one[a] ~ two[a] {}");
       var res = s(".one.two > three {}", "a");
       expect(res == ".one.two[a] > three[a] {}" ||
-          res == ".two.one[a] > three[a] {}").toEqual(true);
+              res == ".two.one[a] > three[a] {}")
+          .toEqual(true);
       expect(s("one[attr=\"value\"] {}", "a"))
           .toEqual("one[attr=\"value\"][a] {}");
       expect(s("one[attr=value] {}", "a")).toEqual("one[attr=\"value\"][a] {}");

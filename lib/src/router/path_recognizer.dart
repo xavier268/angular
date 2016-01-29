@@ -162,17 +162,20 @@ Map<String, dynamic> parsePathString(String route) {
 
 // `/foo/:name`
 String pathDslHash(List<Segment> segments) {
-  return segments.map((segment) {
-    if (segment is StarSegment) {
-      return "*";
-    } else if (segment is ContinuationSegment) {
-      return "...";
-    } else if (segment is DynamicSegment) {
-      return ":";
-    } else if (segment is StaticSegment) {
-      return segment.path;
-    }
-  }).toList().join("/");
+  return segments
+      .map((segment) {
+        if (segment is StarSegment) {
+          return "*";
+        } else if (segment is ContinuationSegment) {
+          return "...";
+        } else if (segment is DynamicSegment) {
+          return ":";
+        } else if (segment is StaticSegment) {
+          return segment.path;
+        }
+      })
+      .toList()
+      .join("/");
 }
 
 List<String> splitBySlash(String url) {

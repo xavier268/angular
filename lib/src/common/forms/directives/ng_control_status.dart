@@ -8,16 +8,14 @@ import "package:angular2/src/facade/lang.dart" show isBlank, isPresent;
  * Directive automatically applied to Angular forms that sets CSS classes
  * based on control status (valid/invalid/dirty/etc).
  */
-@Directive(
-    selector: "[ngControl],[ngModel],[ngFormControl]",
-    host: const {
-      "[class.ng-untouched]": "ngClassUntouched",
-      "[class.ng-touched]": "ngClassTouched",
-      "[class.ng-pristine]": "ngClassPristine",
-      "[class.ng-dirty]": "ngClassDirty",
-      "[class.ng-valid]": "ngClassValid",
-      "[class.ng-invalid]": "ngClassInvalid"
-    })
+@Directive(selector: "[ngControl],[ngModel],[ngFormControl]", host: const {
+  "[class.ng-untouched]": "ngClassUntouched",
+  "[class.ng-touched]": "ngClassTouched",
+  "[class.ng-pristine]": "ngClassPristine",
+  "[class.ng-dirty]": "ngClassDirty",
+  "[class.ng-valid]": "ngClassValid",
+  "[class.ng-invalid]": "ngClassInvalid"
+})
 class NgControlStatus {
   NgControl _cd;
   NgControlStatus(@Self() NgControl cd) {

@@ -76,20 +76,24 @@ main() {
     it("should throw when given two routes that start with the same static segment",
         () {
       recognizer.config(new Route(path: "/hello", component: DummyCmpA));
-      expect(() => recognizer.config(
-          new Route(path: "/hello", component: DummyCmpB))).toThrowError(
-          "Configuration '/hello' conflicts with existing route '/hello'");
+      expect(() => recognizer
+              .config(new Route(path: "/hello", component: DummyCmpB)))
+          .toThrowError(
+              "Configuration '/hello' conflicts with existing route '/hello'");
     });
     it("should throw when given two routes that have dynamic segments in the same order",
         () {
       recognizer.config(new Route(
           path: "/hello/:person/how/:doyoudou", component: DummyCmpA));
-      expect(() => recognizer.config(new Route(
-          path: "/hello/:friend/how/:areyou",
-          component: DummyCmpA))).toThrowError(
+      expect(() => recognizer.config(
+          new Route(
+              path: "/hello/:friend/how/:areyou",
+              component: DummyCmpA))).toThrowError(
           "Configuration '/hello/:friend/how/:areyou' conflicts with existing route '/hello/:person/how/:doyoudou'");
-      expect(() => recognizer.config(new Redirect(
-          path: "/hello/:pal/how/:goesit", redirectTo: ["/Foo"]))).toThrowError(
+      expect(() => recognizer.config(
+          new Redirect(
+              path: "/hello/:pal/how/:goesit",
+              redirectTo: ["/Foo"]))).toThrowError(
           "Configuration '/hello/:pal/how/:goesit' conflicts with existing route '/hello/:person/how/:doyoudou'");
     });
     it(
@@ -126,10 +130,11 @@ main() {
           "Route generator for 'name' was not included in parameters passed.");
     });
     it("should throw if the route alias is not TitleCase", () {
-      expect(() => recognizer.config(new Route(
-          path: "app/user/:name",
-          component: DummyCmpA,
-          name: "user"))).toThrowError(
+      expect(() => recognizer.config(
+          new Route(
+              path: "app/user/:name",
+              component: DummyCmpA,
+              name: "user"))).toThrowError(
           '''Route "app/user/:name" with name "user" does not begin with an uppercase letter. Route names should be CamelCase like "User".''');
     });
     describe("params", () {

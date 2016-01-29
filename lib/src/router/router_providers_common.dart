@@ -19,14 +19,12 @@ const List<dynamic> ROUTER_PROVIDERS_COMMON = const [
   RouteRegistry,
   const Provider(LocationStrategy, useClass: PathLocationStrategy),
   Location,
-  const Provider(Router,
-      useFactory: routerFactory,
-      deps: const [
-        RouteRegistry,
-        Location,
-        ROUTER_PRIMARY_COMPONENT,
-        ApplicationRef
-      ]),
+  const Provider(Router, useFactory: routerFactory, deps: const [
+    RouteRegistry,
+    Location,
+    ROUTER_PRIMARY_COMPONENT,
+    ApplicationRef
+  ]),
   const Provider(ROUTER_PRIMARY_COMPONENT,
       useFactory: routerPrimaryComponentFactory, deps: const [ApplicationRef])
 ];

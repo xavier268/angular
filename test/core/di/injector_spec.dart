@@ -165,11 +165,11 @@ main() {
                 "and that 'NoAnnotations' is decorated with Injectable.");
       });
       it("should throw when no type and not @Inject (factory case)", () {
-        expect(() => createInjector([
-              provide("someToken", useFactory: factoryFn)
-            ])).toThrowError("Cannot resolve all parameters for 'factoryFn'(?). " +
-            "Make sure that all the parameters are decorated with Inject or have valid type annotations " +
-            "and that 'factoryFn' is decorated with Injectable.");
+        expect(() =>
+                createInjector([provide("someToken", useFactory: factoryFn)]))
+            .toThrowError("Cannot resolve all parameters for 'factoryFn'(?). " +
+                "Make sure that all the parameters are decorated with Inject or have valid type annotations " +
+                "and that 'factoryFn' is decorated with Injectable.");
       });
       it("should cache instances", () {
         var injector = createInjector([Engine]);
@@ -428,22 +428,18 @@ main() {
         it("should return a dependency from self", () {
           var inj = Injector.resolveAndCreate([
             Engine,
-            provide(Car,
-                useFactory: (e) => new Car(e),
-                deps: [
-                  [Engine, new SelfMetadata()]
-                ])
+            provide(Car, useFactory: (e) => new Car(e), deps: [
+              [Engine, new SelfMetadata()]
+            ])
           ]);
           expect(inj.get(Car)).toBeAnInstanceOf(Car);
         });
         it("should throw when not requested provider on self", () {
           var parent = Injector.resolveAndCreate([Engine]);
           var child = parent.resolveAndCreateChild([
-            provide(Car,
-                useFactory: (e) => new Car(e),
-                deps: [
-                  [Engine, new SelfMetadata()]
-                ])
+            provide(Car, useFactory: (e) => new Car(e), deps: [
+              [Engine, new SelfMetadata()]
+            ])
           ]);
           expect(() => child.get(Car)).toThrowError(
               '''No provider for Engine! (${ stringify ( Car )} -> ${ stringify ( Engine )})''');
@@ -453,11 +449,9 @@ main() {
         it("should return a dependency from same host", () {
           var parent = Injector.resolveAndCreate([Engine]);
           var child = parent.resolveAndCreateChild([
-            provide(Car,
-                useFactory: (e) => new Car(e),
-                deps: [
-                  [Engine, new HostMetadata()]
-                ])
+            provide(Car, useFactory: (e) => new Car(e), deps: [
+              [Engine, new HostMetadata()]
+            ])
           ]);
           expect(child.get(Car)).toBeAnInstanceOf(Car);
         });
@@ -467,11 +461,9 @@ main() {
               [new ProviderWithVisibility(engine, Visibility.Private)]);
           var parent = new Injector(protoParent);
           var child = createInjector([
-            provide(Car,
-                useFactory: (e) => new Car(e),
-                deps: [
-                  [Engine, new HostMetadata()]
-                ])
+            provide(Car, useFactory: (e) => new Car(e), deps: [
+              [Engine, new HostMetadata()]
+            ])
           ], parent, true);
           expect(child.get(Car)).toBeAnInstanceOf(Car);
         });
@@ -481,11 +473,9 @@ main() {
               [new ProviderWithVisibility(engine, Visibility.Public)]);
           var parent = new Injector(protoParent);
           var child = createInjector([
-            provide(Car,
-                useFactory: (e) => new Car(e),
-                deps: [
-                  [Engine, new HostMetadata()]
-                ])
+            provide(Car, useFactory: (e) => new Car(e), deps: [
+              [Engine, new HostMetadata()]
+            ])
           ], parent, true);
           expect(() => child.get(Car)).toThrowError(
               '''No provider for Engine! (${ stringify ( Car )} -> ${ stringify ( Engine )})''');
@@ -494,11 +484,9 @@ main() {
           var parent = Injector.resolveAndCreate([Engine]);
           var child = parent.resolveAndCreateChild([
             provide(Engine, useClass: TurboEngine),
-            provide(Car,
-                useFactory: (e) => new Car(e),
-                deps: [
-                  [Engine, new HostMetadata()]
-                ])
+            provide(Car, useFactory: (e) => new Car(e), deps: [
+              [Engine, new HostMetadata()]
+            ])
           ]);
           expect(child.get(Car).engine).toBeAnInstanceOf(TurboEngine);
         });
@@ -511,11 +499,9 @@ main() {
           var parent = new Injector(protoParent);
           var child = createInjector([
             provide(Engine, useClass: BrokenEngine),
-            provide(Car,
-                useFactory: (e) => new Car(e),
-                deps: [
-                  [Engine, new SkipSelfMetadata()]
-                ])
+            provide(Car, useFactory: (e) => new Car(e), deps: [
+              [Engine, new SkipSelfMetadata()]
+            ])
           ], parent, true);
           expect(child.get(Car)).toBeAnInstanceOf(Car);
         });
@@ -526,11 +512,9 @@ main() {
           var parent = new Injector(protoParent);
           var child = createInjector([
             provide(Engine, useClass: BrokenEngine),
-            provide(Car,
-                useFactory: (e) => new Car(e),
-                deps: [
-                  [Engine, new SkipSelfMetadata()]
-                ])
+            provide(Car, useFactory: (e) => new Car(e), deps: [
+              [Engine, new SkipSelfMetadata()]
+            ])
           ], parent, true);
           expect(child.get(Car)).toBeAnInstanceOf(Car);
         });
@@ -542,11 +526,9 @@ main() {
           var parent = new Injector(protoParent);
           var child = createInjector([
             provide(Engine, useClass: BrokenEngine),
-            provide(Car,
-                useFactory: (e) => new Car(e),
-                deps: [
-                  [Engine, new SkipSelfMetadata()]
-                ])
+            provide(Car, useFactory: (e) => new Car(e), deps: [
+              [Engine, new SkipSelfMetadata()]
+            ])
           ], parent, false);
           expect(() => child.get(Car)).toThrowError(
               '''No provider for Engine! (${ stringify ( Car )} -> ${ stringify ( Engine )})''');
@@ -621,11 +603,9 @@ main() {
       it("should support overriding factory dependencies with dependency annotations",
           () {
         var providers = Injector.resolve([
-          provide("token",
-              useFactory: (e) => "result",
-              deps: [
-                [new InjectMetadata("dep"), new CustomDependencyMetadata()]
-              ])
+          provide("token", useFactory: (e) => "result", deps: [
+            [new InjectMetadata("dep"), new CustomDependencyMetadata()]
+          ])
         ]);
         var provider = providers[0];
         expect(provider.resolvedFactories[0].dependencies[0].key.token)
@@ -639,14 +619,14 @@ main() {
               useFactory: (e) => e, deps: [new InjectMetadata("dep")])
         ]);
         var nestedResolved = Injector.resolve([
-          provide("token",
-              useFactory: (e) => e,
-              deps: [
-                [new InjectMetadata("dep")]
-              ])
+          provide("token", useFactory: (e) => e, deps: [
+            [new InjectMetadata("dep")]
+          ])
         ]);
         expect(resolved[0].resolvedFactories[0].dependencies[0].key.token)
-            .toEqual(nestedResolved[0].resolvedFactories[0].dependencies[0]
+            .toEqual(nestedResolved[0]
+                .resolvedFactories[0]
+                .dependencies[0]
                 .key
                 .token);
       });

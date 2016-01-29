@@ -26,7 +26,9 @@ const NUMBER_VALUE_ACCESSOR = const Provider(NG_VALUE_ACCESSOR,
       "(input)": "onChange(\$event.target.value)",
       "(blur)": "onTouched()"
     },
-    bindings: const [NUMBER_VALUE_ACCESSOR])
+    bindings: const [
+      NUMBER_VALUE_ACCESSOR
+    ])
 class NumberValueAccessor implements ControlValueAccessor {
   Renderer _renderer;
   ElementRef _elementRef;

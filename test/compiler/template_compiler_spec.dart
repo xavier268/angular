@@ -142,8 +142,8 @@ main() {
             "should compile embedded templates",
             inject([AsyncTestCompleter], (async) {
               compile([CompWithEmbeddedTemplate]).then((humanizedView) {
-                var embeddedView = humanizedView["componentViews"][0]
-                    ["embeddedViews"][0];
+                var embeddedView =
+                    humanizedView["componentViews"][0]["embeddedViews"][0];
                 expect(embeddedView["elements"]).toEqual(["<a>"]);
                 expect(embeddedView["cd"])
                     .toEqual(["prop(href)=someEmbeddedValue"]);
@@ -155,7 +155,8 @@ main() {
             inject([AsyncTestCompleter], (async) {
               compile([CompWithDupDirectives, TreeComp]).then((humanizedView) {
                 expect(humanizedView["componentViews"][0]["componentViews"]
-                    .length).toBe(1);
+                        .length)
+                    .toBe(1);
                 async.done();
               });
             }));

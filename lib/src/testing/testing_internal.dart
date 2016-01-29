@@ -95,16 +95,16 @@ void beforeEachBindings(Function fn) {
 }
 
 void beforeEach(fn) {
-  if (fn is! FunctionWithParamTokens) fn =
-      new FunctionWithParamTokens([], fn, false);
+  if (fn is! FunctionWithParamTokens)
+    fn = new FunctionWithParamTokens([], fn, false);
   gns.beforeEach(() {
     _testInjector.execute(fn);
   });
 }
 
 void _it(gnsFn, name, fn) {
-  if (fn is! FunctionWithParamTokens) fn =
-      new FunctionWithParamTokens([], fn, false);
+  if (fn is! FunctionWithParamTokens)
+    fn = new FunctionWithParamTokens([], fn, false);
   gnsFn(name, () {
     _inIt = true;
     _testInjector.execute(fn);

@@ -22,8 +22,8 @@ class SourceModule {
   SourceWithImports getSourceWithImports() {
     var moduleAliases = {};
     List<List<String>> imports = [];
-    var newSource = StringWrapper.replaceAllMapped(
-        this.sourceWithModuleRefs, MODULE_REGEXP, (match) {
+    var newSource = StringWrapper
+        .replaceAllMapped(this.sourceWithModuleRefs, MODULE_REGEXP, (match) {
       var moduleUrl = match[1];
       var alias = moduleAliases[moduleUrl];
       if (isBlank(alias)) {

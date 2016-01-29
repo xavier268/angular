@@ -261,7 +261,8 @@ class AppView implements ChangeDispatcher {
   }
 
   dynamic getDirectiveFor(DirectiveIndex directive) {
-    return this.appElements[directive.elementIndex]
+    return this
+        .appElements[directive.elementIndex]
         .getDirectiveAtIndex(directive.directiveIndex);
   }
 

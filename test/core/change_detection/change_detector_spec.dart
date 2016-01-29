@@ -807,8 +807,9 @@ main() {
         });
         it("should not break the next run", () {
           var val = _createChangeDetector("a", new TestData("value"));
-          expect(() =>
-              val.changeDetector.checkNoChanges()).toThrowError(new RegExp(
+          expect(
+              () =>
+                  val.changeDetector.checkNoChanges()).toThrowError(new RegExp(
               "Expression ['\"]a in location['\"] has changed after it was checked."));
           val.changeDetector.detectChanges();
           expect(val.dispatcher.loggedValues).toEqual(["value"]);
@@ -1113,8 +1114,9 @@ main() {
             () {
           var pipe = new PipeWithOnDestroy();
           var registry = new FakePipes("pipe", () => pipe);
-          var cd = _createChangeDetector(
-              "name | pipe", new Person("bob"), registry).changeDetector;
+          var cd =
+              _createChangeDetector("name | pipe", new Person("bob"), registry)
+                  .changeDetector;
           cd.detectChanges();
           cd.dehydrate();
           expect(pipe.destroyCalled).toBe(true);
@@ -1123,8 +1125,9 @@ main() {
             () {
           var pipe = new CountingPipe();
           var registry = new FakePipes("pipe", () => pipe);
-          var cd = _createChangeDetector(
-              "name | pipe", new Person("bob"), registry).changeDetector;
+          var cd =
+              _createChangeDetector("name | pipe", new Person("bob"), registry)
+                  .changeDetector;
           cd.detectChanges();
           expect(() => cd.dehydrate()).not.toThrow();
         });

@@ -39,8 +39,9 @@ main() {
               .createAsync(MyComp)
               .then((componentFixture) {
             expect(inspectNativeElement(
-                    componentFixture.debugElement.nativeElement)
-                .componentInstance).toBeAnInstanceOf(MyComp);
+                        componentFixture.debugElement.nativeElement)
+                    .componentInstance)
+                .toBeAnInstanceOf(MyComp);
             async.done();
           });
         }));
@@ -54,7 +55,8 @@ main() {
               .then((componentFixture) {
             componentFixture.destroy();
             expect(inspectNativeElement(
-                componentFixture.debugElement.nativeElement)).toBe(null);
+                    componentFixture.debugElement.nativeElement))
+                .toBe(null);
             async.done();
           });
         }));
@@ -68,8 +70,9 @@ main() {
                 .createAsync(MyComp)
                 .then((componentFixture) {
               expect(global["ng"]
-                      ["probe"](componentFixture.debugElement.nativeElement)
-                  .componentInstance).toBeAnInstanceOf(MyComp);
+                          ["probe"](componentFixture.debugElement.nativeElement)
+                      .componentInstance)
+                  .toBeAnInstanceOf(MyComp);
               async.done();
             });
           }),

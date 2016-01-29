@@ -44,7 +44,8 @@ main() {
       });
       it("should be true for args of pure functions", () {
         expect(r(mode: RecordType.Const, argumentToPureFunction: true)
-            .shouldBeChecked()).toBeTruthy();
+                .shouldBeChecked())
+            .toBeTruthy();
       });
       it("should be true for last in binding records", () {
         expect(r(mode: RecordType.Const, lastInBinding: true).shouldBeChecked())
@@ -61,7 +62,8 @@ main() {
       it("should be true for lastInBinding records that are referenced by self records",
           () {
         expect(r(lastInBinding: true, referencedBySelf: true)
-            .isUsedByOtherRecord()).toBeTruthy();
+                .isUsedByOtherRecord())
+            .toBeTruthy();
       });
       it("should be true for non lastInBinding records", () {
         expect(r(lastInBinding: false).isUsedByOtherRecord()).toBeTruthy();

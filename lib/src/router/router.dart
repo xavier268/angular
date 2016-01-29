@@ -236,8 +236,8 @@ class Router {
   }
 
   Future<dynamic> _afterPromiseFinishNavigating(Future<dynamic> promise) {
-    return PromiseWrapper.catchError(
-        promise.then((_) => this._finishNavigating()), (err) {
+    return PromiseWrapper
+        .catchError(promise.then((_) => this._finishNavigating()), (err) {
       this._finishNavigating();
       throw err;
     });

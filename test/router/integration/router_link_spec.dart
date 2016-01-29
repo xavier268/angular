@@ -117,8 +117,9 @@ main() {
             fixture.detectChanges();
             expect(fixture.debugElement.nativeElement).toHaveText("brian");
             expect(DOM.getAttribute(
-                fixture.debugElement.componentViewChildren[0].nativeElement,
-                "href")).toEqual("/user/brian");
+                    fixture.debugElement.componentViewChildren[0].nativeElement,
+                    "href"))
+                .toEqual("/user/brian");
             async.done();
           });
         }));
@@ -136,9 +137,10 @@ main() {
               .then((_) {
             fixture.detectChanges();
             expect(DOM.getAttribute(
-                fixture.debugElement.componentViewChildren[1]
-                    .componentViewChildren[0].nativeElement,
-                "href")).toEqual("/page/2");
+                    fixture.debugElement.componentViewChildren[1]
+                        .componentViewChildren[0].nativeElement,
+                    "href"))
+                .toEqual("/page/2");
             async.done();
           });
         }));
@@ -156,9 +158,10 @@ main() {
               .then((_) {
             fixture.detectChanges();
             expect(DOM.getAttribute(
-                fixture.debugElement.componentViewChildren[1]
-                    .componentViewChildren[0].nativeElement,
-                "href")).toEqual("/page/2");
+                    fixture.debugElement.componentViewChildren[1]
+                        .componentViewChildren[0].nativeElement,
+                    "href"))
+                .toEqual("/page/2");
             async.done();
           });
         }));
@@ -176,9 +179,10 @@ main() {
               .then((_) {
             fixture.detectChanges();
             expect(DOM.getAttribute(
-                fixture.debugElement.componentViewChildren[1]
-                    .componentViewChildren[0].nativeElement,
-                "href")).toEqual("/book/1984/page/100");
+                    fixture.debugElement.componentViewChildren[1]
+                        .componentViewChildren[0].nativeElement,
+                    "href"))
+                .toEqual("/book/1984/page/100");
             async.done();
           });
         }));
@@ -218,9 +222,10 @@ main() {
               .then((_) {
             fixture.detectChanges();
             expect(DOM.getAttribute(
-                fixture.debugElement.componentViewChildren[1]
-                    .componentViewChildren[0].nativeElement,
-                "href")).toEqual("/child-with-grandchild/grandchild");
+                    fixture.debugElement.componentViewChildren[1]
+                        .componentViewChildren[0].nativeElement,
+                    "href"))
+                .toEqual("/child-with-grandchild/grandchild");
             async.done();
           });
         }));
@@ -238,14 +243,19 @@ main() {
               .then((_) {
             fixture.detectChanges();
             expect(DOM.getAttribute(
-                fixture.debugElement.componentViewChildren[1]
-                    .componentViewChildren[0].nativeElement,
-                "href")).toEqual("/book/1984/page/100");
+                    fixture.debugElement.componentViewChildren[1]
+                        .componentViewChildren[0].nativeElement,
+                    "href"))
+                .toEqual("/book/1984/page/100");
             expect(DOM.getAttribute(
-                fixture.debugElement.componentViewChildren[1]
-                        .componentViewChildren[2].componentViewChildren[0]
-                    .nativeElement,
-                "href")).toEqual("/book/1984/page/2");
+                    fixture
+                        .debugElement
+                        .componentViewChildren[1]
+                        .componentViewChildren[2]
+                        .componentViewChildren[0]
+                        .nativeElement,
+                    "href"))
+                .toEqual("/book/1984/page/2");
             async.done();
           });
         }));
@@ -259,9 +269,10 @@ main() {
               .then((_) {
             fixture.detectChanges();
             expect(DOM.getAttribute(
-                fixture.debugElement.componentViewChildren[1]
-                    .componentViewChildren[0].nativeElement,
-                "href")).toEqual("/(aside)");
+                    fixture.debugElement.componentViewChildren[1]
+                        .componentViewChildren[0].nativeElement,
+                    "href"))
+                .toEqual("/(aside)");
             async.done();
           });
         }));
@@ -269,68 +280,70 @@ main() {
       it(
           "should be added to the associated element",
           inject([AsyncTestCompleter], (async) {
-            router.config([
-              new Route(path: "/child", component: HelloCmp, name: "Child"),
-              new Route(
-                  path: "/better-child",
-                  component: Hello2Cmp,
-                  name: "BetterChild")
-            ])
+            router
+                .config([
+                  new Route(path: "/child", component: HelloCmp, name: "Child"),
+                  new Route(
+                      path: "/better-child",
+                      component: Hello2Cmp,
+                      name: "BetterChild")
+                ])
                 .then((_) => compile(
                     '''<a [routerLink]="[\'./Child\']" class="child-link">Child</a>
                                 <a [routerLink]="[\'./BetterChild\']" class="better-child-link">Better Child</a>
                                 <router-outlet></router-outlet>'''))
                 .then((_) {
-              var element = fixture.debugElement.nativeElement;
-              fixture.detectChanges();
-              var link1 = DOM.querySelector(element, ".child-link");
-              var link2 = DOM.querySelector(element, ".better-child-link");
-              expect(link1).not.toHaveCssClass("router-link-active");
-              expect(link2).not.toHaveCssClass("router-link-active");
-              router.subscribe((_) {
-                fixture.detectChanges();
-                expect(link1).not.toHaveCssClass("router-link-active");
-                expect(link2).toHaveCssClass("router-link-active");
-                async.done();
-              });
-              router.navigateByUrl("/better-child");
-            });
+                  var element = fixture.debugElement.nativeElement;
+                  fixture.detectChanges();
+                  var link1 = DOM.querySelector(element, ".child-link");
+                  var link2 = DOM.querySelector(element, ".better-child-link");
+                  expect(link1).not.toHaveCssClass("router-link-active");
+                  expect(link2).not.toHaveCssClass("router-link-active");
+                  router.subscribe((_) {
+                    fixture.detectChanges();
+                    expect(link1).not.toHaveCssClass("router-link-active");
+                    expect(link2).toHaveCssClass("router-link-active");
+                    async.done();
+                  });
+                  router.navigateByUrl("/better-child");
+                });
           }));
       it(
           "should be added to links in child routes",
           inject([AsyncTestCompleter], (async) {
-            router.config([
-              new Route(path: "/child", component: HelloCmp, name: "Child"),
-              new Route(
-                  path: "/child-with-grandchild/...",
-                  component: ParentCmp,
-                  name: "ChildWithGrandchild")
-            ])
+            router
+                .config([
+                  new Route(path: "/child", component: HelloCmp, name: "Child"),
+                  new Route(
+                      path: "/child-with-grandchild/...",
+                      component: ParentCmp,
+                      name: "ChildWithGrandchild")
+                ])
                 .then((_) => compile(
                     '''<a [routerLink]="[\'./Child\']" class="child-link">Child</a>
                                 <a [routerLink]="[\'./ChildWithGrandchild/Grandchild\']" class="child-with-grandchild-link">Better Child</a>
                                 <router-outlet></router-outlet>'''))
                 .then((_) {
-              var element = fixture.debugElement.nativeElement;
-              fixture.detectChanges();
-              var link1 = DOM.querySelector(element, ".child-link");
-              var link2 =
-                  DOM.querySelector(element, ".child-with-grandchild-link");
-              expect(link1).not.toHaveCssClass("router-link-active");
-              expect(link2).not.toHaveCssClass("router-link-active");
-              router.subscribe((_) {
-                fixture.detectChanges();
-                expect(link1).not.toHaveCssClass("router-link-active");
-                expect(link2).toHaveCssClass("router-link-active");
-                var link3 = DOM.querySelector(element, ".grandchild-link");
-                var link4 =
-                    DOM.querySelector(element, ".better-grandchild-link");
-                expect(link3).toHaveCssClass("router-link-active");
-                expect(link4).not.toHaveCssClass("router-link-active");
-                async.done();
-              });
-              router.navigateByUrl("/child-with-grandchild/grandchild");
-            });
+                  var element = fixture.debugElement.nativeElement;
+                  fixture.detectChanges();
+                  var link1 = DOM.querySelector(element, ".child-link");
+                  var link2 =
+                      DOM.querySelector(element, ".child-with-grandchild-link");
+                  expect(link1).not.toHaveCssClass("router-link-active");
+                  expect(link2).not.toHaveCssClass("router-link-active");
+                  router.subscribe((_) {
+                    fixture.detectChanges();
+                    expect(link1).not.toHaveCssClass("router-link-active");
+                    expect(link2).toHaveCssClass("router-link-active");
+                    var link3 = DOM.querySelector(element, ".grandchild-link");
+                    var link4 =
+                        DOM.querySelector(element, ".better-grandchild-link");
+                    expect(link3).toHaveCssClass("router-link-active");
+                    expect(link4).not.toHaveCssClass("router-link-active");
+                    async.done();
+                  });
+                  router.navigateByUrl("/child-with-grandchild/grandchild");
+                });
           }));
       describe("router link dsl", () {
         it(
@@ -349,8 +362,10 @@ main() {
                 fixture.detectChanges();
                 expect(fixture.debugElement.nativeElement).toHaveText("brian");
                 expect(DOM.getAttribute(
-                    fixture.debugElement.componentViewChildren[0].nativeElement,
-                    "href")).toEqual("/user/brian");
+                        fixture.debugElement.componentViewChildren[0]
+                            .nativeElement,
+                        "href"))
+                    .toEqual("/user/brian");
                 async.done();
               });
             }));

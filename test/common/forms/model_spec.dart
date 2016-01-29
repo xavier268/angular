@@ -535,8 +535,8 @@ main() {
       });
       describe("errors", () {
         it("should run the validator when the value changes", () {
-          var simpleValidator = (c) =>
-              c.controls[0].value != "correct" ? {"broken": true} : null;
+          var simpleValidator =
+              (c) => c.controls[0].value != "correct" ? {"broken": true} : null;
           var c = new Control(null);
           var g = new ControlArray([c], simpleValidator);
           c.updateValue("correct");

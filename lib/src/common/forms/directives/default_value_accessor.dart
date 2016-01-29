@@ -25,7 +25,9 @@ const DEFAULT_VALUE_ACCESSOR = const Provider(NG_VALUE_ACCESSOR,
       "(input)": "onChange(\$event.target.value)",
       "(blur)": "onTouched()"
     },
-    bindings: const [DEFAULT_VALUE_ACCESSOR])
+    bindings: const [
+      DEFAULT_VALUE_ACCESSOR
+    ])
 class DefaultValueAccessor implements ControlValueAccessor {
   Renderer _renderer;
   ElementRef _elementRef;

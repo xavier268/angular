@@ -28,8 +28,8 @@ bool isStyleUrlResolvable(String url) {
 StyleWithImports extractStyleUrls(
     UrlResolver resolver, String baseUrl, String cssText) {
   var foundUrls = [];
-  var modifiedCssText = StringWrapper.replaceAllMapped(cssText, _cssImportRe,
-      (m) {
+  var modifiedCssText =
+      StringWrapper.replaceAllMapped(cssText, _cssImportRe, (m) {
     var url = isPresent(m[1]) ? m[1] : m[2];
     if (!isStyleUrlResolvable(url)) {
       // Do not attempt to resolve non-package absolute URLs with URI scheme

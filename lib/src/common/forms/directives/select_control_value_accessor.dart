@@ -32,7 +32,9 @@ class NgSelectOption {}
       "(input)": "onChange(\$event.target.value)",
       "(blur)": "onTouched()"
     },
-    bindings: const [SELECT_VALUE_ACCESSOR])
+    bindings: const [
+      SELECT_VALUE_ACCESSOR
+    ])
 class SelectControlValueAccessor implements ControlValueAccessor {
   Renderer _renderer;
   ElementRef _elementRef;
@@ -43,7 +45,7 @@ class SelectControlValueAccessor implements ControlValueAccessor {
       this._renderer,
       this._elementRef,
       @Query(NgSelectOption, descendants: true)
-      QueryList<NgSelectOption> query) {
+          QueryList<NgSelectOption> query) {
     this._updateValueWhenListOfOptionsChanges(query);
   }
   void writeValue(dynamic value) {

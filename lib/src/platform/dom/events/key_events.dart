@@ -11,8 +11,8 @@ import "package:angular2/src/core/zone/ng_zone.dart" show NgZone;
 import "package:angular2/src/core/di.dart" show Injectable;
 
 var modifierKeys = ["alt", "control", "meta", "shift"];
-Map<String,
-    dynamic /* (event: KeyboardEvent) => boolean */ > modifierKeyGetters = {
+Map<String, dynamic /* (event: KeyboardEvent) => boolean */ >
+    modifierKeyGetters = {
   "alt": (KeyboardEvent event) => event.altKey,
   "control": (KeyboardEvent event) => event.ctrlKey,
   "meta": (KeyboardEvent event) => event.metaKey,

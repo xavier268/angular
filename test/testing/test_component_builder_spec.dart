@@ -185,27 +185,31 @@ main() {
         "should override a provider",
         inject([TestComponentBuilder, AsyncTestCompleter],
             (TestComponentBuilder tcb, async) {
-          tcb.overrideProviders(TestBindingsComp, [
-            provide(FancyService, useClass: MockFancyService)
-          ]).createAsync(TestBindingsComp).then((componentFixture) {
-            componentFixture.detectChanges();
-            expect(componentFixture.nativeElement)
-                .toHaveText("injected value: mocked out value");
-            async.done();
-          });
+          tcb
+              .overrideProviders(TestBindingsComp,
+                  [provide(FancyService, useClass: MockFancyService)])
+              .createAsync(TestBindingsComp)
+              .then((componentFixture) {
+                componentFixture.detectChanges();
+                expect(componentFixture.nativeElement)
+                    .toHaveText("injected value: mocked out value");
+                async.done();
+              });
         }));
     it(
         "should override a viewBinding",
         inject([TestComponentBuilder, AsyncTestCompleter],
             (TestComponentBuilder tcb, async) {
-          tcb.overrideViewProviders(TestViewBindingsComp, [
-            provide(FancyService, useClass: MockFancyService)
-          ]).createAsync(TestViewBindingsComp).then((componentFixture) {
-            componentFixture.detectChanges();
-            expect(componentFixture.nativeElement)
-                .toHaveText("injected value: mocked out value");
-            async.done();
-          });
+          tcb
+              .overrideViewProviders(TestViewBindingsComp,
+                  [provide(FancyService, useClass: MockFancyService)])
+              .createAsync(TestViewBindingsComp)
+              .then((componentFixture) {
+                componentFixture.detectChanges();
+                expect(componentFixture.nativeElement)
+                    .toHaveText("injected value: mocked out value");
+                async.done();
+              });
         }));
   });
 }

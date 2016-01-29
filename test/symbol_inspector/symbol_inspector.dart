@@ -146,7 +146,8 @@ Iterable<Symbol> _getUsedSymbols(
 
     if (decl is MethodMirror) {
       MethodMirror mdecl = decl;
-      if (mdecl.parameters != null) mdecl.parameters.forEach((p) {
+      if (mdecl.parameters != null)
+        mdecl.parameters.forEach((p) {
         used.addAll(_getUsedSymbols(p.type, seenDecls, path, true));
       });
       used.addAll(_getUsedSymbols(mdecl.returnType, seenDecls, path, true));

@@ -91,8 +91,9 @@ class DirectiveDependency extends Dependency {
     var count = 0;
     if (isPresent(this.queryDecorator)) count++;
     if (isPresent(this.attributeName)) count++;
-    if (count > 1) throw new BaseException(
-        "A directive injectable can contain only one of the following @Attribute or @Query.");
+    if (count > 1)
+      throw new BaseException(
+          "A directive injectable can contain only one of the following @Attribute or @Query.");
   }
 
   static DirectiveDependency createFrom(Dependency d) {
@@ -146,10 +147,10 @@ class DirectiveProvider extends ResolvedProvider_ {
     var isComponent = meta is ComponentMetadata;
     var resolvedProviders =
         isPresent(meta.providers) ? Injector.resolve(meta.providers) : null;
-    var resolvedViewProviders = meta is ComponentMetadata &&
-            isPresent(meta.viewProviders)
-        ? Injector.resolve(meta.viewProviders)
-        : null;
+    var resolvedViewProviders =
+        meta is ComponentMetadata && isPresent(meta.viewProviders)
+            ? Injector.resolve(meta.viewProviders)
+            : null;
     var queries = [];
     if (isPresent(meta.queries)) {
       StringMapWrapper.forEach(meta.queries, (meta, fieldName) {
@@ -431,10 +432,8 @@ class AppElement implements DependencyProvider, ElementRef, AfterViewChecked {
     if (provider is DirectiveProvider) {
       var dirDep = (dep as DirectiveDependency);
       if (isPresent(dirDep.attributeName)) return this._buildAttribute(dirDep);
-      if (isPresent(dirDep.queryDecorator)) return this
-          ._queryStrategy
-          .findQuery(dirDep.queryDecorator)
-          .list;
+      if (isPresent(dirDep.queryDecorator))
+        return this._queryStrategy.findQuery(dirDep.queryDecorator).list;
       if (identical(dirDep.key.id, StaticKeys.instance().changeDetectorRefId)) {
         // We provide the component's view change detector to components and
 
@@ -522,9 +521,8 @@ class AppElement implements DependencyProvider, ElementRef, AfterViewChecked {
   }
 
   void ngAfterContentChecked() {
-    if (isPresent(this._queryStrategy)) this
-        ._queryStrategy
-        .updateContentQueries();
+    if (isPresent(this._queryStrategy))
+      this._queryStrategy.updateContentQueries();
   }
 
   void traverseAndSetQueriesAsDirty() {
@@ -586,21 +584,21 @@ class InlineQueryStrategy implements _QueryStrategy {
     if (protoRefs.length > 2) this.query2 = new QueryRef(protoRefs[2], ei);
   }
   void setContentQueriesAsDirty() {
-    if (isPresent(this.query0) && !this.query0.isViewQuery) this.query0.dirty =
-        true;
-    if (isPresent(this.query1) && !this.query1.isViewQuery) this.query1.dirty =
-        true;
-    if (isPresent(this.query2) && !this.query2.isViewQuery) this.query2.dirty =
-        true;
+    if (isPresent(this.query0) && !this.query0.isViewQuery)
+      this.query0.dirty = true;
+    if (isPresent(this.query1) && !this.query1.isViewQuery)
+      this.query1.dirty = true;
+    if (isPresent(this.query2) && !this.query2.isViewQuery)
+      this.query2.dirty = true;
   }
 
   void setViewQueriesAsDirty() {
-    if (isPresent(this.query0) && this.query0.isViewQuery) this.query0.dirty =
-        true;
-    if (isPresent(this.query1) && this.query1.isViewQuery) this.query1.dirty =
-        true;
-    if (isPresent(this.query2) && this.query2.isViewQuery) this.query2.dirty =
-        true;
+    if (isPresent(this.query0) && this.query0.isViewQuery)
+      this.query0.dirty = true;
+    if (isPresent(this.query1) && this.query1.isViewQuery)
+      this.query1.dirty = true;
+    if (isPresent(this.query2) && this.query2.isViewQuery)
+      this.query2.dirty = true;
   }
 
   updateContentQueries() {
@@ -714,44 +712,44 @@ class ElementDirectiveInlineStrategy implements _ElementDirectiveStrategy {
     i.resetConstructionCounter();
     if (p.provider0 is DirectiveProvider &&
         isPresent(p.keyId0) &&
-        identical(i.obj0, UNDEFINED)) i.obj0 =
-        i.instantiateProvider(p.provider0, p.visibility0);
+        identical(i.obj0, UNDEFINED))
+      i.obj0 = i.instantiateProvider(p.provider0, p.visibility0);
     if (p.provider1 is DirectiveProvider &&
         isPresent(p.keyId1) &&
-        identical(i.obj1, UNDEFINED)) i.obj1 =
-        i.instantiateProvider(p.provider1, p.visibility1);
+        identical(i.obj1, UNDEFINED))
+      i.obj1 = i.instantiateProvider(p.provider1, p.visibility1);
     if (p.provider2 is DirectiveProvider &&
         isPresent(p.keyId2) &&
-        identical(i.obj2, UNDEFINED)) i.obj2 =
-        i.instantiateProvider(p.provider2, p.visibility2);
+        identical(i.obj2, UNDEFINED))
+      i.obj2 = i.instantiateProvider(p.provider2, p.visibility2);
     if (p.provider3 is DirectiveProvider &&
         isPresent(p.keyId3) &&
-        identical(i.obj3, UNDEFINED)) i.obj3 =
-        i.instantiateProvider(p.provider3, p.visibility3);
+        identical(i.obj3, UNDEFINED))
+      i.obj3 = i.instantiateProvider(p.provider3, p.visibility3);
     if (p.provider4 is DirectiveProvider &&
         isPresent(p.keyId4) &&
-        identical(i.obj4, UNDEFINED)) i.obj4 =
-        i.instantiateProvider(p.provider4, p.visibility4);
+        identical(i.obj4, UNDEFINED))
+      i.obj4 = i.instantiateProvider(p.provider4, p.visibility4);
     if (p.provider5 is DirectiveProvider &&
         isPresent(p.keyId5) &&
-        identical(i.obj5, UNDEFINED)) i.obj5 =
-        i.instantiateProvider(p.provider5, p.visibility5);
+        identical(i.obj5, UNDEFINED))
+      i.obj5 = i.instantiateProvider(p.provider5, p.visibility5);
     if (p.provider6 is DirectiveProvider &&
         isPresent(p.keyId6) &&
-        identical(i.obj6, UNDEFINED)) i.obj6 =
-        i.instantiateProvider(p.provider6, p.visibility6);
+        identical(i.obj6, UNDEFINED))
+      i.obj6 = i.instantiateProvider(p.provider6, p.visibility6);
     if (p.provider7 is DirectiveProvider &&
         isPresent(p.keyId7) &&
-        identical(i.obj7, UNDEFINED)) i.obj7 =
-        i.instantiateProvider(p.provider7, p.visibility7);
+        identical(i.obj7, UNDEFINED))
+      i.obj7 = i.instantiateProvider(p.provider7, p.visibility7);
     if (p.provider8 is DirectiveProvider &&
         isPresent(p.keyId8) &&
-        identical(i.obj8, UNDEFINED)) i.obj8 =
-        i.instantiateProvider(p.provider8, p.visibility8);
+        identical(i.obj8, UNDEFINED))
+      i.obj8 = i.instantiateProvider(p.provider8, p.visibility8);
     if (p.provider9 is DirectiveProvider &&
         isPresent(p.keyId9) &&
-        identical(i.obj9, UNDEFINED)) i.obj9 =
-        i.instantiateProvider(p.provider9, p.visibility9);
+        identical(i.obj9, UNDEFINED))
+      i.obj9 = i.instantiateProvider(p.provider9, p.visibility9);
   }
 
   dynamic getComponent() {
@@ -769,62 +767,62 @@ class ElementDirectiveInlineStrategy implements _ElementDirectiveStrategy {
     var p = i.protoStrategy;
     if (isPresent(p.provider0) &&
         identical(p.provider0.key.token, query.selector)) {
-      if (identical(i.obj0, UNDEFINED)) i.obj0 =
-          i.instantiateProvider(p.provider0, p.visibility0);
+      if (identical(i.obj0, UNDEFINED))
+        i.obj0 = i.instantiateProvider(p.provider0, p.visibility0);
       list.add(i.obj0);
     }
     if (isPresent(p.provider1) &&
         identical(p.provider1.key.token, query.selector)) {
-      if (identical(i.obj1, UNDEFINED)) i.obj1 =
-          i.instantiateProvider(p.provider1, p.visibility1);
+      if (identical(i.obj1, UNDEFINED))
+        i.obj1 = i.instantiateProvider(p.provider1, p.visibility1);
       list.add(i.obj1);
     }
     if (isPresent(p.provider2) &&
         identical(p.provider2.key.token, query.selector)) {
-      if (identical(i.obj2, UNDEFINED)) i.obj2 =
-          i.instantiateProvider(p.provider2, p.visibility2);
+      if (identical(i.obj2, UNDEFINED))
+        i.obj2 = i.instantiateProvider(p.provider2, p.visibility2);
       list.add(i.obj2);
     }
     if (isPresent(p.provider3) &&
         identical(p.provider3.key.token, query.selector)) {
-      if (identical(i.obj3, UNDEFINED)) i.obj3 =
-          i.instantiateProvider(p.provider3, p.visibility3);
+      if (identical(i.obj3, UNDEFINED))
+        i.obj3 = i.instantiateProvider(p.provider3, p.visibility3);
       list.add(i.obj3);
     }
     if (isPresent(p.provider4) &&
         identical(p.provider4.key.token, query.selector)) {
-      if (identical(i.obj4, UNDEFINED)) i.obj4 =
-          i.instantiateProvider(p.provider4, p.visibility4);
+      if (identical(i.obj4, UNDEFINED))
+        i.obj4 = i.instantiateProvider(p.provider4, p.visibility4);
       list.add(i.obj4);
     }
     if (isPresent(p.provider5) &&
         identical(p.provider5.key.token, query.selector)) {
-      if (identical(i.obj5, UNDEFINED)) i.obj5 =
-          i.instantiateProvider(p.provider5, p.visibility5);
+      if (identical(i.obj5, UNDEFINED))
+        i.obj5 = i.instantiateProvider(p.provider5, p.visibility5);
       list.add(i.obj5);
     }
     if (isPresent(p.provider6) &&
         identical(p.provider6.key.token, query.selector)) {
-      if (identical(i.obj6, UNDEFINED)) i.obj6 =
-          i.instantiateProvider(p.provider6, p.visibility6);
+      if (identical(i.obj6, UNDEFINED))
+        i.obj6 = i.instantiateProvider(p.provider6, p.visibility6);
       list.add(i.obj6);
     }
     if (isPresent(p.provider7) &&
         identical(p.provider7.key.token, query.selector)) {
-      if (identical(i.obj7, UNDEFINED)) i.obj7 =
-          i.instantiateProvider(p.provider7, p.visibility7);
+      if (identical(i.obj7, UNDEFINED))
+        i.obj7 = i.instantiateProvider(p.provider7, p.visibility7);
       list.add(i.obj7);
     }
     if (isPresent(p.provider8) &&
         identical(p.provider8.key.token, query.selector)) {
-      if (identical(i.obj8, UNDEFINED)) i.obj8 =
-          i.instantiateProvider(p.provider8, p.visibility8);
+      if (identical(i.obj8, UNDEFINED))
+        i.obj8 = i.instantiateProvider(p.provider8, p.visibility8);
       list.add(i.obj8);
     }
     if (isPresent(p.provider9) &&
         identical(p.provider9.key.token, query.selector)) {
-      if (identical(i.obj9, UNDEFINED)) i.obj9 =
-          i.instantiateProvider(p.provider9, p.visibility9);
+      if (identical(i.obj9, UNDEFINED))
+        i.obj9 = i.instantiateProvider(p.provider9, p.visibility9);
       list.add(i.obj9);
     }
   }
@@ -945,8 +943,8 @@ class QueryRef {
         break;
       }
       if (!this.protoQueryRef.query.descendants &&
-          !(curInj.parent == this.originator ||
-              curInj == this.originator)) continue;
+          !(curInj.parent == this.originator || curInj == this.originator))
+        continue;
       // We visit the view container(VC) views right after the injector that contains
 
       // the VC. Theoretically, that might not be the right order if there are

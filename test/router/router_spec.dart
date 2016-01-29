@@ -46,13 +46,14 @@ main() {
         "should navigate based on the initial URL state",
         inject([AsyncTestCompleter], (async) {
           var outlet = makeDummyOutlet();
-          router.config([new Route(path: "/", component: DummyComponent)])
+          router
+              .config([new Route(path: "/", component: DummyComponent)])
               .then((_) => router.registerPrimaryOutlet(outlet))
               .then((_) {
-            expect(outlet.spy("activate")).toHaveBeenCalled();
-            expect(location.urlChanges).toEqual([]);
-            async.done();
-          });
+                expect(outlet.spy("activate")).toHaveBeenCalled();
+                expect(location.urlChanges).toEqual([]);
+                async.done();
+              });
         }));
     it(
         "should activate viewports and update URL on navigate",

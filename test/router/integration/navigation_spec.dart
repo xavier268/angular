@@ -42,139 +42,152 @@ main() {
     it(
         "should work in a simple case",
         inject([AsyncTestCompleter], (async) {
-          compile(tcb).then((rtc) {
-            fixture = rtc;
-          })
+          compile(tcb)
+              .then((rtc) {
+                fixture = rtc;
+              })
               .then((_) =>
                   rtr.config([new Route(path: "/test", component: HelloCmp)]))
               .then((_) => rtr.navigateByUrl("/test"))
               .then((_) {
-            fixture.detectChanges();
-            expect(fixture.debugElement.nativeElement).toHaveText("hello");
-            async.done();
-          });
+                fixture.detectChanges();
+                expect(fixture.debugElement.nativeElement).toHaveText("hello");
+                async.done();
+              });
         }));
     it(
         "should navigate between components with different parameters",
         inject([AsyncTestCompleter], (async) {
-          compile(tcb).then((rtc) {
-            fixture = rtc;
-          })
+          compile(tcb)
+              .then((rtc) {
+                fixture = rtc;
+              })
               .then((_) => rtr
                   .config([new Route(path: "/user/:name", component: UserCmp)]))
               .then((_) => rtr.navigateByUrl("/user/brian"))
               .then((_) {
-            fixture.detectChanges();
-            expect(fixture.debugElement.nativeElement)
-                .toHaveText("hello brian");
-          }).then((_) => rtr.navigateByUrl("/user/igor")).then((_) {
-            fixture.detectChanges();
-            expect(fixture.debugElement.nativeElement).toHaveText("hello igor");
-            async.done();
-          });
+                fixture.detectChanges();
+                expect(fixture.debugElement.nativeElement)
+                    .toHaveText("hello brian");
+              })
+              .then((_) => rtr.navigateByUrl("/user/igor"))
+              .then((_) {
+                fixture.detectChanges();
+                expect(fixture.debugElement.nativeElement)
+                    .toHaveText("hello igor");
+                async.done();
+              });
         }));
     it(
         "should navigate to child routes",
         inject([AsyncTestCompleter], (async) {
-          compile(tcb, "outer { <router-outlet></router-outlet> }").then((rtc) {
-            fixture = rtc;
-          })
+          compile(tcb, "outer { <router-outlet></router-outlet> }")
+              .then((rtc) {
+                fixture = rtc;
+              })
               .then((_) =>
                   rtr.config([new Route(path: "/a/...", component: ParentCmp)]))
               .then((_) => rtr.navigateByUrl("/a/b"))
               .then((_) {
-            fixture.detectChanges();
-            expect(fixture.debugElement.nativeElement)
-                .toHaveText("outer { inner { hello } }");
-            async.done();
-          });
+                fixture.detectChanges();
+                expect(fixture.debugElement.nativeElement)
+                    .toHaveText("outer { inner { hello } }");
+                async.done();
+              });
         }));
     it(
         "should navigate to child routes that capture an empty path",
         inject([AsyncTestCompleter], (async) {
-          compile(tcb, "outer { <router-outlet></router-outlet> }").then((rtc) {
-            fixture = rtc;
-          })
+          compile(tcb, "outer { <router-outlet></router-outlet> }")
+              .then((rtc) {
+                fixture = rtc;
+              })
               .then((_) =>
                   rtr.config([new Route(path: "/a/...", component: ParentCmp)]))
               .then((_) => rtr.navigateByUrl("/a"))
               .then((_) {
-            fixture.detectChanges();
-            expect(fixture.debugElement.nativeElement)
-                .toHaveText("outer { inner { hello } }");
-            async.done();
-          });
+                fixture.detectChanges();
+                expect(fixture.debugElement.nativeElement)
+                    .toHaveText("outer { inner { hello } }");
+                async.done();
+              });
         }));
     it(
         "should navigate to child routes of async routes",
         inject([AsyncTestCompleter], (async) {
-          compile(tcb, "outer { <router-outlet></router-outlet> }").then((rtc) {
-            fixture = rtc;
-          })
+          compile(tcb, "outer { <router-outlet></router-outlet> }")
+              .then((rtc) {
+                fixture = rtc;
+              })
               .then((_) => rtr.config(
                   [new AsyncRoute(path: "/a/...", loader: parentLoader)]))
               .then((_) => rtr.navigateByUrl("/a/b"))
               .then((_) {
-            fixture.detectChanges();
-            expect(fixture.debugElement.nativeElement)
-                .toHaveText("outer { inner { hello } }");
-            async.done();
-          });
+                fixture.detectChanges();
+                expect(fixture.debugElement.nativeElement)
+                    .toHaveText("outer { inner { hello } }");
+                async.done();
+              });
         }));
     it(
         "should reuse common parent components",
         inject([AsyncTestCompleter], (async) {
-          compile(tcb).then((rtc) {
-            fixture = rtc;
-          })
+          compile(tcb)
+              .then((rtc) {
+                fixture = rtc;
+              })
               .then((_) => rtr.config(
                   [new Route(path: "/team/:id/...", component: TeamCmp)]))
               .then((_) => rtr.navigateByUrl("/team/angular/user/rado"))
               .then((_) {
-            fixture.detectChanges();
-            expect(cmpInstanceCount).toBe(1);
-            expect(fixture.debugElement.nativeElement)
-                .toHaveText("team angular { hello rado }");
-          })
+                fixture.detectChanges();
+                expect(cmpInstanceCount).toBe(1);
+                expect(fixture.debugElement.nativeElement)
+                    .toHaveText("team angular { hello rado }");
+              })
               .then((_) => rtr.navigateByUrl("/team/angular/user/victor"))
               .then((_) {
-            fixture.detectChanges();
-            expect(cmpInstanceCount).toBe(1);
-            expect(fixture.debugElement.nativeElement)
-                .toHaveText("team angular { hello victor }");
-            async.done();
-          });
+                fixture.detectChanges();
+                expect(cmpInstanceCount).toBe(1);
+                expect(fixture.debugElement.nativeElement)
+                    .toHaveText("team angular { hello victor }");
+                async.done();
+              });
         }));
     it(
         "should not reuse children when parent components change",
         inject([AsyncTestCompleter], (async) {
-          compile(tcb).then((rtc) {
-            fixture = rtc;
-          })
+          compile(tcb)
+              .then((rtc) {
+                fixture = rtc;
+              })
               .then((_) => rtr.config(
                   [new Route(path: "/team/:id/...", component: TeamCmp)]))
               .then((_) => rtr.navigateByUrl("/team/angular/user/rado"))
               .then((_) {
-            fixture.detectChanges();
-            expect(cmpInstanceCount).toBe(1);
-            expect(childCmpInstanceCount).toBe(1);
-            expect(fixture.debugElement.nativeElement)
-                .toHaveText("team angular { hello rado }");
-          }).then((_) => rtr.navigateByUrl("/team/dart/user/rado")).then((_) {
-            fixture.detectChanges();
-            expect(cmpInstanceCount).toBe(2);
-            expect(childCmpInstanceCount).toBe(2);
-            expect(fixture.debugElement.nativeElement)
-                .toHaveText("team dart { hello rado }");
-            async.done();
-          });
+                fixture.detectChanges();
+                expect(cmpInstanceCount).toBe(1);
+                expect(childCmpInstanceCount).toBe(1);
+                expect(fixture.debugElement.nativeElement)
+                    .toHaveText("team angular { hello rado }");
+              })
+              .then((_) => rtr.navigateByUrl("/team/dart/user/rado"))
+              .then((_) {
+                fixture.detectChanges();
+                expect(cmpInstanceCount).toBe(2);
+                expect(childCmpInstanceCount).toBe(2);
+                expect(fixture.debugElement.nativeElement)
+                    .toHaveText("team dart { hello rado }");
+                async.done();
+              });
         }));
     it(
         "should inject route data into component",
         inject([AsyncTestCompleter], (async) {
-          compile(tcb).then((rtc) {
-            fixture = rtc;
-          })
+          compile(tcb)
+              .then((rtc) {
+                fixture = rtc;
+              })
               .then((_) => rtr.config([
                     new Route(
                         path: "/route-data",
@@ -183,17 +196,18 @@ main() {
                   ]))
               .then((_) => rtr.navigateByUrl("/route-data"))
               .then((_) {
-            fixture.detectChanges();
-            expect(fixture.debugElement.nativeElement).toHaveText("true");
-            async.done();
-          });
+                fixture.detectChanges();
+                expect(fixture.debugElement.nativeElement).toHaveText("true");
+                async.done();
+              });
         }));
     it(
         "should inject route data into component with AsyncRoute",
         inject([AsyncTestCompleter], (async) {
-          compile(tcb).then((rtc) {
-            fixture = rtc;
-          })
+          compile(tcb)
+              .then((rtc) {
+                fixture = rtc;
+              })
               .then((_) => rtr.config([
                     new AsyncRoute(
                         path: "/route-data",
@@ -202,27 +216,28 @@ main() {
                   ]))
               .then((_) => rtr.navigateByUrl("/route-data"))
               .then((_) {
-            fixture.detectChanges();
-            expect(fixture.debugElement.nativeElement).toHaveText("true");
-            async.done();
-          });
+                fixture.detectChanges();
+                expect(fixture.debugElement.nativeElement).toHaveText("true");
+                async.done();
+              });
         }));
     it(
         "should inject empty object if the route has no data property",
         inject([AsyncTestCompleter], (async) {
-          compile(tcb).then((rtc) {
-            fixture = rtc;
-          })
+          compile(tcb)
+              .then((rtc) {
+                fixture = rtc;
+              })
               .then((_) => rtr.config([
                     new Route(
                         path: "/route-data-default", component: RouteDataCmp)
                   ]))
               .then((_) => rtr.navigateByUrl("/route-data-default"))
               .then((_) {
-            fixture.detectChanges();
-            expect(fixture.debugElement.nativeElement).toHaveText("");
-            async.done();
-          });
+                fixture.detectChanges();
+                expect(fixture.debugElement.nativeElement).toHaveText("");
+                async.done();
+              });
         }));
   });
 }

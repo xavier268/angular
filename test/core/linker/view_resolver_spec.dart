@@ -71,13 +71,15 @@ main() {
     it("should throw when Component.template is specified together with the View metadata",
         () {
       expect(
-          () => resolver.resolve(ComponentWithViewTemplate)).toThrowErrorWith(
+          () =>
+              resolver.resolve(ComponentWithViewTemplate)).toThrowErrorWith(
           "Component 'ComponentWithViewTemplate' cannot have both 'template' and '@View' set at the same time");
     });
     it("should throw when Component.template is specified together with the View metadata",
         () {
-      expect(() =>
-          resolver.resolve(ComponentWithViewTemplateUrl)).toThrowErrorWith(
+      expect(
+          () =>
+              resolver.resolve(ComponentWithViewTemplateUrl)).toThrowErrorWith(
           "Component 'ComponentWithViewTemplateUrl' cannot have both 'templateUrl' and '@View' set at the same time");
     });
     it("should throw when Component has no View decorator and no template is set",

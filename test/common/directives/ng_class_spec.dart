@@ -25,9 +25,9 @@ import "package:angular2/src/common/directives/ng_class.dart" show NgClass;
 detectChangesAndCheck(ComponentFixture fixture, String classes,
     [num elIndex = 0]) {
   fixture.detectChanges();
-  expect(fixture.debugElement.componentViewChildren[elIndex]
-      .nativeElement
-      .className).toEqual(classes);
+  expect(fixture
+          .debugElement.componentViewChildren[elIndex].nativeElement.className)
+      .toEqual(classes);
 }
 
 main() {

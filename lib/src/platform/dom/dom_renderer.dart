@@ -150,9 +150,8 @@ class DomRenderer implements Renderer {
 
   attachViewAfter(dynamic node, List<dynamic> viewRootNodes) {
     moveNodesAfterSibling(node, viewRootNodes);
-    for (var i = 0;
-        i < viewRootNodes.length;
-        i++) this.animateNodeEnter(viewRootNodes[i]);
+    for (var i = 0; i < viewRootNodes.length; i++)
+      this.animateNodeEnter(viewRootNodes[i]);
   }
 
   detachView(List<dynamic> viewRootNodes) {

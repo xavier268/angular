@@ -31,9 +31,8 @@ class StyleCompiler {
       new Map<String, Future<List<String>>>();
   ShadowCss _shadowCss = new ShadowCss();
   StyleCompiler(this._xhr, this._urlResolver) {}
-  Future<
-      List<dynamic /* String | List < dynamic > */ >> compileComponentRuntime(
-      CompileTemplateMetadata template) {
+  Future<List<dynamic /* String | List < dynamic > */ >>
+      compileComponentRuntime(CompileTemplateMetadata template) {
     var styles = template.styles;
     var styleAbsUrls = template.styleUrls;
     return this._loadStyles(styles, styleAbsUrls,
