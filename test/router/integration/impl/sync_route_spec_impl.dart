@@ -15,12 +15,13 @@ import "package:angular2/testing_internal.dart"
         xit;
 import "../util.dart"
     show specs, compile, TEST_ROUTER_PROVIDERS, clickOnElement, getHref;
+import "package:angular2/platform/common_dom.dart" show By;
 import "package:angular2/router.dart" show Router, Route, Location;
 import "fixture_components.dart"
     show HelloCmp, UserCmp, TeamCmp, ParentCmp, ParentWithDefaultCmp;
 
 getLinkElement(ComponentFixture rtc) {
-  return rtc.debugElement.componentViewChildren[0].nativeElement;
+  return rtc.debugElement.query(By.css("a")).nativeElement;
 }
 
 syncRoutesWithoutChildrenWithoutParams() {

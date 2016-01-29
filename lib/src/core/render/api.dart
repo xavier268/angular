@@ -1,12 +1,22 @@
 library angular2.src.core.render.api;
 
 import "package:angular2/src/core/metadata/view.dart" show ViewEncapsulation;
+import "package:angular2/src/core/di/injector.dart" show Injector;
 
 class RenderComponentType {
   String id;
   ViewEncapsulation encapsulation;
   List<dynamic /* String | List < dynamic > */ > styles;
   RenderComponentType(this.id, this.encapsulation, this.styles) {}
+}
+
+class RenderDebugInfo {
+  Injector injector;
+  dynamic component;
+  List<dynamic> providerTokens;
+  Map<String, dynamic> locals;
+  RenderDebugInfo(
+      this.injector, this.component, this.providerTokens, this.locals) {}
 }
 
 abstract class ParentRenderer {
@@ -36,6 +46,7 @@ abstract class Renderer implements ParentRenderer {
    */
   setBindingDebugInfo(
       dynamic renderElement, String propertyName, String propertyValue);
+  setElementDebugInfo(dynamic renderElement, RenderDebugInfo info);
   setElementClass(dynamic renderElement, String className, bool isAdd);
   setElementStyle(dynamic renderElement, String styleName, String styleValue);
   invokeElementMethod(

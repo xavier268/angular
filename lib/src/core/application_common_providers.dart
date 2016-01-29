@@ -16,7 +16,6 @@ import "package:angular2/src/core/linker/resolved_metadata_cache.dart"
 import "linker/view_manager.dart" show AppViewManager;
 import "linker/view_manager.dart" show AppViewManager_;
 import "linker/view_resolver.dart" show ViewResolver;
-import "linker/view_listener.dart" show AppViewListener;
 import "linker/directive_resolver.dart" show DirectiveResolver;
 import "linker/pipe_resolver.dart" show PipeResolver;
 import "linker/compiler.dart" show Compiler;
@@ -34,7 +33,6 @@ const List<dynamic /* Type | Provider | List < dynamic > */ >
   APP_ID_RANDOM_PROVIDER,
   ResolvedMetadataCache,
   const Provider(AppViewManager, useClass: AppViewManager_),
-  AppViewListener,
   ViewResolver,
   const Provider(IterableDiffers, useValue: defaultIterableDiffers),
   const Provider(KeyValueDiffers, useValue: defaultKeyValueDiffers),

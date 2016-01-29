@@ -376,7 +376,7 @@ main() {
                   "<test-cmp><li template=\"#item #i=index\">{{i}}: {{item}};</li></test-cmp>")
               .createAsync(ComponentUsingTestComponent)
               .then((fixture) {
-            var testComponent = fixture.debugElement.componentViewChildren[0];
+            var testComponent = fixture.debugElement.children[0];
             testComponent.componentInstance.items = ["a", "b", "c"];
             fixture.detectChanges();
             expect(testComponent.nativeElement).toHaveText("0: a;1: b;2: c;");
@@ -396,7 +396,7 @@ main() {
                   ComponentUsingTestComponent, "<test-cmp></test-cmp>")
               .createAsync(ComponentUsingTestComponent)
               .then((fixture) {
-            var testComponent = fixture.debugElement.componentViewChildren[0];
+            var testComponent = fixture.debugElement.children[0];
             testComponent.componentInstance.items = ["a", "b", "c"];
             fixture.detectChanges();
             expect(testComponent.nativeElement).toHaveText("0: a;1: b;2: c;");
@@ -416,7 +416,7 @@ main() {
                   "<test-cmp><li template=\"#item #i=index\">{{i}}: {{item}};</li></test-cmp>")
               .createAsync(ComponentUsingTestComponent)
               .then((fixture) {
-            var testComponent = fixture.debugElement.componentViewChildren[0];
+            var testComponent = fixture.debugElement.children[0];
             testComponent.componentInstance.items = ["a", "b", "c"];
             fixture.detectChanges();
             expect(testComponent.nativeElement).toHaveText("0: a;1: b;2: c;");

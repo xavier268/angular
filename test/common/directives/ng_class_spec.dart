@@ -22,11 +22,9 @@ import "package:angular2/core.dart" show Component, View, provide;
 import "package:angular2/common.dart" show NgFor;
 import "package:angular2/src/common/directives/ng_class.dart" show NgClass;
 
-detectChangesAndCheck(ComponentFixture fixture, String classes,
-    [num elIndex = 0]) {
+detectChangesAndCheck(ComponentFixture fixture, String classes) {
   fixture.detectChanges();
-  expect(fixture
-          .debugElement.componentViewChildren[elIndex].nativeElement.className)
+  expect(fixture.debugElement.children[0].nativeElement.className)
       .toEqual(classes);
 }
 
@@ -50,7 +48,7 @@ main() {
               fixture.debugElement.componentInstance.items = [
                 ["1"]
               ];
-              detectChangesAndCheck(fixture, "1", 1);
+              detectChangesAndCheck(fixture, "1");
               async.done();
             });
           }));

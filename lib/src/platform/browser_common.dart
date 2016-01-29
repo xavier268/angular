@@ -43,13 +43,13 @@ import "package:angular2/src/platform/browser/testability.dart"
 import "package:angular2/src/core/profile/wtf_init.dart" show wtfInit;
 import "package:angular2/src/platform/dom/events/event_manager.dart"
     show EventManager, EVENT_MANAGER_PLUGINS;
+import "package:angular2/platform/common_dom.dart" show ELEMENT_PROBE_PROVIDERS;
 export "package:angular2/src/platform/dom/dom_tokens.dart" show DOCUMENT;
 export "package:angular2/src/platform/browser/title.dart" show Title;
 export "package:angular2/platform/common_dom.dart"
     show
-        DebugElementViewListener,
         ELEMENT_PROBE_PROVIDERS,
-        ELEMENT_PROBE_BINDINGS,
+        ELEMENT_PROBE_PROVIDERS_PROD_MODE,
         inspectNativeElement,
         By;
 export "browser/browser_adapter.dart" show BrowserDomAdapter;
@@ -100,7 +100,8 @@ const List<dynamic> BROWSER_APP_COMMON_PROVIDERS = const [
   Testability,
   BrowserDetails,
   AnimationBuilder,
-  EventManager
+  EventManager,
+  ELEMENT_PROBE_PROVIDERS
 ];
 initDomAdapter() {
   BrowserDomAdapter.makeCurrent();

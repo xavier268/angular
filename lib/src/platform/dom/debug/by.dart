@@ -44,7 +44,7 @@ class By {
    */
   static Predicate<DebugElement> directive(Type type) {
     return (debugElement) {
-      return debugElement.hasDirective(type);
+      return !identical(debugElement.providerTokens.indexOf(type), -1);
     };
   }
 }

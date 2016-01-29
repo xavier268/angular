@@ -19,7 +19,6 @@ import "view_ref.dart"
         ViewRef_;
 import "view_container_ref.dart" show ViewContainerRef;
 import "template_ref.dart" show TemplateRef, TemplateRef_;
-import "view_listener.dart" show AppViewListener;
 import "package:angular2/src/core/render/api.dart"
     show RootRenderer, RenderComponentType;
 import "../profile/profile.dart" show wtfCreateScope, wtfLeave, WtfScopeFn;
@@ -180,12 +179,9 @@ abstract class AppViewManager {
 @Injectable()
 class AppViewManager_ extends AppViewManager {
   RootRenderer _renderer;
-  AppViewListener _viewListener;
   String _appId;
   num _nextCompTypeId = 0;
-  AppViewManager_(
-      this._renderer, this._viewListener, @Inject(APP_ID) this._appId)
-      : super() {
+  AppViewManager_(this._renderer, @Inject(APP_ID) this._appId) : super() {
     /* super call moved to initializer */;
   }
   ViewContainerRef getViewContainer(ElementRef location) {
@@ -336,15 +332,9 @@ class AppViewManager_ extends AppViewManager {
   }
 
   /** @internal */
-  onViewCreated(AppView view) {
-    this._viewListener.onViewCreated(view);
-  }
-
+  onViewCreated(AppView view) {}
   /** @internal */
-  onViewDestroyed(AppView view) {
-    this._viewListener.onViewDestroyed(view);
-  }
-
+  onViewDestroyed(AppView view) {}
   /** @internal */
   RenderComponentType createRenderComponentType(ViewEncapsulation encapsulation,
       List<dynamic /* String | List < dynamic > */ > styles) {

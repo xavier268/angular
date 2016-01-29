@@ -15,8 +15,8 @@ import "package:angular2/src/facade/lang.dart"
 import "package:angular2/src/facade/exceptions.dart"
     show BaseException, WrappedException;
 import "shared_styles_host.dart" show DomSharedStylesHost;
-import "package:angular2/core.dart"
-    show Renderer, RootRenderer, RenderComponentType;
+import "package:angular2/src/core/render/api.dart"
+    show Renderer, RootRenderer, RenderComponentType, RenderDebugInfo;
 import "events/event_manager.dart" show EventManager;
 import "dom_tokens.dart" show DOCUMENT;
 import "package:angular2/src/core/metadata.dart" show ViewEncapsulation;
@@ -229,6 +229,7 @@ class DomRenderer implements Renderer {
     }
   }
 
+  setElementDebugInfo(dynamic renderElement, RenderDebugInfo info) {}
   void setElementClass(dynamic renderElement, String className, bool isAdd) {
     if (isAdd) {
       DOM.addClass(renderElement, className);

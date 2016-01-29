@@ -3,12 +3,12 @@ library angular2.src.testing.test_component_builder;
 import "package:angular2/core.dart"
     show
         ComponentRef,
-        DebugElement,
         DirectiveResolver,
         DynamicComponentLoader,
         Injector,
         Injectable,
         ViewMetadata,
+        ElementRef,
         EmbeddedViewRef,
         ViewResolver,
         provide;
@@ -21,7 +21,8 @@ import "package:angular2/src/core/linker/view.dart" show AppView;
 import "utils.dart" show el;
 import "package:angular2/src/platform/dom/dom_tokens.dart" show DOCUMENT;
 import "package:angular2/src/platform/dom/dom_adapter.dart" show DOM;
-import "package:angular2/src/core/debug/debug_element.dart" show DebugElement_;
+import "package:angular2/src/core/debug/debug_node.dart"
+    show DebugNode, DebugElement, getDebugNode;
 
 /**
  * Fixture for debugging and testing a component.
@@ -39,6 +40,10 @@ abstract class ComponentFixture {
    * The native element at the root of the component.
    */
   dynamic nativeElement;
+  /**
+   * The ElementRef for the element at the root of the component.
+   */
+  ElementRef elementRef;
   /**
    * Trigger a change detection cycle for the component.
    */
@@ -58,8 +63,10 @@ class ComponentFixture_ extends ComponentFixture {
     /* super call moved to initializer */;
     this._componentParentView =
         ((componentRef.hostView as ViewRef_)).internalView;
-    this.debugElement =
-        new DebugElement_(this._componentParentView.appElements[0]);
+    this.elementRef = this._componentParentView.appElements[0].ref;
+    this.debugElement = (getDebugNode(
+            this._componentParentView.rootNodesOrAppElements[0].nativeElement)
+        as DebugElement);
     this.componentInstance = this.debugElement.componentInstance;
     this.nativeElement = this.debugElement.nativeElement;
     this._componentRef = componentRef;

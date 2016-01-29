@@ -18,14 +18,14 @@ import "package:angular2/testing_internal.dart"
         TestComponentBuilder,
         ComponentFixture;
 import "package:angular2/core.dart" show OnDestroy;
-import "package:angular2/core.dart" show Injector, inspectElement;
+import "package:angular2/core.dart" show Injector;
 import "package:angular2/common.dart" show NgIf;
-import "package:angular2/platform/common_dom.dart" show By;
 import "package:angular2/src/core/metadata.dart"
     show Component, View, ViewMetadata;
 import "package:angular2/src/core/linker/dynamic_component_loader.dart"
     show DynamicComponentLoader;
-import "package:angular2/src/core/linker/element_ref.dart" show ElementRef;
+import "package:angular2/src/core/linker/element_ref.dart"
+    show ElementRef, ElementRef_;
 import "package:angular2/src/platform/dom/dom_tokens.dart" show DOCUMENT;
 import "package:angular2/src/platform/dom/dom_adapter.dart" show DOM;
 import "package:angular2/src/testing/test_component_builder.dart"
@@ -53,8 +53,7 @@ main() {
                 .createAsync(MyComp)
                 .then((tc) {
               loader
-                  .loadIntoLocation(
-                      DynamicallyLoaded, tc.debugElement.elementRef, "loc")
+                  .loadIntoLocation(DynamicallyLoaded, tc.elementRef, "loc")
                   .then((ref) {
                 expect(tc.debugElement.nativeElement)
                     .toHaveText("Location;DynamicallyLoaded;");
@@ -78,8 +77,7 @@ main() {
                 .createAsync(MyComp)
                 .then((tc) {
               loader
-                  .loadIntoLocation(
-                      DynamicallyLoaded, tc.debugElement.elementRef, "loc")
+                  .loadIntoLocation(DynamicallyLoaded, tc.elementRef, "loc")
                   .then((ref) {
                 ref.dispose();
                 expect(tc.debugElement.nativeElement).toHaveText("Location;");
@@ -110,10 +108,15 @@ main() {
                 .then((tc) {
               tc.debugElement.componentInstance.ctxBoolProp = true;
               tc.detectChanges();
-              var childCompEl = tc.debugElement.query(By.css("child-cmp"));
+              var childCompEl =
+                  ((tc.elementRef as ElementRef_)).internalElement;
+              // TODO(juliemr): This is hideous, see if there's a better way to handle
+
+              // child element refs now.
+              var childElementRef = childCompEl.componentView.appElements[0]
+                  .nestedViews[0].appElements[0].ref;
               loader
-                  .loadIntoLocation(
-                      DynamicallyLoaded, childCompEl.elementRef, "loc")
+                  .loadIntoLocation(DynamicallyLoaded, childElementRef, "loc")
                   .then((ref) {
                 expect(tc.debugElement.nativeElement)
                     .toHaveText("Location;DynamicallyLoaded;");
@@ -142,8 +145,8 @@ main() {
                 .createAsync(MyComp)
                 .then((tc) {
               loader
-                  .loadIntoLocation(DynamicallyLoadedWithHostProps,
-                      tc.debugElement.elementRef, "loc")
+                  .loadIntoLocation(
+                      DynamicallyLoadedWithHostProps, tc.elementRef, "loc")
                   .then((ref) {
                 ref.instance.id = "new value";
                 tc.detectChanges();
@@ -172,8 +175,8 @@ main() {
                 .then((ComponentFixture tc) {
               tc.debugElement;
               PromiseWrapper.catchError(
-                  loader.loadIntoLocation(DynamicallyLoadedThrows,
-                      tc.debugElement.elementRef, "loc"), (error) {
+                  loader.loadIntoLocation(
+                      DynamicallyLoadedThrows, tc.elementRef, "loc"), (error) {
                 expect(error.message).toContain("ThrownInConstructor");
                 expect(() => tc.detectChanges()).not.toThrow();
                 async.done();
@@ -197,7 +200,7 @@ main() {
                 .then((tc) {
               expect(() => loader.loadIntoLocation(
                       DynamicallyLoadedWithHostProps,
-                      tc.debugElement.elementRef,
+                      tc.elementRef,
                       "someUnknownVariable"))
                   .toThrowError("Could not find variable someUnknownVariable");
               async.done();
@@ -217,8 +220,8 @@ main() {
                         template: "<div #loc></div>", directives: []))
                 .createAsync(MyComp)
                 .then((tc) {
-              loader.loadIntoLocation(DynamicallyLoadedWithNgContent,
-                  tc.debugElement.elementRef, "loc", null, [
+              loader.loadIntoLocation(
+                  DynamicallyLoadedWithNgContent, tc.elementRef, "loc", null, [
                 [DOM.createTextNode("hello")]
               ]).then((ref) {
                 tc.detectChanges();
@@ -243,7 +246,7 @@ main() {
                 .then((tc) {
               PromiseWrapper.catchError(
                   loader.loadIntoLocation(DynamicallyLoadedWithNgContent,
-                      tc.debugElement.elementRef, "loc", null, []), (e) {
+                      tc.elementRef, "loc", null, []), (e) {
                 expect(e.message).toContain(
                     '''The component ${ stringify ( DynamicallyLoadedWithNgContent )} has 1 <ng-content> elements, but only 0 slots were provided''');
                 async.done();
@@ -268,8 +271,7 @@ main() {
                 .createAsync(MyComp)
                 .then((tc) {
               loader
-                  .loadNextToLocation(
-                      DynamicallyLoaded, tc.debugElement.elementRef)
+                  .loadNextToLocation(DynamicallyLoaded, tc.elementRef)
                   .then((ref) {
                 expect(tc.debugElement.nativeElement).toHaveText("Location;");
                 expect(DOM.nextSibling(tc.debugElement.nativeElement))
@@ -294,12 +296,10 @@ main() {
                 .createAsync(MyComp)
                 .then((tc) {
               loader
-                  .loadNextToLocation(
-                      DynamicallyLoaded, tc.debugElement.elementRef)
+                  .loadNextToLocation(DynamicallyLoaded, tc.elementRef)
                   .then((ref) {
                 loader
-                    .loadNextToLocation(
-                        DynamicallyLoaded2, tc.debugElement.elementRef)
+                    .loadNextToLocation(DynamicallyLoaded2, tc.elementRef)
                     .then((ref2) {
                   var firstSibling =
                       DOM.nextSibling(tc.debugElement.nativeElement);
@@ -332,8 +332,8 @@ main() {
                 .createAsync(MyComp)
                 .then((tc) {
               loader
-                  .loadNextToLocation(DynamicallyLoadedWithHostProps,
-                      tc.debugElement.elementRef)
+                  .loadNextToLocation(
+                      DynamicallyLoadedWithHostProps, tc.elementRef)
                   .then((ref) {
                 ref.instance.id = "new value";
                 tc.detectChanges();
@@ -357,8 +357,8 @@ main() {
                     new ViewMetadata(template: "", directives: [Location]))
                 .createAsync(MyComp)
                 .then((tc) {
-              loader.loadNextToLocation(DynamicallyLoadedWithNgContent,
-                  tc.debugElement.elementRef, null, [
+              loader.loadNextToLocation(
+                  DynamicallyLoadedWithNgContent, tc.elementRef, null, [
                 [DOM.createTextNode("hello")]
               ]).then((ref) {
                 tc.detectChanges();

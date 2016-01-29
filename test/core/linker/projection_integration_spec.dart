@@ -22,8 +22,6 @@ import "package:angular2/testing_internal.dart"
         fakeAsync,
         tick;
 import "package:angular2/src/platform/dom/dom_adapter.dart" show DOM;
-import "package:angular2/src/core/linker/view_listener.dart"
-    show AppViewListener;
 import "package:angular2/core.dart"
     show
         bind,
@@ -35,14 +33,12 @@ import "package:angular2/core.dart"
         View,
         ViewContainerRef,
         ViewEncapsulation,
-        ViewMetadata,
-        Scope;
+        ViewMetadata;
 import "package:angular2/platform/common_dom.dart" show By;
+import "package:angular2/src/core/debug/debug_node.dart" show getAllDebugNodes;
 
 main() {
   describe("projection", () {
-    beforeEachProviders(
-        () => [provide(AppViewListener, useClass: AppViewListener)]);
     it(
         "should support simple components",
         inject([TestComponentBuilder, AsyncTestCompleter],
@@ -223,8 +219,9 @@ main() {
                       ]))
               .createAsync(MainComp)
               .then((main) {
-            var viewportDirectives = main.debugElement
-                .queryAll(By.directive(ManualViewportDirective))
+            var viewportDirectives = main.debugElement.children[0].childNodes
+                .where(By.directive(ManualViewportDirective))
+                .toList()
                 .map((de) => de.inject(ManualViewportDirective))
                 .toList();
             expect(main.debugElement.nativeElement).toHaveText("(, B)");
@@ -272,7 +269,7 @@ main() {
               .createAsync(MainComp)
               .then((main) {
             var viewportDirective = main.debugElement
-                .query(By.directive(ManualViewportDirective))
+                .queryAllNodes(By.directive(ManualViewportDirective))[0]
                 .inject(ManualViewportDirective);
             expect(main.debugElement.nativeElement)
                 .toHaveText("OUTER(INNER(INNERINNER(,BC)))");
@@ -299,7 +296,7 @@ main() {
               .createAsync(MainComp)
               .then((main) {
             var viewportDirective = main.debugElement
-                .query(By.directive(ManualViewportDirective))
+                .queryAllNodes(By.directive(ManualViewportDirective))[0]
                 .inject(ManualViewportDirective);
             expect(main.debugElement.nativeElement).toHaveText("(, BC)");
             viewportDirective.show();
@@ -372,11 +369,18 @@ main() {
                       ]))
               .createAsync(MainComp)
               .then((main) {
-            ManualViewportDirective sourceDirective = main.debugElement
-                .query(By.directive(ManualViewportDirective))
-                .inject(ManualViewportDirective);
+            var sourceDirective;
+            // We can't use the child nodes to get a hold of this because it's not in the dom at
+
+            // all.
+            getAllDebugNodes().forEach((debug) {
+              if (!identical(
+                  debug.providerTokens.indexOf(ManualViewportDirective), -1)) {
+                sourceDirective = debug.inject(ManualViewportDirective);
+              }
+            });
             ProjectDirective projectDirective = main.debugElement
-                .query(By.directive(ProjectDirective))
+                .queryAllNodes(By.directive(ProjectDirective))[0]
                 .inject(ProjectDirective);
             expect(main.debugElement.nativeElement).toHaveText("START()END");
             projectDirective.show(sourceDirective.templateRef);
@@ -403,10 +407,10 @@ main() {
               .createAsync(MainComp)
               .then((main) {
             ManualViewportDirective sourceDirective = main.debugElement
-                .query(By.directive(ManualViewportDirective))
+                .queryAllNodes(By.directive(ManualViewportDirective))[0]
                 .inject(ManualViewportDirective);
             ProjectDirective projectDirective = main.debugElement
-                .query(By.directive(ProjectDirective))
+                .queryAllNodes(By.directive(ProjectDirective))[0]
                 .inject(ProjectDirective);
             expect(main.debugElement.nativeElement)
                 .toHaveText("SIMPLE()START()END");
@@ -437,10 +441,10 @@ main() {
               .createAsync(MainComp)
               .then((main) {
             ManualViewportDirective sourceDirective = main.debugElement
-                .query(By.directive(ManualViewportDirective))
+                .queryAllNodes(By.directive(ManualViewportDirective))[0]
                 .inject(ManualViewportDirective);
             ProjectDirective projectDirective = main.debugElement
-                .query(By.directive(ProjectDirective))
+                .queryAllNodes(By.directive(ProjectDirective))[0]
                 .inject(ProjectDirective);
             expect(main.debugElement.nativeElement)
                 .toHaveText("(, B)START()END");
@@ -474,7 +478,7 @@ main() {
               .then((main) {
             main.detectChanges();
             ManualViewportDirective manualDirective = main.debugElement
-                .query(By.directive(ManualViewportDirective))
+                .queryAllNodes(By.directive(ManualViewportDirective))[0]
                 .inject(ManualViewportDirective);
             expect(main.debugElement.nativeElement).toHaveText("TREE(0:)");
             manualDirective.show();
@@ -545,12 +549,12 @@ main() {
               .createAsync(MainComp)
               .then((main) {
             expect(main.debugElement.nativeElement).toHaveText("MAIN()");
-            var viewportElement = main
-                .debugElement.componentViewChildren[0].componentViewChildren[0];
+            var viewportElement = main.debugElement
+                .queryAllNodes(By.directive(ManualViewportDirective))[0];
             viewportElement.inject(ManualViewportDirective).show();
             expect(main.debugElement.nativeElement).toHaveText("MAIN(FIRST())");
-            viewportElement = main
-                .debugElement.componentViewChildren[0].componentViewChildren[1];
+            viewportElement = main.debugElement
+                .queryAllNodes(By.directive(ManualViewportDirective))[1];
             viewportElement.inject(ManualViewportDirective).show();
             expect(main.debugElement.nativeElement)
                 .toHaveText("MAIN(FIRST(SECOND(a)))");
@@ -618,20 +622,16 @@ main() {
             var conditionalComp = main.debugElement
                 .query(By.directive(ConditionalContentComponent));
             var viewViewportDir = conditionalComp
-                .query(By.directive(ManualViewportDirective), Scope.view)
-                .inject(ManualViewportDirective);
-            var contentViewportDir = conditionalComp
-                .query(By.directive(ManualViewportDirective), Scope.light)
+                .queryAllNodes(By.directive(ManualViewportDirective))[0]
                 .inject(ManualViewportDirective);
             expect(main.debugElement.nativeElement).toHaveText("(, D)");
             expect(main.debugElement.nativeElement).toHaveText("(, D)");
-            // first show content viewport, then the view viewport,
-
-            // i.e. projection needs to take create of already
-
-            // created views
-            contentViewportDir.show();
             viewViewportDir.show();
+            expect(main.debugElement.nativeElement).toHaveText("(AC, D)");
+            var contentViewportDir = conditionalComp
+                .queryAllNodes(By.directive(ManualViewportDirective))[1]
+                .inject(ManualViewportDirective);
+            contentViewportDir.show();
             expect(main.debugElement.nativeElement).toHaveText("(ABC, D)");
             // hide view viewport, and test that it also hides
 

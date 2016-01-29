@@ -20,7 +20,8 @@ import "package:angular2/src/facade/lang.dart"
     show isPresent, isBlank, Type, isArray, isNumber;
 import "package:angular2/src/facade/exceptions.dart"
     show BaseException, WrappedException;
-import "package:angular2/src/core/render/api.dart" show Renderer, RootRenderer;
+import "package:angular2/src/core/render/api.dart"
+    show Renderer, RootRenderer, RenderDebugInfo;
 import "view_ref.dart" show ViewRef_, HostViewFactoryRef;
 import "package:angular2/src/core/pipes/pipes.dart" show ProtoPipes;
 import "package:angular2/src/core/render/util.dart" show camelCaseToDashCase;
@@ -118,6 +119,13 @@ class AppView implements ChangeDispatcher {
     });
     for (var i = 0; i < appElements.length; i++) {
       var appEl = appElements[i];
+      var providerTokens = [];
+      if (isPresent(appEl.proto.protoInjector)) {
+        for (var j = 0; j < appEl.proto.protoInjector.numberOfProviders; j++) {
+          providerTokens
+              .add(appEl.proto.protoInjector.getProviderAtIndex(j).key.token);
+        }
+      }
       StringMapWrapper.forEach(appEl.proto.directiveVariableBindings,
           (directiveIndex, name) {
         if (isBlank(directiveIndex)) {
@@ -126,6 +134,10 @@ class AppView implements ChangeDispatcher {
           localsMap[name] = appEl.getDirectiveAtIndex(directiveIndex);
         }
       });
+      this.renderer.setElementDebugInfo(
+          appEl.nativeElement,
+          new RenderDebugInfo(appEl.getInjector(), appEl.getComponent(),
+              providerTokens, localsMap));
     }
     var parentLocals = null;
     if (!identical(this.proto.type, ViewType.COMPONENT)) {

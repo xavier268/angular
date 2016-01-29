@@ -1,7 +1,7 @@
 library angular2.src.web_workers.worker.renderer;
 
 import "package:angular2/src/core/render/api.dart"
-    show Renderer, RootRenderer, RenderComponentType;
+    show Renderer, RootRenderer, RenderComponentType, RenderDebugInfo;
 import "package:angular2/src/web_workers/shared/client_message_broker.dart"
     show ClientMessageBroker, ClientMessageBrokerFactory, FnArg, UiArguments;
 import "package:angular2/src/facade/lang.dart" show isPresent, isBlank, print;
@@ -209,6 +209,7 @@ class WebWorkerRenderer implements Renderer, RenderStoreObject {
     ]);
   }
 
+  setElementDebugInfo(dynamic renderElement, RenderDebugInfo info) {}
   setElementClass(dynamic renderElement, String className, bool isAdd) {
     this._runOnService("setElementClass", [
       new FnArg(renderElement, RenderStoreObject),

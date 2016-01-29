@@ -16,6 +16,7 @@ import "package:angular2/testing_internal.dart"
         beforeEachProviders,
         it,
         xit;
+import "package:angular2/platform/common_dom.dart" show By;
 import "package:angular2/core.dart" show provide, Component, Injector, Inject;
 import "package:angular2/router.dart"
     show Router, ROUTER_DIRECTIVES, RouteParams, RouteData, Location;
@@ -26,7 +27,7 @@ import "../util.dart"
 import "package:angular2/src/facade/exceptions.dart" show BaseException;
 
 getLinkElement(ComponentFixture rtc, [num linkIndex = 0]) {
-  return rtc.debugElement.componentViewChildren[linkIndex].nativeElement;
+  return rtc.debugElement.queryAll(By.css("a"))[linkIndex].nativeElement;
 }
 
 auxRoutes() {
