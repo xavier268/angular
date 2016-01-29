@@ -702,7 +702,7 @@ System.register("angular2/src/mock/mock_location_strategy", ["angular2/src/core/
   return module.exports;
 });
 
-System.register("angular2/src/testing/test_component_builder", ["angular2/core", "angular2/src/facade/lang", "angular2/src/facade/collection", "angular2/src/testing/utils", "angular2/src/platform/dom/dom_tokens", "angular2/src/platform/dom/dom_adapter", "angular2/src/core/debug/debug_element"], true, function(require, exports, module) {
+System.register("angular2/src/testing/test_component_builder", ["angular2/core", "angular2/src/facade/lang", "angular2/src/facade/collection", "angular2/src/testing/utils", "angular2/src/platform/dom/dom_tokens", "angular2/src/platform/dom/dom_adapter", "angular2/src/core/debug/debug_node"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -737,7 +737,7 @@ System.register("angular2/src/testing/test_component_builder", ["angular2/core",
   var utils_1 = require("angular2/src/testing/utils");
   var dom_tokens_1 = require("angular2/src/platform/dom/dom_tokens");
   var dom_adapter_1 = require("angular2/src/platform/dom/dom_adapter");
-  var debug_element_1 = require("angular2/src/core/debug/debug_element");
+  var debug_node_1 = require("angular2/src/core/debug/debug_node");
   var ComponentFixture = (function() {
     function ComponentFixture() {}
     return ComponentFixture;
@@ -748,7 +748,8 @@ System.register("angular2/src/testing/test_component_builder", ["angular2/core",
     function ComponentFixture_(componentRef) {
       _super.call(this);
       this._componentParentView = componentRef.hostView.internalView;
-      this.debugElement = new debug_element_1.DebugElement_(this._componentParentView.appElements[0]);
+      this.elementRef = this._componentParentView.appElements[0].ref;
+      this.debugElement = debug_node_1.getDebugNode(this._componentParentView.rootNodesOrAppElements[0].nativeElement);
       this.componentInstance = this.debugElement.componentInstance;
       this.nativeElement = this.debugElement.nativeElement;
       this._componentRef = componentRef;

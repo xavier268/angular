@@ -5978,6 +5978,16 @@ System.register("angular2/src/core/render/api", [], true, function(require, expo
     return RenderComponentType;
   })();
   exports.RenderComponentType = RenderComponentType;
+  var RenderDebugInfo = (function() {
+    function RenderDebugInfo(injector, component, providerTokens, locals) {
+      this.injector = injector;
+      this.component = component;
+      this.providerTokens = providerTokens;
+      this.locals = locals;
+    }
+    return RenderDebugInfo;
+  })();
+  exports.RenderDebugInfo = RenderDebugInfo;
   var Renderer = (function() {
     function Renderer() {}
     return Renderer;
@@ -6312,10 +6322,19 @@ System.register("angular2/src/core/render/util", ["angular2/src/facade/lang"], t
   return module.exports;
 });
 
-System.register("angular2/src/core/linker/view_listener", ["angular2/src/core/di"], true, function(require, exports, module) {
+System.register("angular2/src/core/linker/view_manager", ["angular2/src/core/di", "angular2/src/facade/lang", "angular2/src/facade/collection", "angular2/src/facade/exceptions", "angular2/src/core/linker/view", "angular2/src/core/linker/element", "angular2/src/core/render/api", "angular2/src/core/profile/profile", "angular2/src/core/application_tokens", "angular2/src/core/linker/view_type"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
+  var __extends = (this && this.__extends) || function(d, b) {
+    for (var p in b)
+      if (b.hasOwnProperty(p))
+        d[p] = b[p];
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
   var __decorate = (this && this.__decorate) || function(decorators, target, key, desc) {
     var c = arguments.length,
         r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
@@ -6332,15 +6351,166 @@ System.register("angular2/src/core/linker/view_listener", ["angular2/src/core/di
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
       return Reflect.metadata(k, v);
   };
+  var __param = (this && this.__param) || function(paramIndex, decorator) {
+    return function(target, key) {
+      decorator(target, key, paramIndex);
+    };
+  };
   var di_1 = require("angular2/src/core/di");
-  var AppViewListener = (function() {
-    function AppViewListener() {}
-    AppViewListener.prototype.onViewCreated = function(view) {};
-    AppViewListener.prototype.onViewDestroyed = function(view) {};
-    AppViewListener = __decorate([di_1.Injectable(), __metadata('design:paramtypes', [])], AppViewListener);
-    return AppViewListener;
+  var lang_1 = require("angular2/src/facade/lang");
+  var collection_1 = require("angular2/src/facade/collection");
+  var exceptions_1 = require("angular2/src/facade/exceptions");
+  var view_1 = require("angular2/src/core/linker/view");
+  var element_1 = require("angular2/src/core/linker/element");
+  var api_1 = require("angular2/src/core/render/api");
+  var profile_1 = require("angular2/src/core/profile/profile");
+  var application_tokens_1 = require("angular2/src/core/application_tokens");
+  var view_type_1 = require("angular2/src/core/linker/view_type");
+  var AppViewManager = (function() {
+    function AppViewManager() {}
+    return AppViewManager;
   })();
-  exports.AppViewListener = AppViewListener;
+  exports.AppViewManager = AppViewManager;
+  var AppViewManager_ = (function(_super) {
+    __extends(AppViewManager_, _super);
+    function AppViewManager_(_renderer, _appId) {
+      _super.call(this);
+      this._renderer = _renderer;
+      this._appId = _appId;
+      this._nextCompTypeId = 0;
+      this._createRootHostViewScope = profile_1.wtfCreateScope('AppViewManager#createRootHostView()');
+      this._destroyRootHostViewScope = profile_1.wtfCreateScope('AppViewManager#destroyRootHostView()');
+      this._createEmbeddedViewInContainerScope = profile_1.wtfCreateScope('AppViewManager#createEmbeddedViewInContainer()');
+      this._createHostViewInContainerScope = profile_1.wtfCreateScope('AppViewManager#createHostViewInContainer()');
+      this._destroyViewInContainerScope = profile_1.wtfCreateScope('AppViewMananger#destroyViewInContainer()');
+      this._attachViewInContainerScope = profile_1.wtfCreateScope('AppViewMananger#attachViewInContainer()');
+      this._detachViewInContainerScope = profile_1.wtfCreateScope('AppViewMananger#detachViewInContainer()');
+    }
+    AppViewManager_.prototype.getViewContainer = function(location) {
+      return location.internalElement.getViewContainerRef();
+    };
+    AppViewManager_.prototype.getHostElement = function(hostViewRef) {
+      var hostView = hostViewRef.internalView;
+      if (hostView.proto.type !== view_type_1.ViewType.HOST) {
+        throw new exceptions_1.BaseException('This operation is only allowed on host views');
+      }
+      return hostView.appElements[0].ref;
+    };
+    AppViewManager_.prototype.getNamedElementInComponentView = function(hostLocation, variableName) {
+      var appEl = hostLocation.internalElement;
+      var componentView = appEl.componentView;
+      if (lang_1.isBlank(componentView)) {
+        throw new exceptions_1.BaseException("There is no component directive at element " + hostLocation);
+      }
+      for (var i = 0; i < componentView.appElements.length; i++) {
+        var compAppEl = componentView.appElements[i];
+        if (collection_1.StringMapWrapper.contains(compAppEl.proto.directiveVariableBindings, variableName)) {
+          return compAppEl.ref;
+        }
+      }
+      throw new exceptions_1.BaseException("Could not find variable " + variableName);
+    };
+    AppViewManager_.prototype.getComponent = function(hostLocation) {
+      return hostLocation.internalElement.getComponent();
+    };
+    AppViewManager_.prototype.createRootHostView = function(hostViewFactoryRef, overrideSelector, injector, projectableNodes) {
+      if (projectableNodes === void 0) {
+        projectableNodes = null;
+      }
+      var s = this._createRootHostViewScope();
+      var hostViewFactory = hostViewFactoryRef.internalHostViewFactory;
+      var selector = lang_1.isPresent(overrideSelector) ? overrideSelector : hostViewFactory.selector;
+      var view = hostViewFactory.viewFactory(this._renderer, this, null, projectableNodes, selector, null, injector);
+      return profile_1.wtfLeave(s, view.ref);
+    };
+    AppViewManager_.prototype.destroyRootHostView = function(hostViewRef) {
+      var s = this._destroyRootHostViewScope();
+      var hostView = hostViewRef.internalView;
+      hostView.renderer.detachView(view_1.flattenNestedViewRenderNodes(hostView.rootNodesOrAppElements));
+      hostView.destroy();
+      profile_1.wtfLeave(s);
+    };
+    AppViewManager_.prototype.createEmbeddedViewInContainer = function(viewContainerLocation, index, templateRef) {
+      var s = this._createEmbeddedViewInContainerScope();
+      var contextEl = templateRef.elementRef.internalElement;
+      var view = contextEl.embeddedViewFactory(contextEl.parentView.renderer, this, contextEl, contextEl.parentView.projectableNodes, null, null, null);
+      this._attachViewToContainer(view, viewContainerLocation.internalElement, index);
+      return profile_1.wtfLeave(s, view.ref);
+    };
+    AppViewManager_.prototype.createHostViewInContainer = function(viewContainerLocation, index, hostViewFactoryRef, dynamicallyCreatedProviders, projectableNodes) {
+      var s = this._createHostViewInContainerScope();
+      var viewContainerLocation_ = viewContainerLocation;
+      var contextEl = viewContainerLocation_.internalElement;
+      var hostViewFactory = hostViewFactoryRef.internalHostViewFactory;
+      var view = hostViewFactory.viewFactory(contextEl.parentView.renderer, contextEl.parentView.viewManager, contextEl, projectableNodes, null, dynamicallyCreatedProviders, null);
+      this._attachViewToContainer(view, viewContainerLocation_.internalElement, index);
+      return profile_1.wtfLeave(s, view.ref);
+    };
+    AppViewManager_.prototype.destroyViewInContainer = function(viewContainerLocation, index) {
+      var s = this._destroyViewInContainerScope();
+      var view = this._detachViewInContainer(viewContainerLocation.internalElement, index);
+      view.destroy();
+      profile_1.wtfLeave(s);
+    };
+    AppViewManager_.prototype.attachViewInContainer = function(viewContainerLocation, index, viewRef) {
+      var viewRef_ = viewRef;
+      var s = this._attachViewInContainerScope();
+      this._attachViewToContainer(viewRef_.internalView, viewContainerLocation.internalElement, index);
+      return profile_1.wtfLeave(s, viewRef_);
+    };
+    AppViewManager_.prototype.detachViewInContainer = function(viewContainerLocation, index) {
+      var s = this._detachViewInContainerScope();
+      var view = this._detachViewInContainer(viewContainerLocation.internalElement, index);
+      return profile_1.wtfLeave(s, view.ref);
+    };
+    AppViewManager_.prototype.onViewCreated = function(view) {};
+    AppViewManager_.prototype.onViewDestroyed = function(view) {};
+    AppViewManager_.prototype.createRenderComponentType = function(encapsulation, styles) {
+      return new api_1.RenderComponentType(this._appId + "-" + this._nextCompTypeId++, encapsulation, styles);
+    };
+    AppViewManager_.prototype._attachViewToContainer = function(view, vcAppElement, viewIndex) {
+      if (view.proto.type === view_type_1.ViewType.COMPONENT) {
+        throw new exceptions_1.BaseException("Component views can't be moved!");
+      }
+      var nestedViews = vcAppElement.nestedViews;
+      if (nestedViews == null) {
+        nestedViews = [];
+        vcAppElement.nestedViews = nestedViews;
+      }
+      collection_1.ListWrapper.insert(nestedViews, viewIndex, view);
+      var refNode;
+      if (viewIndex > 0) {
+        var prevView = nestedViews[viewIndex - 1];
+        refNode = prevView.rootNodesOrAppElements.length > 0 ? prevView.rootNodesOrAppElements[prevView.rootNodesOrAppElements.length - 1] : null;
+      } else {
+        refNode = vcAppElement.nativeElement;
+      }
+      if (lang_1.isPresent(refNode)) {
+        var refRenderNode;
+        if (refNode instanceof element_1.AppElement) {
+          refRenderNode = refNode.nativeElement;
+        } else {
+          refRenderNode = refNode;
+        }
+        view.renderer.attachViewAfter(refRenderNode, view_1.flattenNestedViewRenderNodes(view.rootNodesOrAppElements));
+      }
+      vcAppElement.parentView.changeDetector.addContentChild(view.changeDetector);
+      vcAppElement.traverseAndSetQueriesAsDirty();
+    };
+    AppViewManager_.prototype._detachViewInContainer = function(vcAppElement, viewIndex) {
+      var view = collection_1.ListWrapper.removeAt(vcAppElement.nestedViews, viewIndex);
+      if (view.proto.type === view_type_1.ViewType.COMPONENT) {
+        throw new exceptions_1.BaseException("Component views can't be moved!");
+      }
+      vcAppElement.traverseAndSetQueriesAsDirty();
+      view.renderer.detachView(view_1.flattenNestedViewRenderNodes(view.rootNodesOrAppElements));
+      view.changeDetector.remove();
+      return view;
+    };
+    AppViewManager_ = __decorate([di_1.Injectable(), __param(1, di_1.Inject(application_tokens_1.APP_ID)), __metadata('design:paramtypes', [api_1.RootRenderer, String])], AppViewManager_);
+    return AppViewManager_;
+  })(AppViewManager);
+  exports.AppViewManager_ = AppViewManager_;
   global.define = __define;
   return module.exports;
 });
@@ -6642,7 +6812,7 @@ System.register("angular2/src/core/linker/view_resolver", ["angular2/src/core/di
   return module.exports;
 });
 
-System.register("angular2/src/core/debug/debug_element", ["angular2/src/facade/lang", "angular2/src/facade/exceptions"], true, function(require, exports, module) {
+System.register("angular2/src/core/debug/debug_node", ["angular2/src/facade/lang", "angular2/src/facade/collection"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -6656,196 +6826,161 @@ System.register("angular2/src/core/debug/debug_element", ["angular2/src/facade/l
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
   };
   var lang_1 = require("angular2/src/facade/lang");
-  var exceptions_1 = require("angular2/src/facade/exceptions");
-  var DebugElement = (function() {
-    function DebugElement() {}
-    Object.defineProperty(DebugElement.prototype, "componentInstance", {
-      get: function() {
-        return exceptions_1.unimplemented();
-      },
-      enumerable: true,
-      configurable: true
-    });
+  var collection_1 = require("angular2/src/facade/collection");
+  var EventListener = (function() {
+    function EventListener(name, callback) {
+      this.name = name;
+      this.callback = callback;
+    }
     ;
-    Object.defineProperty(DebugElement.prototype, "nativeElement", {
-      get: function() {
-        return exceptions_1.unimplemented();
-      },
-      enumerable: true,
-      configurable: true
-    });
-    ;
-    Object.defineProperty(DebugElement.prototype, "elementRef", {
-      get: function() {
-        return exceptions_1.unimplemented();
-      },
-      enumerable: true,
-      configurable: true
-    });
-    ;
-    Object.defineProperty(DebugElement.prototype, "children", {
-      get: function() {
-        return exceptions_1.unimplemented();
-      },
-      enumerable: true,
-      configurable: true
-    });
-    ;
-    Object.defineProperty(DebugElement.prototype, "componentViewChildren", {
-      get: function() {
-        return exceptions_1.unimplemented();
-      },
-      enumerable: true,
-      configurable: true
-    });
-    ;
-    DebugElement.prototype.query = function(predicate, scope) {
-      if (scope === void 0) {
-        scope = Scope.all;
+    return EventListener;
+  })();
+  exports.EventListener = EventListener;
+  var DebugNode = (function() {
+    function DebugNode(nativeNode, parent) {
+      this.nativeNode = nativeNode;
+      if (lang_1.isPresent(parent) && parent instanceof DebugElement) {
+        parent.addChild(this);
+      } else {
+        this.parent = null;
       }
-      var results = this.queryAll(predicate, scope);
+      this.listeners = [];
+      this.providerTokens = [];
+    }
+    DebugNode.prototype.setDebugInfo = function(info) {
+      this.injector = info.injector;
+      this.providerTokens = info.providerTokens;
+      this.locals = info.locals;
+      this.componentInstance = info.component;
+    };
+    DebugNode.prototype.inject = function(token) {
+      return this.injector.get(token);
+    };
+    DebugNode.prototype.getLocal = function(name) {
+      return this.locals.get(name);
+    };
+    return DebugNode;
+  })();
+  exports.DebugNode = DebugNode;
+  var DebugElement = (function(_super) {
+    __extends(DebugElement, _super);
+    function DebugElement(nativeNode, parent) {
+      _super.call(this, nativeNode, parent);
+      this.properties = new Map();
+      this.attributes = new Map();
+      this.childNodes = [];
+      this.nativeElement = nativeNode;
+    }
+    DebugElement.prototype.addChild = function(child) {
+      if (lang_1.isPresent(child)) {
+        this.childNodes.push(child);
+        child.parent = this;
+      }
+    };
+    DebugElement.prototype.removeChild = function(child) {
+      var childIndex = this.childNodes.indexOf(child);
+      if (childIndex !== -1) {
+        child.parent = null;
+        this.childNodes.splice(childIndex, 1);
+      }
+    };
+    DebugElement.prototype.insertChildrenAfter = function(child, newChildren) {
+      var siblingIndex = this.childNodes.indexOf(child);
+      if (siblingIndex !== -1) {
+        var previousChildren = this.childNodes.slice(0, siblingIndex + 1);
+        var nextChildren = this.childNodes.slice(siblingIndex + 1);
+        this.childNodes = collection_1.ListWrapper.concat(collection_1.ListWrapper.concat(previousChildren, newChildren), nextChildren);
+        for (var i = 0; i < newChildren.length; ++i) {
+          var newChild = newChildren[i];
+          if (lang_1.isPresent(newChild.parent)) {
+            newChild.parent.removeChild(newChild);
+          }
+          newChild.parent = this;
+        }
+      }
+    };
+    DebugElement.prototype.query = function(predicate) {
+      var results = this.queryAll(predicate);
       return results.length > 0 ? results[0] : null;
     };
-    DebugElement.prototype.queryAll = function(predicate, scope) {
-      if (scope === void 0) {
-        scope = Scope.all;
-      }
-      var elementsInScope = scope(this);
-      return elementsInScope.filter(predicate);
+    DebugElement.prototype.queryAll = function(predicate) {
+      var matches = [];
+      _queryElementChildren(this, predicate, matches);
+      return matches;
+    };
+    DebugElement.prototype.queryAllNodes = function(predicate) {
+      var matches = [];
+      _queryNodeChildren(this, predicate, matches);
+      return matches;
+    };
+    Object.defineProperty(DebugElement.prototype, "children", {
+      get: function() {
+        var children = [];
+        this.childNodes.forEach(function(node) {
+          if (node instanceof DebugElement) {
+            children.push(node);
+          }
+        });
+        return children;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    DebugElement.prototype.triggerEventHandler = function(eventName, eventObj) {
+      this.listeners.forEach(function(listener) {
+        if (listener.name == eventName) {
+          listener.callback(eventObj);
+        }
+      });
     };
     return DebugElement;
-  })();
+  })(DebugNode);
   exports.DebugElement = DebugElement;
-  var DebugElement_ = (function(_super) {
-    __extends(DebugElement_, _super);
-    function DebugElement_(_appElement) {
-      _super.call(this);
-      this._appElement = _appElement;
-    }
-    Object.defineProperty(DebugElement_.prototype, "componentInstance", {
-      get: function() {
-        if (!lang_1.isPresent(this._appElement)) {
-          return null;
-        }
-        return this._appElement.getComponent();
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(DebugElement_.prototype, "nativeElement", {
-      get: function() {
-        return this.elementRef.nativeElement;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(DebugElement_.prototype, "elementRef", {
-      get: function() {
-        return this._appElement.ref;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    DebugElement_.prototype.getDirectiveInstance = function(directiveIndex) {
-      return this._appElement.getDirectiveAtIndex(directiveIndex);
-    };
-    Object.defineProperty(DebugElement_.prototype, "children", {
-      get: function() {
-        return this._getChildElements(this._appElement.parentView, this._appElement);
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(DebugElement_.prototype, "componentViewChildren", {
-      get: function() {
-        if (!lang_1.isPresent(this._appElement.componentView)) {
-          return [];
-        }
-        return this._getChildElements(this._appElement.componentView, null);
-      },
-      enumerable: true,
-      configurable: true
-    });
-    DebugElement_.prototype.triggerEventHandler = function(eventName, eventObj) {
-      this._appElement.parentView.triggerEventHandlers(eventName, eventObj, this._appElement.proto.index);
-    };
-    DebugElement_.prototype.hasDirective = function(type) {
-      if (!lang_1.isPresent(this._appElement)) {
-        return false;
-      }
-      return this._appElement.hasDirective(type);
-    };
-    DebugElement_.prototype.inject = function(type) {
-      if (!lang_1.isPresent(this._appElement)) {
-        return null;
-      }
-      return this._appElement.get(type);
-    };
-    DebugElement_.prototype.getLocal = function(name) {
-      return this._appElement.parentView.locals.get(name);
-    };
-    DebugElement_.prototype._getChildElements = function(view, parentAppElement) {
-      var _this = this;
-      var els = [];
-      for (var i = 0; i < view.appElements.length; ++i) {
-        var appEl = view.appElements[i];
-        if (appEl.parent == parentAppElement) {
-          els.push(new DebugElement_(appEl));
-          var views = appEl.nestedViews;
-          if (lang_1.isPresent(views)) {
-            views.forEach(function(nextView) {
-              els = els.concat(_this._getChildElements(nextView, null));
-            });
-          }
-        }
-      }
-      return els;
-    };
-    return DebugElement_;
-  })(DebugElement);
-  exports.DebugElement_ = DebugElement_;
-  function inspectElement(elementRef) {
-    return new DebugElement_(elementRef.internalElement);
-  }
-  exports.inspectElement = inspectElement;
-  function asNativeElements(arr) {
-    return arr.map(function(debugEl) {
-      return debugEl.nativeElement;
+  function asNativeElements(debugEls) {
+    return debugEls.map(function(el) {
+      return el.nativeElement;
     });
   }
   exports.asNativeElements = asNativeElements;
-  var Scope = (function() {
-    function Scope() {}
-    Scope.all = function(debugElement) {
-      var scope = [];
-      scope.push(debugElement);
-      debugElement.children.forEach(function(child) {
-        return scope = scope.concat(Scope.all(child));
+  function _queryElementChildren(element, predicate, matches) {
+    element.childNodes.forEach(function(node) {
+      if (node instanceof DebugElement) {
+        if (predicate(node)) {
+          matches.push(node);
+        }
+        _queryElementChildren(node, predicate, matches);
+      }
+    });
+  }
+  function _queryNodeChildren(parentNode, predicate, matches) {
+    if (parentNode instanceof DebugElement) {
+      parentNode.childNodes.forEach(function(node) {
+        if (predicate(node)) {
+          matches.push(node);
+        }
+        if (node instanceof DebugElement) {
+          _queryNodeChildren(node, predicate, matches);
+        }
       });
-      debugElement.componentViewChildren.forEach(function(child) {
-        return scope = scope.concat(Scope.all(child));
-      });
-      return scope;
-    };
-    Scope.light = function(debugElement) {
-      var scope = [];
-      debugElement.children.forEach(function(child) {
-        scope.push(child);
-        scope = scope.concat(Scope.light(child));
-      });
-      return scope;
-    };
-    Scope.view = function(debugElement) {
-      var scope = [];
-      debugElement.componentViewChildren.forEach(function(child) {
-        scope.push(child);
-        scope = scope.concat(Scope.light(child));
-      });
-      return scope;
-    };
-    return Scope;
-  })();
-  exports.Scope = Scope;
+    }
+  }
+  var _nativeNodeToDebugNode = new Map();
+  function getDebugNode(nativeNode) {
+    return _nativeNodeToDebugNode.get(nativeNode);
+  }
+  exports.getDebugNode = getDebugNode;
+  function getAllDebugNodes() {
+    return collection_1.MapWrapper.values(_nativeNodeToDebugNode);
+  }
+  exports.getAllDebugNodes = getAllDebugNodes;
+  function indexDebugNode(node) {
+    _nativeNodeToDebugNode.set(node.nativeNode, node);
+  }
+  exports.indexDebugNode = indexDebugNode;
+  function removeDebugNodeFromIndex(node) {
+    _nativeNodeToDebugNode.delete(node.nativeNode);
+  }
+  exports.removeDebugNodeFromIndex = removeDebugNodeFromIndex;
   global.define = __define;
   return module.exports;
 });
@@ -6951,7 +7086,7 @@ System.register("angular2/src/platform/dom/debug/by", ["angular2/src/facade/lang
     };
     By.directive = function(type) {
       return function(debugElement) {
-        return debugElement.hasDirective(type);
+        return debugElement.providerTokens.indexOf(type) !== -1;
       };
     };
     return By;
@@ -6961,88 +7096,143 @@ System.register("angular2/src/platform/dom/debug/by", ["angular2/src/facade/lang
   return module.exports;
 });
 
-System.register("angular2/src/platform/dom/debug/debug_element_view_listener", ["angular2/src/facade/lang", "angular2/src/facade/collection", "angular2/src/core/di", "angular2/src/core/linker/view_listener", "angular2/src/platform/dom/dom_adapter", "angular2/src/core/debug/debug_element"], true, function(require, exports, module) {
+System.register("angular2/src/core/debug/debug_renderer", ["angular2/src/facade/lang", "angular2/src/core/debug/debug_node"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
-  var __decorate = (this && this.__decorate) || function(decorators, target, key, desc) {
-    var c = arguments.length,
-        r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-        d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function")
-      r = Reflect.decorate(decorators, target, key, desc);
-    else
-      for (var i = decorators.length - 1; i >= 0; i--)
-        if (d = decorators[i])
-          r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-  };
-  var __metadata = (this && this.__metadata) || function(k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
-      return Reflect.metadata(k, v);
-  };
   var lang_1 = require("angular2/src/facade/lang");
-  var collection_1 = require("angular2/src/facade/collection");
-  var di_1 = require("angular2/src/core/di");
-  var view_listener_1 = require("angular2/src/core/linker/view_listener");
-  var dom_adapter_1 = require("angular2/src/platform/dom/dom_adapter");
-  var debug_element_1 = require("angular2/src/core/debug/debug_element");
-  var NG_ID_PROPERTY = 'ngid';
-  var INSPECT_GLOBAL_NAME = 'ng.probe';
-  var NG_ID_SEPARATOR = '#';
-  var _allIdsByView = new collection_1.Map();
-  var _allViewsById = new collection_1.Map();
-  var _nextId = 0;
-  function _setElementId(element, indices) {
-    if (lang_1.isPresent(element) && dom_adapter_1.DOM.isElementNode(element)) {
-      dom_adapter_1.DOM.setData(element, NG_ID_PROPERTY, indices.join(NG_ID_SEPARATOR));
+  var debug_node_1 = require("angular2/src/core/debug/debug_node");
+  var DebugDomRootRenderer = (function() {
+    function DebugDomRootRenderer(_delegate) {
+      this._delegate = _delegate;
     }
-  }
-  function _getElementId(element) {
-    var elId = dom_adapter_1.DOM.getData(element, NG_ID_PROPERTY);
-    if (lang_1.isPresent(elId)) {
-      return elId.split(NG_ID_SEPARATOR).map(function(partStr) {
-        return lang_1.NumberWrapper.parseInt(partStr, 10);
-      });
-    } else {
-      return null;
-    }
-  }
-  function inspectNativeElement(element) {
-    var elId = _getElementId(element);
-    if (lang_1.isPresent(elId)) {
-      var view = _allViewsById.get(elId[0]);
-      if (lang_1.isPresent(view)) {
-        return new debug_element_1.DebugElement_(view.appElements[elId[1]]);
-      }
-    }
-    return null;
-  }
-  exports.inspectNativeElement = inspectNativeElement;
-  var DebugElementViewListener = (function() {
-    function DebugElementViewListener() {
-      dom_adapter_1.DOM.setGlobalVar(INSPECT_GLOBAL_NAME, inspectNativeElement);
-    }
-    DebugElementViewListener.prototype.onViewCreated = function(view) {
-      var viewId = _nextId++;
-      _allViewsById.set(viewId, view);
-      _allIdsByView.set(view, viewId);
-      for (var i = 0; i < view.appElements.length; i++) {
-        var el = view.appElements[i];
-        _setElementId(el.nativeElement, [viewId, i]);
-      }
+    DebugDomRootRenderer.prototype.renderComponent = function(componentProto) {
+      return new DebugDomRenderer(this, this._delegate.renderComponent(componentProto));
     };
-    DebugElementViewListener.prototype.onViewDestroyed = function(view) {
-      var viewId = _allIdsByView.get(view);
-      _allIdsByView.delete(view);
-      _allViewsById.delete(viewId);
-    };
-    DebugElementViewListener = __decorate([di_1.Injectable(), __metadata('design:paramtypes', [])], DebugElementViewListener);
-    return DebugElementViewListener;
+    return DebugDomRootRenderer;
   })();
-  exports.DebugElementViewListener = DebugElementViewListener;
-  exports.ELEMENT_PROBE_PROVIDERS = lang_1.CONST_EXPR([DebugElementViewListener, lang_1.CONST_EXPR(new di_1.Provider(view_listener_1.AppViewListener, {useExisting: DebugElementViewListener}))]);
-  exports.ELEMENT_PROBE_BINDINGS = exports.ELEMENT_PROBE_PROVIDERS;
+  exports.DebugDomRootRenderer = DebugDomRootRenderer;
+  var DebugDomRenderer = (function() {
+    function DebugDomRenderer(_rootRenderer, _delegate) {
+      this._rootRenderer = _rootRenderer;
+      this._delegate = _delegate;
+    }
+    DebugDomRenderer.prototype.renderComponent = function(componentType) {
+      return this._rootRenderer.renderComponent(componentType);
+    };
+    DebugDomRenderer.prototype.selectRootElement = function(selector) {
+      var nativeEl = this._delegate.selectRootElement(selector);
+      var debugEl = new debug_node_1.DebugElement(nativeEl, null);
+      debug_node_1.indexDebugNode(debugEl);
+      return nativeEl;
+    };
+    DebugDomRenderer.prototype.createElement = function(parentElement, name) {
+      var nativeEl = this._delegate.createElement(parentElement, name);
+      var debugEl = new debug_node_1.DebugElement(nativeEl, debug_node_1.getDebugNode(parentElement));
+      debugEl.name = name;
+      debug_node_1.indexDebugNode(debugEl);
+      return nativeEl;
+    };
+    DebugDomRenderer.prototype.createViewRoot = function(hostElement) {
+      return this._delegate.createViewRoot(hostElement);
+    };
+    DebugDomRenderer.prototype.createTemplateAnchor = function(parentElement) {
+      var comment = this._delegate.createTemplateAnchor(parentElement);
+      var debugEl = new debug_node_1.DebugNode(comment, debug_node_1.getDebugNode(parentElement));
+      debug_node_1.indexDebugNode(debugEl);
+      return comment;
+    };
+    DebugDomRenderer.prototype.createText = function(parentElement, value) {
+      var text = this._delegate.createText(parentElement, value);
+      var debugEl = new debug_node_1.DebugNode(text, debug_node_1.getDebugNode(parentElement));
+      debug_node_1.indexDebugNode(debugEl);
+      return text;
+    };
+    DebugDomRenderer.prototype.projectNodes = function(parentElement, nodes) {
+      var debugParent = debug_node_1.getDebugNode(parentElement);
+      if (lang_1.isPresent(debugParent) && debugParent instanceof debug_node_1.DebugElement) {
+        nodes.forEach(function(node) {
+          debugParent.addChild(debug_node_1.getDebugNode(node));
+        });
+      }
+      return this._delegate.projectNodes(parentElement, nodes);
+    };
+    DebugDomRenderer.prototype.attachViewAfter = function(node, viewRootNodes) {
+      var debugNode = debug_node_1.getDebugNode(node);
+      if (lang_1.isPresent(debugNode)) {
+        var debugParent = debugNode.parent;
+        if (viewRootNodes.length > 0 && lang_1.isPresent(debugParent)) {
+          var debugViewRootNodes = [];
+          viewRootNodes.forEach(function(rootNode) {
+            return debugViewRootNodes.push(debug_node_1.getDebugNode(rootNode));
+          });
+          debugParent.insertChildrenAfter(debugNode, debugViewRootNodes);
+        }
+      }
+      return this._delegate.attachViewAfter(node, viewRootNodes);
+    };
+    DebugDomRenderer.prototype.detachView = function(viewRootNodes) {
+      viewRootNodes.forEach(function(node) {
+        var debugNode = debug_node_1.getDebugNode(node);
+        if (lang_1.isPresent(debugNode) && lang_1.isPresent(debugNode.parent)) {
+          debugNode.parent.removeChild(debugNode);
+        }
+      });
+      return this._delegate.detachView(viewRootNodes);
+    };
+    DebugDomRenderer.prototype.destroyView = function(hostElement, viewAllNodes) {
+      viewAllNodes.forEach(function(node) {
+        debug_node_1.removeDebugNodeFromIndex(debug_node_1.getDebugNode(node));
+      });
+      return this._delegate.destroyView(hostElement, viewAllNodes);
+    };
+    DebugDomRenderer.prototype.listen = function(renderElement, name, callback) {
+      var debugEl = debug_node_1.getDebugNode(renderElement);
+      if (lang_1.isPresent(debugEl)) {
+        debugEl.listeners.push(new debug_node_1.EventListener(name, callback));
+      }
+      return this._delegate.listen(renderElement, name, callback);
+    };
+    DebugDomRenderer.prototype.listenGlobal = function(target, name, callback) {
+      return this._delegate.listenGlobal(target, name, callback);
+    };
+    DebugDomRenderer.prototype.setElementProperty = function(renderElement, propertyName, propertyValue) {
+      var debugEl = debug_node_1.getDebugNode(renderElement);
+      if (lang_1.isPresent(debugEl) && debugEl instanceof debug_node_1.DebugElement) {
+        debugEl.properties.set(propertyName, propertyValue);
+      }
+      return this._delegate.setElementProperty(renderElement, propertyName, propertyValue);
+    };
+    DebugDomRenderer.prototype.setElementAttribute = function(renderElement, attributeName, attributeValue) {
+      var debugEl = debug_node_1.getDebugNode(renderElement);
+      if (lang_1.isPresent(debugEl) && debugEl instanceof debug_node_1.DebugElement) {
+        debugEl.attributes.set(attributeName, attributeValue);
+      }
+      return this._delegate.setElementAttribute(renderElement, attributeName, attributeValue);
+    };
+    DebugDomRenderer.prototype.setBindingDebugInfo = function(renderElement, propertyName, propertyValue) {
+      return this._delegate.setBindingDebugInfo(renderElement, propertyName, propertyValue);
+    };
+    DebugDomRenderer.prototype.setElementDebugInfo = function(renderElement, info) {
+      var debugEl = debug_node_1.getDebugNode(renderElement);
+      debugEl.setDebugInfo(info);
+      return this._delegate.setElementDebugInfo(renderElement, info);
+    };
+    DebugDomRenderer.prototype.setElementClass = function(renderElement, className, isAdd) {
+      return this._delegate.setElementClass(renderElement, className, isAdd);
+    };
+    DebugDomRenderer.prototype.setElementStyle = function(renderElement, styleName, styleValue) {
+      return this._delegate.setElementStyle(renderElement, styleName, styleValue);
+    };
+    DebugDomRenderer.prototype.invokeElementMethod = function(renderElement, methodName, args) {
+      return this._delegate.invokeElementMethod(renderElement, methodName, args);
+    };
+    DebugDomRenderer.prototype.setText = function(renderNode, text) {
+      return this._delegate.setText(renderNode, text);
+    };
+    return DebugDomRenderer;
+  })();
+  exports.DebugDomRenderer = DebugDomRenderer;
   global.define = __define;
   return module.exports;
 });
@@ -9155,205 +9345,6 @@ System.register("angular2/src/core/pipes/pipes", ["angular2/src/facade/lang", "a
   return module.exports;
 });
 
-System.register("angular2/src/core/linker/view_manager", ["angular2/src/core/di", "angular2/src/facade/lang", "angular2/src/facade/collection", "angular2/src/facade/exceptions", "angular2/src/core/linker/view", "angular2/src/core/linker/element", "angular2/src/core/linker/view_listener", "angular2/src/core/render/api", "angular2/src/core/profile/profile", "angular2/src/core/application_tokens", "angular2/src/core/linker/view_type"], true, function(require, exports, module) {
-  var global = System.global,
-      __define = global.define;
-  global.define = undefined;
-  var __extends = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-  var __decorate = (this && this.__decorate) || function(decorators, target, key, desc) {
-    var c = arguments.length,
-        r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-        d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function")
-      r = Reflect.decorate(decorators, target, key, desc);
-    else
-      for (var i = decorators.length - 1; i >= 0; i--)
-        if (d = decorators[i])
-          r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-  };
-  var __metadata = (this && this.__metadata) || function(k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
-      return Reflect.metadata(k, v);
-  };
-  var __param = (this && this.__param) || function(paramIndex, decorator) {
-    return function(target, key) {
-      decorator(target, key, paramIndex);
-    };
-  };
-  var di_1 = require("angular2/src/core/di");
-  var lang_1 = require("angular2/src/facade/lang");
-  var collection_1 = require("angular2/src/facade/collection");
-  var exceptions_1 = require("angular2/src/facade/exceptions");
-  var view_1 = require("angular2/src/core/linker/view");
-  var element_1 = require("angular2/src/core/linker/element");
-  var view_listener_1 = require("angular2/src/core/linker/view_listener");
-  var api_1 = require("angular2/src/core/render/api");
-  var profile_1 = require("angular2/src/core/profile/profile");
-  var application_tokens_1 = require("angular2/src/core/application_tokens");
-  var view_type_1 = require("angular2/src/core/linker/view_type");
-  var AppViewManager = (function() {
-    function AppViewManager() {}
-    return AppViewManager;
-  })();
-  exports.AppViewManager = AppViewManager;
-  var AppViewManager_ = (function(_super) {
-    __extends(AppViewManager_, _super);
-    function AppViewManager_(_renderer, _viewListener, _appId) {
-      _super.call(this);
-      this._renderer = _renderer;
-      this._viewListener = _viewListener;
-      this._appId = _appId;
-      this._nextCompTypeId = 0;
-      this._createRootHostViewScope = profile_1.wtfCreateScope('AppViewManager#createRootHostView()');
-      this._destroyRootHostViewScope = profile_1.wtfCreateScope('AppViewManager#destroyRootHostView()');
-      this._createEmbeddedViewInContainerScope = profile_1.wtfCreateScope('AppViewManager#createEmbeddedViewInContainer()');
-      this._createHostViewInContainerScope = profile_1.wtfCreateScope('AppViewManager#createHostViewInContainer()');
-      this._destroyViewInContainerScope = profile_1.wtfCreateScope('AppViewMananger#destroyViewInContainer()');
-      this._attachViewInContainerScope = profile_1.wtfCreateScope('AppViewMananger#attachViewInContainer()');
-      this._detachViewInContainerScope = profile_1.wtfCreateScope('AppViewMananger#detachViewInContainer()');
-    }
-    AppViewManager_.prototype.getViewContainer = function(location) {
-      return location.internalElement.getViewContainerRef();
-    };
-    AppViewManager_.prototype.getHostElement = function(hostViewRef) {
-      var hostView = hostViewRef.internalView;
-      if (hostView.proto.type !== view_type_1.ViewType.HOST) {
-        throw new exceptions_1.BaseException('This operation is only allowed on host views');
-      }
-      return hostView.appElements[0].ref;
-    };
-    AppViewManager_.prototype.getNamedElementInComponentView = function(hostLocation, variableName) {
-      var appEl = hostLocation.internalElement;
-      var componentView = appEl.componentView;
-      if (lang_1.isBlank(componentView)) {
-        throw new exceptions_1.BaseException("There is no component directive at element " + hostLocation);
-      }
-      for (var i = 0; i < componentView.appElements.length; i++) {
-        var compAppEl = componentView.appElements[i];
-        if (collection_1.StringMapWrapper.contains(compAppEl.proto.directiveVariableBindings, variableName)) {
-          return compAppEl.ref;
-        }
-      }
-      throw new exceptions_1.BaseException("Could not find variable " + variableName);
-    };
-    AppViewManager_.prototype.getComponent = function(hostLocation) {
-      return hostLocation.internalElement.getComponent();
-    };
-    AppViewManager_.prototype.createRootHostView = function(hostViewFactoryRef, overrideSelector, injector, projectableNodes) {
-      if (projectableNodes === void 0) {
-        projectableNodes = null;
-      }
-      var s = this._createRootHostViewScope();
-      var hostViewFactory = hostViewFactoryRef.internalHostViewFactory;
-      var selector = lang_1.isPresent(overrideSelector) ? overrideSelector : hostViewFactory.selector;
-      var view = hostViewFactory.viewFactory(this._renderer, this, null, projectableNodes, selector, null, injector);
-      return profile_1.wtfLeave(s, view.ref);
-    };
-    AppViewManager_.prototype.destroyRootHostView = function(hostViewRef) {
-      var s = this._destroyRootHostViewScope();
-      var hostView = hostViewRef.internalView;
-      hostView.renderer.detachView(view_1.flattenNestedViewRenderNodes(hostView.rootNodesOrAppElements));
-      hostView.destroy();
-      profile_1.wtfLeave(s);
-    };
-    AppViewManager_.prototype.createEmbeddedViewInContainer = function(viewContainerLocation, index, templateRef) {
-      var s = this._createEmbeddedViewInContainerScope();
-      var contextEl = templateRef.elementRef.internalElement;
-      var view = contextEl.embeddedViewFactory(contextEl.parentView.renderer, this, contextEl, contextEl.parentView.projectableNodes, null, null, null);
-      this._attachViewToContainer(view, viewContainerLocation.internalElement, index);
-      return profile_1.wtfLeave(s, view.ref);
-    };
-    AppViewManager_.prototype.createHostViewInContainer = function(viewContainerLocation, index, hostViewFactoryRef, dynamicallyCreatedProviders, projectableNodes) {
-      var s = this._createHostViewInContainerScope();
-      var viewContainerLocation_ = viewContainerLocation;
-      var contextEl = viewContainerLocation_.internalElement;
-      var hostViewFactory = hostViewFactoryRef.internalHostViewFactory;
-      var view = hostViewFactory.viewFactory(contextEl.parentView.renderer, contextEl.parentView.viewManager, contextEl, projectableNodes, null, dynamicallyCreatedProviders, null);
-      this._attachViewToContainer(view, viewContainerLocation_.internalElement, index);
-      return profile_1.wtfLeave(s, view.ref);
-    };
-    AppViewManager_.prototype.destroyViewInContainer = function(viewContainerLocation, index) {
-      var s = this._destroyViewInContainerScope();
-      var view = this._detachViewInContainer(viewContainerLocation.internalElement, index);
-      view.destroy();
-      profile_1.wtfLeave(s);
-    };
-    AppViewManager_.prototype.attachViewInContainer = function(viewContainerLocation, index, viewRef) {
-      var viewRef_ = viewRef;
-      var s = this._attachViewInContainerScope();
-      this._attachViewToContainer(viewRef_.internalView, viewContainerLocation.internalElement, index);
-      return profile_1.wtfLeave(s, viewRef_);
-    };
-    AppViewManager_.prototype.detachViewInContainer = function(viewContainerLocation, index) {
-      var s = this._detachViewInContainerScope();
-      var view = this._detachViewInContainer(viewContainerLocation.internalElement, index);
-      return profile_1.wtfLeave(s, view.ref);
-    };
-    AppViewManager_.prototype.onViewCreated = function(view) {
-      this._viewListener.onViewCreated(view);
-    };
-    AppViewManager_.prototype.onViewDestroyed = function(view) {
-      this._viewListener.onViewDestroyed(view);
-    };
-    AppViewManager_.prototype.createRenderComponentType = function(encapsulation, styles) {
-      return new api_1.RenderComponentType(this._appId + "-" + this._nextCompTypeId++, encapsulation, styles);
-    };
-    AppViewManager_.prototype._attachViewToContainer = function(view, vcAppElement, viewIndex) {
-      if (view.proto.type === view_type_1.ViewType.COMPONENT) {
-        throw new exceptions_1.BaseException("Component views can't be moved!");
-      }
-      var nestedViews = vcAppElement.nestedViews;
-      if (nestedViews == null) {
-        nestedViews = [];
-        vcAppElement.nestedViews = nestedViews;
-      }
-      collection_1.ListWrapper.insert(nestedViews, viewIndex, view);
-      var refNode;
-      if (viewIndex > 0) {
-        var prevView = nestedViews[viewIndex - 1];
-        refNode = prevView.rootNodesOrAppElements.length > 0 ? prevView.rootNodesOrAppElements[prevView.rootNodesOrAppElements.length - 1] : null;
-      } else {
-        refNode = vcAppElement.nativeElement;
-      }
-      if (lang_1.isPresent(refNode)) {
-        var refRenderNode;
-        if (refNode instanceof element_1.AppElement) {
-          refRenderNode = refNode.nativeElement;
-        } else {
-          refRenderNode = refNode;
-        }
-        view.renderer.attachViewAfter(refRenderNode, view_1.flattenNestedViewRenderNodes(view.rootNodesOrAppElements));
-      }
-      vcAppElement.parentView.changeDetector.addContentChild(view.changeDetector);
-      vcAppElement.traverseAndSetQueriesAsDirty();
-    };
-    AppViewManager_.prototype._detachViewInContainer = function(vcAppElement, viewIndex) {
-      var view = collection_1.ListWrapper.removeAt(vcAppElement.nestedViews, viewIndex);
-      if (view.proto.type === view_type_1.ViewType.COMPONENT) {
-        throw new exceptions_1.BaseException("Component views can't be moved!");
-      }
-      vcAppElement.traverseAndSetQueriesAsDirty();
-      view.renderer.detachView(view_1.flattenNestedViewRenderNodes(view.rootNodesOrAppElements));
-      view.changeDetector.remove();
-      return view;
-    };
-    AppViewManager_ = __decorate([di_1.Injectable(), __param(2, di_1.Inject(application_tokens_1.APP_ID)), __metadata('design:paramtypes', [api_1.RootRenderer, view_listener_1.AppViewListener, String])], AppViewManager_);
-    return AppViewManager_;
-  })(AppViewManager);
-  exports.AppViewManager_ = AppViewManager_;
-  global.define = __define;
-  return module.exports;
-});
-
 System.register("angular2/src/core/linker", ["angular2/src/core/linker/directive_resolver", "angular2/src/core/linker/view_resolver", "angular2/src/core/linker/compiler", "angular2/src/core/linker/view_manager", "angular2/src/core/linker/query_list", "angular2/src/core/linker/dynamic_component_loader", "angular2/src/core/linker/element_ref", "angular2/src/core/linker/template_ref", "angular2/src/core/linker/view_ref", "angular2/src/core/linker/view_container_ref", "angular2/src/core/linker/dynamic_component_loader"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
@@ -9441,6 +9432,44 @@ System.register("angular2/src/core/linker/resolved_metadata_cache", ["angular2/s
   })();
   exports.ResolvedMetadataCache = ResolvedMetadataCache;
   exports.CODEGEN_RESOLVED_METADATA_CACHE = new ResolvedMetadataCache(directive_resolver_1.CODEGEN_DIRECTIVE_RESOLVER, pipe_resolver_1.CODEGEN_PIPE_RESOLVER);
+  global.define = __define;
+  return module.exports;
+});
+
+System.register("angular2/src/platform/dom/debug/ng_probe", ["angular2/src/facade/lang", "angular2/src/core/di", "angular2/src/platform/dom/dom_adapter", "angular2/src/core/debug/debug_node", "angular2/src/platform/dom/dom_renderer", "angular2/core", "angular2/src/core/debug/debug_renderer"], true, function(require, exports, module) {
+  var global = System.global,
+      __define = global.define;
+  global.define = undefined;
+  var lang_1 = require("angular2/src/facade/lang");
+  var di_1 = require("angular2/src/core/di");
+  var dom_adapter_1 = require("angular2/src/platform/dom/dom_adapter");
+  var debug_node_1 = require("angular2/src/core/debug/debug_node");
+  var dom_renderer_1 = require("angular2/src/platform/dom/dom_renderer");
+  var core_1 = require("angular2/core");
+  var debug_renderer_1 = require("angular2/src/core/debug/debug_renderer");
+  var INSPECT_GLOBAL_NAME = 'ng.probe';
+  function inspectNativeElement(element) {
+    return debug_node_1.getDebugNode(element);
+  }
+  exports.inspectNativeElement = inspectNativeElement;
+  function _createConditionalRootRenderer(rootRenderer) {
+    if (lang_1.assertionsEnabled()) {
+      return _createRootRenderer(rootRenderer);
+    }
+    return rootRenderer;
+  }
+  function _createRootRenderer(rootRenderer) {
+    dom_adapter_1.DOM.setGlobalVar(INSPECT_GLOBAL_NAME, inspectNativeElement);
+    return new debug_renderer_1.DebugDomRootRenderer(rootRenderer);
+  }
+  exports.ELEMENT_PROBE_PROVIDERS = lang_1.CONST_EXPR([new di_1.Provider(core_1.RootRenderer, {
+    useFactory: _createConditionalRootRenderer,
+    deps: [dom_renderer_1.DomRootRenderer]
+  })]);
+  exports.ELEMENT_PROBE_PROVIDERS_PROD_MODE = lang_1.CONST_EXPR([new di_1.Provider(core_1.RootRenderer, {
+    useFactory: _createRootRenderer,
+    deps: [dom_renderer_1.DomRootRenderer]
+  })]);
   global.define = __define;
   return module.exports;
 });
@@ -10580,7 +10609,7 @@ System.register("angular2/src/core/change_detection/change_detection_jit_generat
   return module.exports;
 });
 
-System.register("angular2/src/core/linker/view", ["angular2/src/facade/collection", "angular2/src/core/change_detection/change_detection", "angular2/src/core/change_detection/interfaces", "angular2/src/core/linker/element", "angular2/src/facade/lang", "angular2/src/facade/exceptions", "angular2/src/core/linker/view_ref", "angular2/src/core/pipes/pipes", "angular2/src/core/render/util", "angular2/src/core/change_detection/interfaces", "angular2/src/core/pipes/pipes", "angular2/src/core/linker/view_type"], true, function(require, exports, module) {
+System.register("angular2/src/core/linker/view", ["angular2/src/facade/collection", "angular2/src/core/change_detection/change_detection", "angular2/src/core/change_detection/interfaces", "angular2/src/core/linker/element", "angular2/src/facade/lang", "angular2/src/facade/exceptions", "angular2/src/core/render/api", "angular2/src/core/linker/view_ref", "angular2/src/core/pipes/pipes", "angular2/src/core/render/util", "angular2/src/core/change_detection/interfaces", "angular2/src/core/pipes/pipes", "angular2/src/core/linker/view_type"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -10606,6 +10635,7 @@ System.register("angular2/src/core/linker/view", ["angular2/src/facade/collectio
   var element_1 = require("angular2/src/core/linker/element");
   var lang_1 = require("angular2/src/facade/lang");
   var exceptions_1 = require("angular2/src/facade/exceptions");
+  var api_1 = require("angular2/src/core/render/api");
   var view_ref_1 = require("angular2/src/core/linker/view_ref");
   var pipes_1 = require("angular2/src/core/pipes/pipes");
   var util_1 = require("angular2/src/core/render/util");
@@ -10659,6 +10689,12 @@ System.register("angular2/src/core/linker/view", ["angular2/src/facade/collectio
       });
       for (var i = 0; i < appElements.length; i++) {
         var appEl = appElements[i];
+        var providerTokens = [];
+        if (lang_1.isPresent(appEl.proto.protoInjector)) {
+          for (var j = 0; j < appEl.proto.protoInjector.numberOfProviders; j++) {
+            providerTokens.push(appEl.proto.protoInjector.getProviderAtIndex(j).key.token);
+          }
+        }
         collection_1.StringMapWrapper.forEach(appEl.proto.directiveVariableBindings, function(directiveIndex, name) {
           if (lang_1.isBlank(directiveIndex)) {
             localsMap.set(name, appEl.nativeElement);
@@ -10666,6 +10702,7 @@ System.register("angular2/src/core/linker/view", ["angular2/src/facade/collectio
             localsMap.set(name, appEl.getDirectiveAtIndex(directiveIndex));
           }
         });
+        this.renderer.setElementDebugInfo(appEl.nativeElement, new api_1.RenderDebugInfo(appEl.getInjector(), appEl.getComponent(), providerTokens, localsMap));
       }
       var parentLocals = null;
       if (this.proto.type !== view_type_1.ViewType.COMPONENT) {
@@ -10853,7 +10890,7 @@ System.register("angular2/src/core/linker/view", ["angular2/src/facade/collectio
   return module.exports;
 });
 
-System.register("angular2/src/core/application_common_providers", ["angular2/src/facade/lang", "angular2/src/core/di", "angular2/src/core/application_tokens", "angular2/src/core/change_detection/change_detection", "angular2/src/core/linker/resolved_metadata_cache", "angular2/src/core/linker/view_manager", "angular2/src/core/linker/view_manager", "angular2/src/core/linker/view_resolver", "angular2/src/core/linker/view_listener", "angular2/src/core/linker/directive_resolver", "angular2/src/core/linker/pipe_resolver", "angular2/src/core/linker/compiler", "angular2/src/core/linker/compiler", "angular2/src/core/linker/dynamic_component_loader", "angular2/src/core/linker/dynamic_component_loader"], true, function(require, exports, module) {
+System.register("angular2/src/core/application_common_providers", ["angular2/src/facade/lang", "angular2/src/core/di", "angular2/src/core/application_tokens", "angular2/src/core/change_detection/change_detection", "angular2/src/core/linker/resolved_metadata_cache", "angular2/src/core/linker/view_manager", "angular2/src/core/linker/view_manager", "angular2/src/core/linker/view_resolver", "angular2/src/core/linker/directive_resolver", "angular2/src/core/linker/pipe_resolver", "angular2/src/core/linker/compiler", "angular2/src/core/linker/compiler", "angular2/src/core/linker/dynamic_component_loader", "angular2/src/core/linker/dynamic_component_loader"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -10865,14 +10902,13 @@ System.register("angular2/src/core/application_common_providers", ["angular2/src
   var view_manager_1 = require("angular2/src/core/linker/view_manager");
   var view_manager_2 = require("angular2/src/core/linker/view_manager");
   var view_resolver_1 = require("angular2/src/core/linker/view_resolver");
-  var view_listener_1 = require("angular2/src/core/linker/view_listener");
   var directive_resolver_1 = require("angular2/src/core/linker/directive_resolver");
   var pipe_resolver_1 = require("angular2/src/core/linker/pipe_resolver");
   var compiler_1 = require("angular2/src/core/linker/compiler");
   var compiler_2 = require("angular2/src/core/linker/compiler");
   var dynamic_component_loader_1 = require("angular2/src/core/linker/dynamic_component_loader");
   var dynamic_component_loader_2 = require("angular2/src/core/linker/dynamic_component_loader");
-  exports.APPLICATION_COMMON_PROVIDERS = lang_1.CONST_EXPR([new di_1.Provider(compiler_1.Compiler, {useClass: compiler_2.Compiler_}), application_tokens_1.APP_ID_RANDOM_PROVIDER, resolved_metadata_cache_1.ResolvedMetadataCache, new di_1.Provider(view_manager_1.AppViewManager, {useClass: view_manager_2.AppViewManager_}), view_listener_1.AppViewListener, view_resolver_1.ViewResolver, new di_1.Provider(change_detection_1.IterableDiffers, {useValue: change_detection_1.defaultIterableDiffers}), new di_1.Provider(change_detection_1.KeyValueDiffers, {useValue: change_detection_1.defaultKeyValueDiffers}), directive_resolver_1.DirectiveResolver, pipe_resolver_1.PipeResolver, new di_1.Provider(dynamic_component_loader_1.DynamicComponentLoader, {useClass: dynamic_component_loader_2.DynamicComponentLoader_})]);
+  exports.APPLICATION_COMMON_PROVIDERS = lang_1.CONST_EXPR([new di_1.Provider(compiler_1.Compiler, {useClass: compiler_2.Compiler_}), application_tokens_1.APP_ID_RANDOM_PROVIDER, resolved_metadata_cache_1.ResolvedMetadataCache, new di_1.Provider(view_manager_1.AppViewManager, {useClass: view_manager_2.AppViewManager_}), view_resolver_1.ViewResolver, new di_1.Provider(change_detection_1.IterableDiffers, {useValue: change_detection_1.defaultIterableDiffers}), new di_1.Provider(change_detection_1.KeyValueDiffers, {useValue: change_detection_1.defaultKeyValueDiffers}), directive_resolver_1.DirectiveResolver, pipe_resolver_1.PipeResolver, new di_1.Provider(dynamic_component_loader_1.DynamicComponentLoader, {useClass: dynamic_component_loader_2.DynamicComponentLoader_})]);
   global.define = __define;
   return module.exports;
 });
@@ -13138,7 +13174,7 @@ System.register("angular2/src/core/metadata/directives", ["angular2/src/facade/l
   return module.exports;
 });
 
-System.register("angular2/core", ["angular2/src/core/metadata", "angular2/src/core/util", "angular2/src/core/prod_mode", "angular2/src/core/di", "angular2/src/facade/facade", "angular2/src/facade/lang", "angular2/src/core/application_ref", "angular2/src/core/application_tokens", "angular2/src/core/zone", "angular2/src/core/render", "angular2/src/core/linker", "angular2/src/core/debug/debug_element", "angular2/src/core/testability/testability", "angular2/src/core/change_detection", "angular2/src/core/platform_directives_and_pipes", "angular2/src/core/platform_common_providers", "angular2/src/core/application_common_providers", "angular2/src/core/reflection/reflection"], true, function(require, exports, module) {
+System.register("angular2/core", ["angular2/src/core/metadata", "angular2/src/core/util", "angular2/src/core/prod_mode", "angular2/src/core/di", "angular2/src/facade/facade", "angular2/src/facade/lang", "angular2/src/core/application_ref", "angular2/src/core/application_tokens", "angular2/src/core/zone", "angular2/src/core/render", "angular2/src/core/linker", "angular2/src/core/debug/debug_node", "angular2/src/core/testability/testability", "angular2/src/core/change_detection", "angular2/src/core/platform_directives_and_pipes", "angular2/src/core/platform_common_providers", "angular2/src/core/application_common_providers", "angular2/src/core/reflection/reflection"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -13168,11 +13204,10 @@ System.register("angular2/core", ["angular2/src/core/metadata", "angular2/src/co
   __export(require("angular2/src/core/zone"));
   __export(require("angular2/src/core/render"));
   __export(require("angular2/src/core/linker"));
-  var debug_element_1 = require("angular2/src/core/debug/debug_element");
-  exports.DebugElement = debug_element_1.DebugElement;
-  exports.Scope = debug_element_1.Scope;
-  exports.inspectElement = debug_element_1.inspectElement;
-  exports.asNativeElements = debug_element_1.asNativeElements;
+  var debug_node_1 = require("angular2/src/core/debug/debug_node");
+  exports.DebugElement = debug_node_1.DebugElement;
+  exports.DebugNode = debug_node_1.DebugNode;
+  exports.asNativeElements = debug_node_1.asNativeElements;
   __export(require("angular2/src/core/testability/testability"));
   __export(require("angular2/src/core/change_detection"));
   __export(require("angular2/src/core/platform_directives_and_pipes"));
@@ -13859,6 +13894,7 @@ System.register("angular2/src/platform/dom/dom_renderer", ["angular2/src/core/di
         this.setElementAttribute(renderElement, propertyName, propertyValue);
       }
     };
+    DomRenderer.prototype.setElementDebugInfo = function(renderElement, info) {};
     DomRenderer.prototype.setElementClass = function(renderElement, className, isAdd) {
       if (isAdd) {
         dom_adapter_1.DOM.addClass(renderElement, className);
@@ -13963,7 +13999,7 @@ System.register("angular2/src/platform/dom/dom_renderer", ["angular2/src/core/di
   return module.exports;
 });
 
-System.register("angular2/platform/common_dom", ["angular2/src/platform/dom/dom_adapter", "angular2/src/platform/dom/dom_renderer", "angular2/src/platform/dom/dom_tokens", "angular2/src/platform/dom/shared_styles_host", "angular2/src/platform/dom/events/dom_events", "angular2/src/platform/dom/events/event_manager", "angular2/src/platform/dom/debug/by", "angular2/src/platform/dom/debug/debug_element_view_listener"], true, function(require, exports, module) {
+System.register("angular2/platform/common_dom", ["angular2/src/platform/dom/dom_adapter", "angular2/src/platform/dom/dom_renderer", "angular2/src/platform/dom/dom_tokens", "angular2/src/platform/dom/shared_styles_host", "angular2/src/platform/dom/events/dom_events", "angular2/src/platform/dom/events/event_manager", "angular2/src/platform/dom/debug/by", "angular2/src/platform/dom/debug/ng_probe"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -13990,7 +14026,7 @@ System.register("angular2/platform/common_dom", ["angular2/src/platform/dom/dom_
   exports.EventManager = event_manager_1.EventManager;
   exports.EventManagerPlugin = event_manager_1.EventManagerPlugin;
   __export(require("angular2/src/platform/dom/debug/by"));
-  __export(require("angular2/src/platform/dom/debug/debug_element_view_listener"));
+  __export(require("angular2/src/platform/dom/debug/ng_probe"));
   global.define = __define;
   return module.exports;
 });
@@ -24464,7 +24500,7 @@ System.register("angular2/compiler", ["angular2/src/compiler/url_resolver", "ang
   return module.exports;
 });
 
-System.register("angular2/src/platform/browser_common", ["angular2/src/facade/lang", "angular2/src/core/di", "angular2/core", "angular2/common", "angular2/src/core/testability/testability", "angular2/src/platform/dom/dom_adapter", "angular2/src/platform/dom/events/dom_events", "angular2/src/platform/dom/events/key_events", "angular2/src/platform/dom/events/hammer_gestures", "angular2/src/platform/dom/dom_tokens", "angular2/src/platform/dom/dom_renderer", "angular2/src/platform/dom/shared_styles_host", "angular2/src/platform/dom/shared_styles_host", "angular2/src/animate/browser_details", "angular2/src/animate/animation_builder", "angular2/src/platform/browser/browser_adapter", "angular2/src/platform/browser/testability", "angular2/src/core/profile/wtf_init", "angular2/src/platform/dom/events/event_manager", "angular2/src/platform/dom/dom_tokens", "angular2/src/platform/browser/title", "angular2/platform/common_dom", "angular2/src/platform/browser/browser_adapter", "angular2/src/platform/browser/tools/tools"], true, function(require, exports, module) {
+System.register("angular2/src/platform/browser_common", ["angular2/src/facade/lang", "angular2/src/core/di", "angular2/core", "angular2/common", "angular2/src/core/testability/testability", "angular2/src/platform/dom/dom_adapter", "angular2/src/platform/dom/events/dom_events", "angular2/src/platform/dom/events/key_events", "angular2/src/platform/dom/events/hammer_gestures", "angular2/src/platform/dom/dom_tokens", "angular2/src/platform/dom/dom_renderer", "angular2/src/platform/dom/shared_styles_host", "angular2/src/platform/dom/shared_styles_host", "angular2/src/animate/browser_details", "angular2/src/animate/animation_builder", "angular2/src/platform/browser/browser_adapter", "angular2/src/platform/browser/testability", "angular2/src/core/profile/wtf_init", "angular2/src/platform/dom/events/event_manager", "angular2/platform/common_dom", "angular2/src/platform/dom/dom_tokens", "angular2/src/platform/browser/title", "angular2/platform/common_dom", "angular2/src/platform/browser/browser_adapter", "angular2/src/platform/browser/tools/tools"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -24487,16 +24523,16 @@ System.register("angular2/src/platform/browser_common", ["angular2/src/facade/la
   var testability_2 = require("angular2/src/platform/browser/testability");
   var wtf_init_1 = require("angular2/src/core/profile/wtf_init");
   var event_manager_1 = require("angular2/src/platform/dom/events/event_manager");
+  var common_dom_1 = require("angular2/platform/common_dom");
   var dom_tokens_2 = require("angular2/src/platform/dom/dom_tokens");
   exports.DOCUMENT = dom_tokens_2.DOCUMENT;
   var title_1 = require("angular2/src/platform/browser/title");
   exports.Title = title_1.Title;
-  var common_dom_1 = require("angular2/platform/common_dom");
-  exports.DebugElementViewListener = common_dom_1.DebugElementViewListener;
-  exports.ELEMENT_PROBE_PROVIDERS = common_dom_1.ELEMENT_PROBE_PROVIDERS;
-  exports.ELEMENT_PROBE_BINDINGS = common_dom_1.ELEMENT_PROBE_BINDINGS;
-  exports.inspectNativeElement = common_dom_1.inspectNativeElement;
-  exports.By = common_dom_1.By;
+  var common_dom_2 = require("angular2/platform/common_dom");
+  exports.ELEMENT_PROBE_PROVIDERS = common_dom_2.ELEMENT_PROBE_PROVIDERS;
+  exports.ELEMENT_PROBE_PROVIDERS_PROD_MODE = common_dom_2.ELEMENT_PROBE_PROVIDERS_PROD_MODE;
+  exports.inspectNativeElement = common_dom_2.inspectNativeElement;
+  exports.By = common_dom_2.By;
   var browser_adapter_2 = require("angular2/src/platform/browser/browser_adapter");
   exports.BrowserDomAdapter = browser_adapter_2.BrowserDomAdapter;
   var tools_1 = require("angular2/src/platform/browser/tools/tools");
@@ -24533,7 +24569,7 @@ System.register("angular2/src/platform/browser_common", ["angular2/src/facade/la
   }), new di_1.Provider(event_manager_1.EVENT_MANAGER_PLUGINS, {
     useClass: hammer_gestures_1.HammerGesturesPlugin,
     multi: true
-  }), new di_1.Provider(dom_renderer_1.DomRootRenderer, {useClass: dom_renderer_1.DomRootRenderer_}), new di_1.Provider(core_1.RootRenderer, {useExisting: dom_renderer_1.DomRootRenderer}), new di_1.Provider(shared_styles_host_2.SharedStylesHost, {useExisting: shared_styles_host_1.DomSharedStylesHost}), shared_styles_host_1.DomSharedStylesHost, testability_1.Testability, browser_details_1.BrowserDetails, animation_builder_1.AnimationBuilder, event_manager_1.EventManager]);
+  }), new di_1.Provider(dom_renderer_1.DomRootRenderer, {useClass: dom_renderer_1.DomRootRenderer_}), new di_1.Provider(core_1.RootRenderer, {useExisting: dom_renderer_1.DomRootRenderer}), new di_1.Provider(shared_styles_host_2.SharedStylesHost, {useExisting: shared_styles_host_1.DomSharedStylesHost}), shared_styles_host_1.DomSharedStylesHost, testability_1.Testability, browser_details_1.BrowserDetails, animation_builder_1.AnimationBuilder, event_manager_1.EventManager, common_dom_1.ELEMENT_PROBE_PROVIDERS]);
   function initDomAdapter() {
     browser_adapter_1.BrowserDomAdapter.makeCurrent();
     wtf_init_1.wtfInit();
@@ -24552,8 +24588,8 @@ System.register("angular2/platform/browser", ["angular2/src/core/angular_entrypo
   exports.AngularEntrypoint = angular_entrypoint_1.AngularEntrypoint;
   var browser_common_1 = require("angular2/src/platform/browser_common");
   exports.BROWSER_PROVIDERS = browser_common_1.BROWSER_PROVIDERS;
-  exports.ELEMENT_PROBE_BINDINGS = browser_common_1.ELEMENT_PROBE_BINDINGS;
   exports.ELEMENT_PROBE_PROVIDERS = browser_common_1.ELEMENT_PROBE_PROVIDERS;
+  exports.ELEMENT_PROBE_PROVIDERS_PROD_MODE = browser_common_1.ELEMENT_PROBE_PROVIDERS_PROD_MODE;
   exports.inspectNativeElement = browser_common_1.inspectNativeElement;
   exports.BrowserDomAdapter = browser_common_1.BrowserDomAdapter;
   exports.By = browser_common_1.By;

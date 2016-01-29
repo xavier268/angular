@@ -62,11 +62,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	exports.core = __webpack_require__(2);
-	exports.common = __webpack_require__(98);
-	exports.compiler = __webpack_require__(141);
+	exports.common = __webpack_require__(97);
+	exports.compiler = __webpack_require__(140);
 	exports.platform = {
-	  browser: __webpack_require__(174),
-	  common_dom: __webpack_require__(198)
+	  browser: __webpack_require__(173),
+	  common_dom: __webpack_require__(196)
 	};
 	exports.http = __webpack_require__(204);
 	exports.router = __webpack_require__(219);
@@ -105,19 +105,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.APP_INITIALIZER = application_tokens_1.APP_INITIALIZER;
 	exports.PACKAGE_ROOT_URL = application_tokens_1.PACKAGE_ROOT_URL;
 	exports.PLATFORM_INITIALIZER = application_tokens_1.PLATFORM_INITIALIZER;
+	__export(__webpack_require__(86));
 	__export(__webpack_require__(87));
 	__export(__webpack_require__(88));
-	__export(__webpack_require__(89));
-	var debug_element_1 = __webpack_require__(92);
-	exports.DebugElement = debug_element_1.DebugElement;
-	exports.Scope = debug_element_1.Scope;
-	exports.inspectElement = debug_element_1.inspectElement;
-	exports.asNativeElements = debug_element_1.asNativeElements;
+	var debug_node_1 = __webpack_require__(91);
+	exports.DebugElement = debug_node_1.DebugElement;
+	exports.DebugNode = debug_node_1.DebugNode;
+	exports.asNativeElements = debug_node_1.asNativeElements;
 	__export(__webpack_require__(68));
 	__export(__webpack_require__(24));
+	__export(__webpack_require__(92));
 	__export(__webpack_require__(93));
 	__export(__webpack_require__(94));
-	__export(__webpack_require__(95));
 	__export(__webpack_require__(16));
 
 
@@ -12481,7 +12480,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var testability_1 = __webpack_require__(68);
 	var dynamic_component_loader_1 = __webpack_require__(69);
 	var exceptions_1 = __webpack_require__(14);
-	var console_1 = __webpack_require__(86);
+	var console_1 = __webpack_require__(85);
 	var profile_1 = __webpack_require__(45);
 	var lang_2 = __webpack_require__(5);
 	/**
@@ -13781,6 +13780,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var element_1 = __webpack_require__(72);
 	var lang_1 = __webpack_require__(5);
 	var exceptions_1 = __webpack_require__(14);
+	var api_1 = __webpack_require__(76);
 	var view_ref_1 = __webpack_require__(80);
 	var pipes_1 = __webpack_require__(81);
 	var util_1 = __webpack_require__(83);
@@ -13840,6 +13840,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        collection_1.StringMapWrapper.forEach(this.proto.templateVariableBindings, function (templateName, _) { localsMap.set(templateName, null); });
 	        for (var i = 0; i < appElements.length; i++) {
 	            var appEl = appElements[i];
+	            var providerTokens = [];
+	            if (lang_1.isPresent(appEl.proto.protoInjector)) {
+	                for (var j = 0; j < appEl.proto.protoInjector.numberOfProviders; j++) {
+	                    providerTokens.push(appEl.proto.protoInjector.getProviderAtIndex(j).key.token);
+	                }
+	            }
 	            collection_1.StringMapWrapper.forEach(appEl.proto.directiveVariableBindings, function (directiveIndex, name) {
 	                if (lang_1.isBlank(directiveIndex)) {
 	                    localsMap.set(name, appEl.nativeElement);
@@ -13848,6 +13854,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    localsMap.set(name, appEl.getDirectiveAtIndex(directiveIndex));
 	                }
 	            });
+	            this.renderer.setElementDebugInfo(appEl.nativeElement, new api_1.RenderDebugInfo(appEl.getInjector(), appEl.getComponent(), providerTokens, localsMap));
 	        }
 	        var parentLocals = null;
 	        if (this.proto.type !== view_type_1.ViewType.COMPONENT) {
@@ -15099,6 +15106,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return RenderComponentType;
 	})();
 	exports.RenderComponentType = RenderComponentType;
+	var RenderDebugInfo = (function () {
+	    function RenderDebugInfo(injector, component, providerTokens, locals) {
+	        this.injector = injector;
+	        this.component = component;
+	        this.providerTokens = providerTokens;
+	        this.locals = locals;
+	    }
+	    return RenderDebugInfo;
+	})();
+	exports.RenderDebugInfo = RenderDebugInfo;
 	var Renderer = (function () {
 	    function Renderer() {
 	    }
@@ -15584,7 +15601,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var exceptions_1 = __webpack_require__(14);
 	var view_1 = __webpack_require__(71);
 	var element_1 = __webpack_require__(72);
-	var view_listener_1 = __webpack_require__(85);
 	var api_1 = __webpack_require__(76);
 	var profile_1 = __webpack_require__(45);
 	var application_tokens_1 = __webpack_require__(67);
@@ -15603,10 +15619,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.AppViewManager = AppViewManager;
 	var AppViewManager_ = (function (_super) {
 	    __extends(AppViewManager_, _super);
-	    function AppViewManager_(_renderer, _viewListener, _appId) {
+	    function AppViewManager_(_renderer, _appId) {
 	        _super.call(this);
 	        this._renderer = _renderer;
-	        this._viewListener = _viewListener;
 	        this._appId = _appId;
 	        this._nextCompTypeId = 0;
 	        /** @internal */
@@ -15703,9 +15718,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return profile_1.wtfLeave(s, view.ref);
 	    };
 	    /** @internal */
-	    AppViewManager_.prototype.onViewCreated = function (view) { this._viewListener.onViewCreated(view); };
+	    AppViewManager_.prototype.onViewCreated = function (view) { };
 	    /** @internal */
-	    AppViewManager_.prototype.onViewDestroyed = function (view) { this._viewListener.onViewDestroyed(view); };
+	    AppViewManager_.prototype.onViewDestroyed = function (view) { };
 	    /** @internal */
 	    AppViewManager_.prototype.createRenderComponentType = function (encapsulation, styles) {
 	        return new api_1.RenderComponentType(this._appId + "-" + this._nextCompTypeId++, encapsulation, styles);
@@ -15759,8 +15774,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    AppViewManager_ = __decorate([
 	        di_1.Injectable(),
-	        __param(2, di_1.Inject(application_tokens_1.APP_ID)), 
-	        __metadata('design:paramtypes', [api_1.RootRenderer, view_listener_1.AppViewListener, String])
+	        __param(1, di_1.Inject(application_tokens_1.APP_ID)), 
+	        __metadata('design:paramtypes', [api_1.RootRenderer, String])
 	    ], AppViewManager_);
 	    return AppViewManager_;
 	})(AppViewManager);
@@ -15769,37 +15784,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 85 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var di_1 = __webpack_require__(6);
-	/**
-	 * Listener for view creation / destruction.
-	 */
-	var AppViewListener = (function () {
-	    function AppViewListener() {
-	    }
-	    AppViewListener.prototype.onViewCreated = function (view) { };
-	    AppViewListener.prototype.onViewDestroyed = function (view) { };
-	    AppViewListener = __decorate([
-	        di_1.Injectable(), 
-	        __metadata('design:paramtypes', [])
-	    ], AppViewListener);
-	    return AppViewListener;
-	})();
-	exports.AppViewListener = AppViewListener;
-
-
-/***/ },
-/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -15827,7 +15811,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 87 */
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Public API for Zone
@@ -15837,7 +15821,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 88 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Public API for render
@@ -15848,13 +15832,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 89 */
+/* 88 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Public API for compiler
-	var directive_resolver_1 = __webpack_require__(90);
+	var directive_resolver_1 = __webpack_require__(89);
 	exports.DirectiveResolver = directive_resolver_1.DirectiveResolver;
-	var view_resolver_1 = __webpack_require__(91);
+	var view_resolver_1 = __webpack_require__(90);
 	exports.ViewResolver = view_resolver_1.ViewResolver;
 	var compiler_1 = __webpack_require__(70);
 	exports.Compiler = compiler_1.Compiler;
@@ -15880,7 +15864,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 90 */
+/* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -16029,7 +16013,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 91 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -16140,7 +16124,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 92 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -16149,256 +16133,162 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var lang_1 = __webpack_require__(5);
-	var exceptions_1 = __webpack_require__(14);
-	/**
-	 * A DebugElement contains information from the Angular compiler about an
-	 * element and provides access to the corresponding ElementInjector and
-	 * underlying DOM Element, as well as a way to query for children.
-	 *
-	 * A DebugElement can be obtained from a {@link ComponentFixture} or from an
-	 * {@link ElementRef} via {@link inspectElement}.
-	 */
-	var DebugElement = (function () {
-	    function DebugElement() {
+	var collection_1 = __webpack_require__(12);
+	var EventListener = (function () {
+	    function EventListener(name, callback) {
+	        this.name = name;
+	        this.callback = callback;
 	    }
-	    Object.defineProperty(DebugElement.prototype, "componentInstance", {
-	        /**
-	         * Return the instance of the component associated with this element, if any.
-	         */
-	        get: function () { return exceptions_1.unimplemented(); },
-	        enumerable: true,
-	        configurable: true
-	    });
 	    ;
-	    Object.defineProperty(DebugElement.prototype, "nativeElement", {
-	        /**
-	         * Return the native HTML element for this DebugElement.
-	         */
-	        get: function () { return exceptions_1.unimplemented(); },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    ;
-	    Object.defineProperty(DebugElement.prototype, "elementRef", {
-	        /**
-	         * Return an Angular {@link ElementRef} for this element.
-	         */
-	        get: function () { return exceptions_1.unimplemented(); },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    ;
-	    Object.defineProperty(DebugElement.prototype, "children", {
-	        /**
-	         * Get child DebugElements from within the Light DOM.
-	         *
-	         * @return {DebugElement[]}
-	         */
-	        get: function () { return exceptions_1.unimplemented(); },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    ;
-	    Object.defineProperty(DebugElement.prototype, "componentViewChildren", {
-	        /**
-	         * Get the root DebugElement children of a component. Returns an empty
-	         * list if the current DebugElement is not a component root.
-	         *
-	         * @return {DebugElement[]}
-	         */
-	        get: function () { return exceptions_1.unimplemented(); },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    ;
-	    /**
-	     * Return the first descendant TestElement matching the given predicate
-	     * and scope.
-	     *
-	     * @param {Function: boolean} predicate
-	     * @param {Scope} scope
-	     *
-	     * @return {DebugElement}
-	     */
-	    DebugElement.prototype.query = function (predicate, scope) {
-	        if (scope === void 0) { scope = Scope.all; }
-	        var results = this.queryAll(predicate, scope);
+	    return EventListener;
+	})();
+	exports.EventListener = EventListener;
+	var DebugNode = (function () {
+	    function DebugNode(nativeNode, parent) {
+	        this.nativeNode = nativeNode;
+	        if (lang_1.isPresent(parent) && parent instanceof DebugElement) {
+	            parent.addChild(this);
+	        }
+	        else {
+	            this.parent = null;
+	        }
+	        this.listeners = [];
+	        this.providerTokens = [];
+	    }
+	    DebugNode.prototype.setDebugInfo = function (info) {
+	        this.injector = info.injector;
+	        this.providerTokens = info.providerTokens;
+	        this.locals = info.locals;
+	        this.componentInstance = info.component;
+	    };
+	    DebugNode.prototype.inject = function (token) { return this.injector.get(token); };
+	    DebugNode.prototype.getLocal = function (name) { return this.locals.get(name); };
+	    return DebugNode;
+	})();
+	exports.DebugNode = DebugNode;
+	var DebugElement = (function (_super) {
+	    __extends(DebugElement, _super);
+	    function DebugElement(nativeNode, parent) {
+	        _super.call(this, nativeNode, parent);
+	        this.properties = new Map();
+	        this.attributes = new Map();
+	        this.childNodes = [];
+	        this.nativeElement = nativeNode;
+	    }
+	    DebugElement.prototype.addChild = function (child) {
+	        if (lang_1.isPresent(child)) {
+	            this.childNodes.push(child);
+	            child.parent = this;
+	        }
+	    };
+	    DebugElement.prototype.removeChild = function (child) {
+	        var childIndex = this.childNodes.indexOf(child);
+	        if (childIndex !== -1) {
+	            child.parent = null;
+	            this.childNodes.splice(childIndex, 1);
+	        }
+	    };
+	    DebugElement.prototype.insertChildrenAfter = function (child, newChildren) {
+	        var siblingIndex = this.childNodes.indexOf(child);
+	        if (siblingIndex !== -1) {
+	            var previousChildren = this.childNodes.slice(0, siblingIndex + 1);
+	            var nextChildren = this.childNodes.slice(siblingIndex + 1);
+	            this.childNodes =
+	                collection_1.ListWrapper.concat(collection_1.ListWrapper.concat(previousChildren, newChildren), nextChildren);
+	            for (var i = 0; i < newChildren.length; ++i) {
+	                var newChild = newChildren[i];
+	                if (lang_1.isPresent(newChild.parent)) {
+	                    newChild.parent.removeChild(newChild);
+	                }
+	                newChild.parent = this;
+	            }
+	        }
+	    };
+	    DebugElement.prototype.query = function (predicate) {
+	        var results = this.queryAll(predicate);
 	        return results.length > 0 ? results[0] : null;
 	    };
-	    /**
-	     * Return descendant TestElememts matching the given predicate
-	     * and scope.
-	     *
-	     * @param {Function: boolean} predicate
-	     * @param {Scope} scope
-	     *
-	     * @return {DebugElement[]}
-	     */
-	    DebugElement.prototype.queryAll = function (predicate, scope) {
-	        if (scope === void 0) { scope = Scope.all; }
-	        var elementsInScope = scope(this);
-	        return elementsInScope.filter(predicate);
+	    DebugElement.prototype.queryAll = function (predicate) {
+	        var matches = [];
+	        _queryElementChildren(this, predicate, matches);
+	        return matches;
+	    };
+	    DebugElement.prototype.queryAllNodes = function (predicate) {
+	        var matches = [];
+	        _queryNodeChildren(this, predicate, matches);
+	        return matches;
+	    };
+	    Object.defineProperty(DebugElement.prototype, "children", {
+	        get: function () {
+	            var children = [];
+	            this.childNodes.forEach(function (node) {
+	                if (node instanceof DebugElement) {
+	                    children.push(node);
+	                }
+	            });
+	            return children;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    DebugElement.prototype.triggerEventHandler = function (eventName, eventObj) {
+	        this.listeners.forEach(function (listener) {
+	            if (listener.name == eventName) {
+	                listener.callback(eventObj);
+	            }
+	        });
 	    };
 	    return DebugElement;
-	})();
+	})(DebugNode);
 	exports.DebugElement = DebugElement;
-	var DebugElement_ = (function (_super) {
-	    __extends(DebugElement_, _super);
-	    function DebugElement_(_appElement) {
-	        _super.call(this);
-	        this._appElement = _appElement;
-	    }
-	    Object.defineProperty(DebugElement_.prototype, "componentInstance", {
-	        get: function () {
-	            if (!lang_1.isPresent(this._appElement)) {
-	                return null;
-	            }
-	            return this._appElement.getComponent();
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(DebugElement_.prototype, "nativeElement", {
-	        get: function () { return this.elementRef.nativeElement; },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(DebugElement_.prototype, "elementRef", {
-	        get: function () { return this._appElement.ref; },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    DebugElement_.prototype.getDirectiveInstance = function (directiveIndex) {
-	        return this._appElement.getDirectiveAtIndex(directiveIndex);
-	    };
-	    Object.defineProperty(DebugElement_.prototype, "children", {
-	        get: function () {
-	            return this._getChildElements(this._appElement.parentView, this._appElement);
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(DebugElement_.prototype, "componentViewChildren", {
-	        get: function () {
-	            if (!lang_1.isPresent(this._appElement.componentView)) {
-	                // The current element is not a component.
-	                return [];
-	            }
-	            return this._getChildElements(this._appElement.componentView, null);
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    DebugElement_.prototype.triggerEventHandler = function (eventName, eventObj) {
-	        this._appElement.parentView.triggerEventHandlers(eventName, eventObj, this._appElement.proto.index);
-	    };
-	    DebugElement_.prototype.hasDirective = function (type) {
-	        if (!lang_1.isPresent(this._appElement)) {
-	            return false;
-	        }
-	        return this._appElement.hasDirective(type);
-	    };
-	    DebugElement_.prototype.inject = function (type) {
-	        if (!lang_1.isPresent(this._appElement)) {
-	            return null;
-	        }
-	        return this._appElement.get(type);
-	    };
-	    DebugElement_.prototype.getLocal = function (name) { return this._appElement.parentView.locals.get(name); };
-	    /** @internal */
-	    DebugElement_.prototype._getChildElements = function (view, parentAppElement) {
-	        var _this = this;
-	        var els = [];
-	        for (var i = 0; i < view.appElements.length; ++i) {
-	            var appEl = view.appElements[i];
-	            if (appEl.parent == parentAppElement) {
-	                els.push(new DebugElement_(appEl));
-	                var views = appEl.nestedViews;
-	                if (lang_1.isPresent(views)) {
-	                    views.forEach(function (nextView) { els = els.concat(_this._getChildElements(nextView, null)); });
-	                }
-	            }
-	        }
-	        return els;
-	    };
-	    return DebugElement_;
-	})(DebugElement);
-	exports.DebugElement_ = DebugElement_;
-	/**
-	 * Returns a {@link DebugElement} for an {@link ElementRef}.
-	 *
-	 * @param {ElementRef}: elementRef
-	 * @return {DebugElement}
-	 */
-	function inspectElement(elementRef) {
-	    return new DebugElement_(elementRef.internalElement);
-	}
-	exports.inspectElement = inspectElement;
-	/**
-	 * Maps an array of {@link DebugElement}s to an array of native DOM elements.
-	 */
-	function asNativeElements(arr) {
-	    return arr.map(function (debugEl) { return debugEl.nativeElement; });
+	function asNativeElements(debugEls) {
+	    return debugEls.map(function (el) { return el.nativeElement; });
 	}
 	exports.asNativeElements = asNativeElements;
-	/**
-	 * Set of scope functions used with {@link DebugElement}'s query functionality.
-	 */
-	var Scope = (function () {
-	    function Scope() {
+	function _queryElementChildren(element, predicate, matches) {
+	    element.childNodes.forEach(function (node) {
+	        if (node instanceof DebugElement) {
+	            if (predicate(node)) {
+	                matches.push(node);
+	            }
+	            _queryElementChildren(node, predicate, matches);
+	        }
+	    });
+	}
+	function _queryNodeChildren(parentNode, predicate, matches) {
+	    if (parentNode instanceof DebugElement) {
+	        parentNode.childNodes.forEach(function (node) {
+	            if (predicate(node)) {
+	                matches.push(node);
+	            }
+	            if (node instanceof DebugElement) {
+	                _queryNodeChildren(node, predicate, matches);
+	            }
+	        });
 	    }
-	    /**
-	     * Scope queries to both the light dom and view of an element and its
-	     * children.
-	     *
-	     * ## Example
-	     *
-	     * {@example core/debug/ts/debug_element/debug_element.ts region='scope_all'}
-	     */
-	    Scope.all = function (debugElement) {
-	        var scope = [];
-	        scope.push(debugElement);
-	        debugElement.children.forEach(function (child) { return scope = scope.concat(Scope.all(child)); });
-	        debugElement.componentViewChildren.forEach(function (child) { return scope = scope.concat(Scope.all(child)); });
-	        return scope;
-	    };
-	    /**
-	     * Scope queries to the light dom of an element and its children.
-	     *
-	     * ## Example
-	     *
-	     * {@example core/debug/ts/debug_element/debug_element.ts region='scope_light'}
-	     */
-	    Scope.light = function (debugElement) {
-	        var scope = [];
-	        debugElement.children.forEach(function (child) {
-	            scope.push(child);
-	            scope = scope.concat(Scope.light(child));
-	        });
-	        return scope;
-	    };
-	    /**
-	     * Scope queries to the view of an element of its children.
-	     *
-	     * ## Example
-	     *
-	     * {@example core/debug/ts/debug_element/debug_element.ts region='scope_view'}
-	     */
-	    Scope.view = function (debugElement) {
-	        var scope = [];
-	        debugElement.componentViewChildren.forEach(function (child) {
-	            scope.push(child);
-	            scope = scope.concat(Scope.light(child));
-	        });
-	        return scope;
-	    };
-	    return Scope;
-	})();
-	exports.Scope = Scope;
+	}
+	// Need to keep the nodes in a global Map so that multiple angular apps are supported.
+	var _nativeNodeToDebugNode = new Map();
+	function getDebugNode(nativeNode) {
+	    return _nativeNodeToDebugNode.get(nativeNode);
+	}
+	exports.getDebugNode = getDebugNode;
+	function getAllDebugNodes() {
+	    return collection_1.MapWrapper.values(_nativeNodeToDebugNode);
+	}
+	exports.getAllDebugNodes = getAllDebugNodes;
+	function indexDebugNode(node) {
+	    _nativeNodeToDebugNode.set(node.nativeNode, node);
+	}
+	exports.indexDebugNode = indexDebugNode;
+	function removeDebugNodeFromIndex(node) {
+	    _nativeNodeToDebugNode.delete(node.nativeNode);
+	}
+	exports.removeDebugNodeFromIndex = removeDebugNodeFromIndex;
 
 
 /***/ },
-/* 93 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var di_1 = __webpack_require__(6);
@@ -16455,12 +16345,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 94 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var lang_1 = __webpack_require__(5);
 	var di_1 = __webpack_require__(6);
-	var console_1 = __webpack_require__(86);
+	var console_1 = __webpack_require__(85);
 	var reflection_1 = __webpack_require__(16);
 	var testability_1 = __webpack_require__(68);
 	function _reflector() {
@@ -16473,20 +16363,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 95 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var lang_1 = __webpack_require__(5);
 	var di_1 = __webpack_require__(6);
 	var application_tokens_1 = __webpack_require__(67);
 	var change_detection_1 = __webpack_require__(25);
-	var resolved_metadata_cache_1 = __webpack_require__(96);
+	var resolved_metadata_cache_1 = __webpack_require__(95);
 	var view_manager_1 = __webpack_require__(84);
 	var view_manager_2 = __webpack_require__(84);
-	var view_resolver_1 = __webpack_require__(91);
-	var view_listener_1 = __webpack_require__(85);
-	var directive_resolver_1 = __webpack_require__(90);
-	var pipe_resolver_1 = __webpack_require__(97);
+	var view_resolver_1 = __webpack_require__(90);
+	var directive_resolver_1 = __webpack_require__(89);
+	var pipe_resolver_1 = __webpack_require__(96);
 	var compiler_1 = __webpack_require__(70);
 	var compiler_2 = __webpack_require__(70);
 	var dynamic_component_loader_1 = __webpack_require__(69);
@@ -16500,7 +16389,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    application_tokens_1.APP_ID_RANDOM_PROVIDER,
 	    resolved_metadata_cache_1.ResolvedMetadataCache,
 	    new di_1.Provider(view_manager_1.AppViewManager, { useClass: view_manager_2.AppViewManager_ }),
-	    view_listener_1.AppViewListener,
 	    view_resolver_1.ViewResolver,
 	    new di_1.Provider(change_detection_1.IterableDiffers, { useValue: change_detection_1.defaultIterableDiffers }),
 	    new di_1.Provider(change_detection_1.KeyValueDiffers, { useValue: change_detection_1.defaultKeyValueDiffers }),
@@ -16511,7 +16399,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 96 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -16526,9 +16414,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	var di_1 = __webpack_require__(6);
 	var lang_1 = __webpack_require__(5);
 	var element_1 = __webpack_require__(72);
-	var directive_resolver_1 = __webpack_require__(90);
+	var directive_resolver_1 = __webpack_require__(89);
 	var pipe_provider_1 = __webpack_require__(79);
-	var pipe_resolver_1 = __webpack_require__(97);
+	var pipe_resolver_1 = __webpack_require__(96);
 	var ResolvedMetadataCache = (function () {
 	    function ResolvedMetadataCache(_directiveResolver, _pipeResolver) {
 	        this._directiveResolver = _directiveResolver;
@@ -16563,7 +16451,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 97 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -16617,20 +16505,20 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 98 */
+/* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(99));
-	__export(__webpack_require__(109));
-	__export(__webpack_require__(117));
-	__export(__webpack_require__(140));
+	__export(__webpack_require__(98));
+	__export(__webpack_require__(108));
+	__export(__webpack_require__(116));
+	__export(__webpack_require__(139));
 
 
 /***/ },
-/* 99 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -16638,30 +16526,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @description
 	 * This module provides a set of common Pipes.
 	 */
-	var async_pipe_1 = __webpack_require__(100);
-	var uppercase_pipe_1 = __webpack_require__(102);
-	var lowercase_pipe_1 = __webpack_require__(103);
-	var json_pipe_1 = __webpack_require__(104);
-	var slice_pipe_1 = __webpack_require__(105);
-	var date_pipe_1 = __webpack_require__(106);
-	var number_pipe_1 = __webpack_require__(108);
+	var async_pipe_1 = __webpack_require__(99);
+	var uppercase_pipe_1 = __webpack_require__(101);
+	var lowercase_pipe_1 = __webpack_require__(102);
+	var json_pipe_1 = __webpack_require__(103);
+	var slice_pipe_1 = __webpack_require__(104);
+	var date_pipe_1 = __webpack_require__(105);
+	var number_pipe_1 = __webpack_require__(107);
 	var lang_1 = __webpack_require__(5);
-	var async_pipe_2 = __webpack_require__(100);
+	var async_pipe_2 = __webpack_require__(99);
 	exports.AsyncPipe = async_pipe_2.AsyncPipe;
-	var date_pipe_2 = __webpack_require__(106);
+	var date_pipe_2 = __webpack_require__(105);
 	exports.DatePipe = date_pipe_2.DatePipe;
-	var json_pipe_2 = __webpack_require__(104);
+	var json_pipe_2 = __webpack_require__(103);
 	exports.JsonPipe = json_pipe_2.JsonPipe;
-	var slice_pipe_2 = __webpack_require__(105);
+	var slice_pipe_2 = __webpack_require__(104);
 	exports.SlicePipe = slice_pipe_2.SlicePipe;
-	var lowercase_pipe_2 = __webpack_require__(103);
+	var lowercase_pipe_2 = __webpack_require__(102);
 	exports.LowerCasePipe = lowercase_pipe_2.LowerCasePipe;
-	var number_pipe_2 = __webpack_require__(108);
+	var number_pipe_2 = __webpack_require__(107);
 	exports.NumberPipe = number_pipe_2.NumberPipe;
 	exports.DecimalPipe = number_pipe_2.DecimalPipe;
 	exports.PercentPipe = number_pipe_2.PercentPipe;
 	exports.CurrencyPipe = number_pipe_2.CurrencyPipe;
-	var uppercase_pipe_2 = __webpack_require__(102);
+	var uppercase_pipe_2 = __webpack_require__(101);
 	exports.UpperCasePipe = uppercase_pipe_2.UpperCasePipe;
 	/**
 	 * A collection of Angular core pipes that are likely to be used in each and every
@@ -16684,7 +16572,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 100 */
+/* 99 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -16699,7 +16587,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var lang_1 = __webpack_require__(5);
 	var async_1 = __webpack_require__(48);
 	var core_1 = __webpack_require__(2);
-	var invalid_pipe_argument_exception_1 = __webpack_require__(101);
+	var invalid_pipe_argument_exception_1 = __webpack_require__(100);
 	var ObservableStrategy = (function () {
 	    function ObservableStrategy() {
 	    }
@@ -16823,7 +16711,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 101 */
+/* 100 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -16844,7 +16732,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 102 */
+/* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -16858,7 +16746,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var lang_1 = __webpack_require__(5);
 	var core_1 = __webpack_require__(2);
-	var invalid_pipe_argument_exception_1 = __webpack_require__(101);
+	var invalid_pipe_argument_exception_1 = __webpack_require__(100);
 	/**
 	 * Implements uppercase transforms to text.
 	 *
@@ -16890,7 +16778,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 103 */
+/* 102 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -16904,7 +16792,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var lang_1 = __webpack_require__(5);
 	var core_1 = __webpack_require__(2);
-	var invalid_pipe_argument_exception_1 = __webpack_require__(101);
+	var invalid_pipe_argument_exception_1 = __webpack_require__(100);
 	/**
 	 * Transforms text to lowercase.
 	 *
@@ -16936,7 +16824,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 104 */
+/* 103 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -16975,7 +16863,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 105 */
+/* 104 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -16991,7 +16879,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var exceptions_1 = __webpack_require__(14);
 	var collection_1 = __webpack_require__(12);
 	var core_1 = __webpack_require__(2);
-	var invalid_pipe_argument_exception_1 = __webpack_require__(101);
+	var invalid_pipe_argument_exception_1 = __webpack_require__(100);
 	/**
 	 * Creates a new List or String containing only a subset (slice) of the
 	 * elements.
@@ -17075,7 +16963,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 106 */
+/* 105 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -17088,10 +16976,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var lang_1 = __webpack_require__(5);
-	var intl_1 = __webpack_require__(107);
+	var intl_1 = __webpack_require__(106);
 	var core_1 = __webpack_require__(2);
 	var collection_1 = __webpack_require__(12);
-	var invalid_pipe_argument_exception_1 = __webpack_require__(101);
+	var invalid_pipe_argument_exception_1 = __webpack_require__(100);
 	// TODO: move to a global configurable location along with other i18n components.
 	var defaultLocale = 'en-US';
 	/**
@@ -17202,7 +17090,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 107 */
+/* 106 */
 /***/ function(module, exports) {
 
 	(function (NumberFormatStyle) {
@@ -17311,7 +17199,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 108 */
+/* 107 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -17330,10 +17218,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var lang_1 = __webpack_require__(5);
 	var exceptions_1 = __webpack_require__(14);
-	var intl_1 = __webpack_require__(107);
+	var intl_1 = __webpack_require__(106);
 	var core_1 = __webpack_require__(2);
 	var collection_1 = __webpack_require__(12);
-	var invalid_pipe_argument_exception_1 = __webpack_require__(101);
+	var invalid_pipe_argument_exception_1 = __webpack_require__(100);
 	var defaultLocale = 'en-US';
 	var _re = lang_1.RegExpWrapper.create('^(\\d+)?\\.((\\d+)(\\-(\\d+))?)?$');
 	/**
@@ -17504,7 +17392,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 109 */
+/* 108 */
 /***/ function(module, exports, __webpack_require__) {
 
 	function __export(m) {
@@ -17515,25 +17403,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @description
 	 * Common directives shipped with Angular.
 	 */
-	var ng_class_1 = __webpack_require__(110);
+	var ng_class_1 = __webpack_require__(109);
 	exports.NgClass = ng_class_1.NgClass;
-	var ng_for_1 = __webpack_require__(111);
+	var ng_for_1 = __webpack_require__(110);
 	exports.NgFor = ng_for_1.NgFor;
-	var ng_if_1 = __webpack_require__(112);
+	var ng_if_1 = __webpack_require__(111);
 	exports.NgIf = ng_if_1.NgIf;
-	var ng_style_1 = __webpack_require__(113);
+	var ng_style_1 = __webpack_require__(112);
 	exports.NgStyle = ng_style_1.NgStyle;
-	var ng_switch_1 = __webpack_require__(114);
+	var ng_switch_1 = __webpack_require__(113);
 	exports.NgSwitch = ng_switch_1.NgSwitch;
 	exports.NgSwitchWhen = ng_switch_1.NgSwitchWhen;
 	exports.NgSwitchDefault = ng_switch_1.NgSwitchDefault;
-	__export(__webpack_require__(115));
-	var core_directives_1 = __webpack_require__(116);
+	__export(__webpack_require__(114));
+	var core_directives_1 = __webpack_require__(115);
 	exports.CORE_DIRECTIVES = core_directives_1.CORE_DIRECTIVES;
 
 
 /***/ },
-/* 110 */
+/* 109 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -17727,7 +17615,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 111 */
+/* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -17899,7 +17787,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 112 */
+/* 111 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -17965,7 +17853,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 113 */
+/* 112 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -18073,7 +17961,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 114 */
+/* 113 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -18304,22 +18192,22 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 115 */
+/* 114 */
 /***/ function(module, exports) {
 
 	// TS does not have Observables
 
 
 /***/ },
-/* 116 */
+/* 115 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var lang_1 = __webpack_require__(5);
-	var ng_class_1 = __webpack_require__(110);
-	var ng_for_1 = __webpack_require__(111);
-	var ng_if_1 = __webpack_require__(112);
-	var ng_style_1 = __webpack_require__(113);
-	var ng_switch_1 = __webpack_require__(114);
+	var ng_class_1 = __webpack_require__(109);
+	var ng_for_1 = __webpack_require__(110);
+	var ng_if_1 = __webpack_require__(111);
+	var ng_style_1 = __webpack_require__(112);
+	var ng_switch_1 = __webpack_require__(113);
 	/**
 	 * A collection of Angular core directives that are likely to be used in each and every Angular
 	 * application.
@@ -18364,7 +18252,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 117 */
+/* 116 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -18380,58 +18268,58 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * explicitly.
 	 *
 	 */
-	var model_1 = __webpack_require__(118);
+	var model_1 = __webpack_require__(117);
 	exports.AbstractControl = model_1.AbstractControl;
 	exports.Control = model_1.Control;
 	exports.ControlGroup = model_1.ControlGroup;
 	exports.ControlArray = model_1.ControlArray;
-	var abstract_control_directive_1 = __webpack_require__(119);
+	var abstract_control_directive_1 = __webpack_require__(118);
 	exports.AbstractControlDirective = abstract_control_directive_1.AbstractControlDirective;
-	var control_container_1 = __webpack_require__(120);
+	var control_container_1 = __webpack_require__(119);
 	exports.ControlContainer = control_container_1.ControlContainer;
-	var ng_control_name_1 = __webpack_require__(121);
+	var ng_control_name_1 = __webpack_require__(120);
 	exports.NgControlName = ng_control_name_1.NgControlName;
-	var ng_form_control_1 = __webpack_require__(131);
+	var ng_form_control_1 = __webpack_require__(130);
 	exports.NgFormControl = ng_form_control_1.NgFormControl;
-	var ng_model_1 = __webpack_require__(132);
+	var ng_model_1 = __webpack_require__(131);
 	exports.NgModel = ng_model_1.NgModel;
-	var ng_control_1 = __webpack_require__(122);
+	var ng_control_1 = __webpack_require__(121);
 	exports.NgControl = ng_control_1.NgControl;
-	var ng_control_group_1 = __webpack_require__(133);
+	var ng_control_group_1 = __webpack_require__(132);
 	exports.NgControlGroup = ng_control_group_1.NgControlGroup;
-	var ng_form_model_1 = __webpack_require__(134);
+	var ng_form_model_1 = __webpack_require__(133);
 	exports.NgFormModel = ng_form_model_1.NgFormModel;
-	var ng_form_1 = __webpack_require__(135);
+	var ng_form_1 = __webpack_require__(134);
 	exports.NgForm = ng_form_1.NgForm;
-	var control_value_accessor_1 = __webpack_require__(123);
+	var control_value_accessor_1 = __webpack_require__(122);
 	exports.NG_VALUE_ACCESSOR = control_value_accessor_1.NG_VALUE_ACCESSOR;
-	var default_value_accessor_1 = __webpack_require__(126);
+	var default_value_accessor_1 = __webpack_require__(125);
 	exports.DefaultValueAccessor = default_value_accessor_1.DefaultValueAccessor;
-	var ng_control_status_1 = __webpack_require__(136);
+	var ng_control_status_1 = __webpack_require__(135);
 	exports.NgControlStatus = ng_control_status_1.NgControlStatus;
-	var checkbox_value_accessor_1 = __webpack_require__(128);
+	var checkbox_value_accessor_1 = __webpack_require__(127);
 	exports.CheckboxControlValueAccessor = checkbox_value_accessor_1.CheckboxControlValueAccessor;
-	var select_control_value_accessor_1 = __webpack_require__(129);
+	var select_control_value_accessor_1 = __webpack_require__(128);
 	exports.NgSelectOption = select_control_value_accessor_1.NgSelectOption;
 	exports.SelectControlValueAccessor = select_control_value_accessor_1.SelectControlValueAccessor;
-	var directives_1 = __webpack_require__(137);
+	var directives_1 = __webpack_require__(136);
 	exports.FORM_DIRECTIVES = directives_1.FORM_DIRECTIVES;
-	var validators_1 = __webpack_require__(125);
+	var validators_1 = __webpack_require__(124);
 	exports.NG_VALIDATORS = validators_1.NG_VALIDATORS;
 	exports.NG_ASYNC_VALIDATORS = validators_1.NG_ASYNC_VALIDATORS;
 	exports.Validators = validators_1.Validators;
-	var validators_2 = __webpack_require__(138);
+	var validators_2 = __webpack_require__(137);
 	exports.RequiredValidator = validators_2.RequiredValidator;
 	exports.MinLengthValidator = validators_2.MinLengthValidator;
 	exports.MaxLengthValidator = validators_2.MaxLengthValidator;
-	var form_builder_1 = __webpack_require__(139);
+	var form_builder_1 = __webpack_require__(138);
 	exports.FormBuilder = form_builder_1.FormBuilder;
 	exports.FORM_PROVIDERS = form_builder_1.FORM_PROVIDERS;
 	exports.FORM_BINDINGS = form_builder_1.FORM_BINDINGS;
 
 
 /***/ },
-/* 118 */
+/* 117 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -18925,7 +18813,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 119 */
+/* 118 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var lang_1 = __webpack_require__(5);
@@ -18991,7 +18879,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 120 */
+/* 119 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -18999,7 +18887,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var abstract_control_directive_1 = __webpack_require__(119);
+	var abstract_control_directive_1 = __webpack_require__(118);
 	/**
 	 * A directive that contains multiple {@link NgControl}s.
 	 *
@@ -19032,7 +18920,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 121 */
+/* 120 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -19055,11 +18943,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	var lang_1 = __webpack_require__(5);
 	var async_1 = __webpack_require__(48);
 	var core_1 = __webpack_require__(2);
-	var control_container_1 = __webpack_require__(120);
-	var ng_control_1 = __webpack_require__(122);
-	var control_value_accessor_1 = __webpack_require__(123);
-	var shared_1 = __webpack_require__(124);
-	var validators_1 = __webpack_require__(125);
+	var control_container_1 = __webpack_require__(119);
+	var ng_control_1 = __webpack_require__(121);
+	var control_value_accessor_1 = __webpack_require__(122);
+	var shared_1 = __webpack_require__(123);
+	var validators_1 = __webpack_require__(124);
 	var controlNameBinding = lang_1.CONST_EXPR(new core_1.Provider(ng_control_1.NgControl, { useExisting: core_1.forwardRef(function () { return NgControlName; }) }));
 	/**
 	 * Creates and binds a control with a specified name to a DOM element.
@@ -19195,7 +19083,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 122 */
+/* 121 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -19203,7 +19091,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var abstract_control_directive_1 = __webpack_require__(119);
+	var abstract_control_directive_1 = __webpack_require__(118);
 	var exceptions_1 = __webpack_require__(14);
 	/**
 	 * A base class that all control directive extend.
@@ -19234,7 +19122,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 123 */
+/* 122 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var core_1 = __webpack_require__(2);
@@ -19248,18 +19136,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 124 */
+/* 123 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var collection_1 = __webpack_require__(12);
 	var lang_1 = __webpack_require__(5);
 	var exceptions_1 = __webpack_require__(14);
-	var validators_1 = __webpack_require__(125);
-	var default_value_accessor_1 = __webpack_require__(126);
-	var number_value_accessor_1 = __webpack_require__(127);
-	var checkbox_value_accessor_1 = __webpack_require__(128);
-	var select_control_value_accessor_1 = __webpack_require__(129);
-	var normalize_validator_1 = __webpack_require__(130);
+	var validators_1 = __webpack_require__(124);
+	var default_value_accessor_1 = __webpack_require__(125);
+	var number_value_accessor_1 = __webpack_require__(126);
+	var checkbox_value_accessor_1 = __webpack_require__(127);
+	var select_control_value_accessor_1 = __webpack_require__(128);
+	var normalize_validator_1 = __webpack_require__(129);
 	function controlPath(name, parent) {
 	    var p = collection_1.ListWrapper.clone(parent.path);
 	    p.push(name);
@@ -19350,7 +19238,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 125 */
+/* 124 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var lang_1 = __webpack_require__(5);
@@ -19471,7 +19359,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 126 */
+/* 125 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -19484,7 +19372,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(2);
-	var control_value_accessor_1 = __webpack_require__(123);
+	var control_value_accessor_1 = __webpack_require__(122);
 	var lang_1 = __webpack_require__(5);
 	var DEFAULT_VALUE_ACCESSOR = lang_1.CONST_EXPR(new core_1.Provider(control_value_accessor_1.NG_VALUE_ACCESSOR, { useExisting: core_1.forwardRef(function () { return DefaultValueAccessor; }), multi: true }));
 	/**
@@ -19526,7 +19414,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 127 */
+/* 126 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -19539,7 +19427,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(2);
-	var control_value_accessor_1 = __webpack_require__(123);
+	var control_value_accessor_1 = __webpack_require__(122);
 	var lang_1 = __webpack_require__(5);
 	var NUMBER_VALUE_ACCESSOR = lang_1.CONST_EXPR(new core_1.Provider(control_value_accessor_1.NG_VALUE_ACCESSOR, { useExisting: core_1.forwardRef(function () { return NumberValueAccessor; }), multi: true }));
 	/**
@@ -19583,7 +19471,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 128 */
+/* 127 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -19596,7 +19484,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(2);
-	var control_value_accessor_1 = __webpack_require__(123);
+	var control_value_accessor_1 = __webpack_require__(122);
 	var lang_1 = __webpack_require__(5);
 	var CHECKBOX_VALUE_ACCESSOR = lang_1.CONST_EXPR(new core_1.Provider(control_value_accessor_1.NG_VALUE_ACCESSOR, { useExisting: core_1.forwardRef(function () { return CheckboxControlValueAccessor; }), multi: true }));
 	/**
@@ -19633,7 +19521,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 129 */
+/* 128 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -19650,7 +19538,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var core_1 = __webpack_require__(2);
 	var async_1 = __webpack_require__(48);
-	var control_value_accessor_1 = __webpack_require__(123);
+	var control_value_accessor_1 = __webpack_require__(122);
 	var lang_1 = __webpack_require__(5);
 	var SELECT_VALUE_ACCESSOR = lang_1.CONST_EXPR(new core_1.Provider(control_value_accessor_1.NG_VALUE_ACCESSOR, { useExisting: core_1.forwardRef(function () { return SelectControlValueAccessor; }), multi: true }));
 	/**
@@ -19710,7 +19598,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 130 */
+/* 129 */
 /***/ function(module, exports) {
 
 	function normalizeValidator(validator) {
@@ -19725,7 +19613,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 131 */
+/* 130 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -19749,10 +19637,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	var collection_1 = __webpack_require__(12);
 	var async_1 = __webpack_require__(48);
 	var core_1 = __webpack_require__(2);
-	var ng_control_1 = __webpack_require__(122);
-	var validators_1 = __webpack_require__(125);
-	var control_value_accessor_1 = __webpack_require__(123);
-	var shared_1 = __webpack_require__(124);
+	var ng_control_1 = __webpack_require__(121);
+	var validators_1 = __webpack_require__(124);
+	var control_value_accessor_1 = __webpack_require__(122);
+	var shared_1 = __webpack_require__(123);
 	var formControlBinding = lang_1.CONST_EXPR(new core_1.Provider(ng_control_1.NgControl, { useExisting: core_1.forwardRef(function () { return NgFormControl; }) }));
 	/**
 	 * Binds an existing {@link Control} to a DOM element.
@@ -19872,7 +19760,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 132 */
+/* 131 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -19895,11 +19783,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	var lang_1 = __webpack_require__(5);
 	var async_1 = __webpack_require__(48);
 	var core_1 = __webpack_require__(2);
-	var control_value_accessor_1 = __webpack_require__(123);
-	var ng_control_1 = __webpack_require__(122);
-	var model_1 = __webpack_require__(118);
-	var validators_1 = __webpack_require__(125);
-	var shared_1 = __webpack_require__(124);
+	var control_value_accessor_1 = __webpack_require__(122);
+	var ng_control_1 = __webpack_require__(121);
+	var model_1 = __webpack_require__(117);
+	var validators_1 = __webpack_require__(124);
+	var shared_1 = __webpack_require__(123);
 	var formControlBinding = lang_1.CONST_EXPR(new core_1.Provider(ng_control_1.NgControl, { useExisting: core_1.forwardRef(function () { return NgModel; }) }));
 	/**
 	 * Binds a domain model to a form control.
@@ -19995,7 +19883,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 133 */
+/* 132 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -20017,9 +19905,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var core_1 = __webpack_require__(2);
 	var lang_1 = __webpack_require__(5);
-	var control_container_1 = __webpack_require__(120);
-	var shared_1 = __webpack_require__(124);
-	var validators_1 = __webpack_require__(125);
+	var control_container_1 = __webpack_require__(119);
+	var shared_1 = __webpack_require__(123);
+	var validators_1 = __webpack_require__(124);
 	var controlGroupProvider = lang_1.CONST_EXPR(new core_1.Provider(control_container_1.ControlContainer, { useExisting: core_1.forwardRef(function () { return NgControlGroup; }) }));
 	/**
 	 * Creates and binds a control group to a DOM element.
@@ -20136,7 +20024,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 134 */
+/* 133 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -20160,9 +20048,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	var collection_1 = __webpack_require__(12);
 	var async_1 = __webpack_require__(48);
 	var core_1 = __webpack_require__(2);
-	var control_container_1 = __webpack_require__(120);
-	var shared_1 = __webpack_require__(124);
-	var validators_1 = __webpack_require__(125);
+	var control_container_1 = __webpack_require__(119);
+	var shared_1 = __webpack_require__(123);
+	var validators_1 = __webpack_require__(124);
 	var formDirectiveProvider = lang_1.CONST_EXPR(new core_1.Provider(control_container_1.ControlContainer, { useExisting: core_1.forwardRef(function () { return NgFormModel; }) }));
 	/**
 	 * Binds an existing control group to a DOM element.
@@ -20327,7 +20215,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 135 */
+/* 134 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -20351,10 +20239,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	var collection_1 = __webpack_require__(12);
 	var lang_1 = __webpack_require__(5);
 	var core_1 = __webpack_require__(2);
-	var control_container_1 = __webpack_require__(120);
-	var model_1 = __webpack_require__(118);
-	var shared_1 = __webpack_require__(124);
-	var validators_1 = __webpack_require__(125);
+	var control_container_1 = __webpack_require__(119);
+	var model_1 = __webpack_require__(117);
+	var shared_1 = __webpack_require__(123);
+	var validators_1 = __webpack_require__(124);
 	var formDirectiveProvider = lang_1.CONST_EXPR(new core_1.Provider(control_container_1.ControlContainer, { useExisting: core_1.forwardRef(function () { return NgForm; }) }));
 	/**
 	 * If `NgForm` is bound in a component, `<form>` elements in that component will be
@@ -20526,7 +20414,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 136 */
+/* 135 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -20542,7 +20430,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return function (target, key) { decorator(target, key, paramIndex); }
 	};
 	var core_1 = __webpack_require__(2);
-	var ng_control_1 = __webpack_require__(122);
+	var ng_control_1 = __webpack_require__(121);
 	var lang_1 = __webpack_require__(5);
 	/**
 	 * Directive automatically applied to Angular forms that sets CSS classes
@@ -20615,50 +20503,50 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 137 */
+/* 136 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var lang_1 = __webpack_require__(5);
-	var ng_control_name_1 = __webpack_require__(121);
-	var ng_form_control_1 = __webpack_require__(131);
-	var ng_model_1 = __webpack_require__(132);
-	var ng_control_group_1 = __webpack_require__(133);
-	var ng_form_model_1 = __webpack_require__(134);
-	var ng_form_1 = __webpack_require__(135);
-	var default_value_accessor_1 = __webpack_require__(126);
-	var checkbox_value_accessor_1 = __webpack_require__(128);
-	var number_value_accessor_1 = __webpack_require__(127);
-	var ng_control_status_1 = __webpack_require__(136);
-	var select_control_value_accessor_1 = __webpack_require__(129);
-	var validators_1 = __webpack_require__(138);
-	var ng_control_name_2 = __webpack_require__(121);
+	var ng_control_name_1 = __webpack_require__(120);
+	var ng_form_control_1 = __webpack_require__(130);
+	var ng_model_1 = __webpack_require__(131);
+	var ng_control_group_1 = __webpack_require__(132);
+	var ng_form_model_1 = __webpack_require__(133);
+	var ng_form_1 = __webpack_require__(134);
+	var default_value_accessor_1 = __webpack_require__(125);
+	var checkbox_value_accessor_1 = __webpack_require__(127);
+	var number_value_accessor_1 = __webpack_require__(126);
+	var ng_control_status_1 = __webpack_require__(135);
+	var select_control_value_accessor_1 = __webpack_require__(128);
+	var validators_1 = __webpack_require__(137);
+	var ng_control_name_2 = __webpack_require__(120);
 	exports.NgControlName = ng_control_name_2.NgControlName;
-	var ng_form_control_2 = __webpack_require__(131);
+	var ng_form_control_2 = __webpack_require__(130);
 	exports.NgFormControl = ng_form_control_2.NgFormControl;
-	var ng_model_2 = __webpack_require__(132);
+	var ng_model_2 = __webpack_require__(131);
 	exports.NgModel = ng_model_2.NgModel;
-	var ng_control_group_2 = __webpack_require__(133);
+	var ng_control_group_2 = __webpack_require__(132);
 	exports.NgControlGroup = ng_control_group_2.NgControlGroup;
-	var ng_form_model_2 = __webpack_require__(134);
+	var ng_form_model_2 = __webpack_require__(133);
 	exports.NgFormModel = ng_form_model_2.NgFormModel;
-	var ng_form_2 = __webpack_require__(135);
+	var ng_form_2 = __webpack_require__(134);
 	exports.NgForm = ng_form_2.NgForm;
-	var default_value_accessor_2 = __webpack_require__(126);
+	var default_value_accessor_2 = __webpack_require__(125);
 	exports.DefaultValueAccessor = default_value_accessor_2.DefaultValueAccessor;
-	var checkbox_value_accessor_2 = __webpack_require__(128);
+	var checkbox_value_accessor_2 = __webpack_require__(127);
 	exports.CheckboxControlValueAccessor = checkbox_value_accessor_2.CheckboxControlValueAccessor;
-	var number_value_accessor_2 = __webpack_require__(127);
+	var number_value_accessor_2 = __webpack_require__(126);
 	exports.NumberValueAccessor = number_value_accessor_2.NumberValueAccessor;
-	var ng_control_status_2 = __webpack_require__(136);
+	var ng_control_status_2 = __webpack_require__(135);
 	exports.NgControlStatus = ng_control_status_2.NgControlStatus;
-	var select_control_value_accessor_2 = __webpack_require__(129);
+	var select_control_value_accessor_2 = __webpack_require__(128);
 	exports.SelectControlValueAccessor = select_control_value_accessor_2.SelectControlValueAccessor;
 	exports.NgSelectOption = select_control_value_accessor_2.NgSelectOption;
-	var validators_2 = __webpack_require__(138);
+	var validators_2 = __webpack_require__(137);
 	exports.RequiredValidator = validators_2.RequiredValidator;
 	exports.MinLengthValidator = validators_2.MinLengthValidator;
 	exports.MaxLengthValidator = validators_2.MaxLengthValidator;
-	var ng_control_1 = __webpack_require__(122);
+	var ng_control_1 = __webpack_require__(121);
 	exports.NgControl = ng_control_1.NgControl;
 	/**
 	 *
@@ -20696,7 +20584,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 138 */
+/* 137 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -20713,7 +20601,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var core_1 = __webpack_require__(2);
 	var lang_1 = __webpack_require__(5);
-	var validators_1 = __webpack_require__(125);
+	var validators_1 = __webpack_require__(124);
 	var lang_2 = __webpack_require__(5);
 	var REQUIRED_VALIDATOR = lang_1.CONST_EXPR(new core_1.Provider(validators_1.NG_VALIDATORS, { useValue: validators_1.Validators.required, multi: true }));
 	/**
@@ -20798,7 +20686,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 139 */
+/* 138 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -20813,7 +20701,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var core_1 = __webpack_require__(2);
 	var collection_1 = __webpack_require__(12);
 	var lang_1 = __webpack_require__(5);
-	var modelModule = __webpack_require__(118);
+	var modelModule = __webpack_require__(117);
 	/**
 	 * Creates a form object from a user-specified configuration.
 	 *
@@ -20943,12 +20831,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 140 */
+/* 139 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var lang_1 = __webpack_require__(5);
-	var forms_1 = __webpack_require__(117);
-	var directives_1 = __webpack_require__(109);
+	var forms_1 = __webpack_require__(116);
+	var directives_1 = __webpack_require__(108);
 	/**
 	 * A collection of Angular core directives that are likely to be used in each and every Angular
 	 * application. This includes core directives (e.g., NgIf and NgFor), and forms directives (e.g.,
@@ -20996,7 +20884,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 141 */
+/* 140 */
 /***/ function(module, exports, __webpack_require__) {
 
 	function __export(m) {
@@ -21007,13 +20895,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @description
 	 * Starting point to import all compiler APIs.
 	 */
+	__export(__webpack_require__(141));
 	__export(__webpack_require__(142));
 	__export(__webpack_require__(143));
-	__export(__webpack_require__(144));
 
 
 /***/ },
-/* 142 */
+/* 141 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -21343,7 +21231,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 143 */
+/* 142 */
 /***/ function(module, exports) {
 
 	// TODO: vsavkin rename it into TemplateLoader
@@ -21361,45 +21249,45 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 144 */
+/* 143 */
 /***/ function(module, exports, __webpack_require__) {
 
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	var runtime_compiler_1 = __webpack_require__(145);
-	var template_compiler_1 = __webpack_require__(146);
+	var runtime_compiler_1 = __webpack_require__(144);
+	var template_compiler_1 = __webpack_require__(145);
 	exports.TemplateCompiler = template_compiler_1.TemplateCompiler;
-	var directive_metadata_1 = __webpack_require__(147);
+	var directive_metadata_1 = __webpack_require__(146);
 	exports.CompileDirectiveMetadata = directive_metadata_1.CompileDirectiveMetadata;
 	exports.CompileTypeMetadata = directive_metadata_1.CompileTypeMetadata;
 	exports.CompileTemplateMetadata = directive_metadata_1.CompileTemplateMetadata;
-	var source_module_1 = __webpack_require__(152);
+	var source_module_1 = __webpack_require__(151);
 	exports.SourceModule = source_module_1.SourceModule;
 	exports.SourceWithImports = source_module_1.SourceWithImports;
-	var platform_directives_and_pipes_1 = __webpack_require__(93);
+	var platform_directives_and_pipes_1 = __webpack_require__(92);
 	exports.PLATFORM_DIRECTIVES = platform_directives_and_pipes_1.PLATFORM_DIRECTIVES;
 	exports.PLATFORM_PIPES = platform_directives_and_pipes_1.PLATFORM_PIPES;
-	__export(__webpack_require__(151));
-	var template_parser_1 = __webpack_require__(161);
+	__export(__webpack_require__(150));
+	var template_parser_1 = __webpack_require__(160);
 	exports.TEMPLATE_TRANSFORMS = template_parser_1.TEMPLATE_TRANSFORMS;
 	var lang_1 = __webpack_require__(5);
 	var di_1 = __webpack_require__(6);
-	var template_parser_2 = __webpack_require__(161);
-	var html_parser_1 = __webpack_require__(162);
-	var template_normalizer_1 = __webpack_require__(169);
-	var runtime_metadata_1 = __webpack_require__(170);
-	var change_detector_compiler_1 = __webpack_require__(153);
-	var style_compiler_1 = __webpack_require__(156);
-	var view_compiler_1 = __webpack_require__(159);
-	var proto_view_compiler_1 = __webpack_require__(160);
-	var template_compiler_2 = __webpack_require__(146);
+	var template_parser_2 = __webpack_require__(160);
+	var html_parser_1 = __webpack_require__(161);
+	var template_normalizer_1 = __webpack_require__(168);
+	var runtime_metadata_1 = __webpack_require__(169);
+	var change_detector_compiler_1 = __webpack_require__(152);
+	var style_compiler_1 = __webpack_require__(155);
+	var view_compiler_1 = __webpack_require__(158);
+	var proto_view_compiler_1 = __webpack_require__(159);
+	var template_compiler_2 = __webpack_require__(145);
 	var change_detection_1 = __webpack_require__(25);
 	var compiler_1 = __webpack_require__(70);
-	var runtime_compiler_2 = __webpack_require__(145);
-	var element_schema_registry_1 = __webpack_require__(167);
-	var dom_element_schema_registry_1 = __webpack_require__(172);
-	var url_resolver_1 = __webpack_require__(142);
+	var runtime_compiler_2 = __webpack_require__(144);
+	var element_schema_registry_1 = __webpack_require__(166);
+	var dom_element_schema_registry_1 = __webpack_require__(171);
+	var url_resolver_1 = __webpack_require__(141);
 	var change_detection_2 = __webpack_require__(25);
 	function _createChangeDetectorGenConfig() {
 	    return new change_detection_1.ChangeDetectorGenConfig(lang_1.assertionsEnabled(), false, true);
@@ -21431,7 +21319,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 145 */
+/* 144 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -21450,7 +21338,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var compiler_1 = __webpack_require__(70);
 	var view_ref_1 = __webpack_require__(80);
-	var template_compiler_1 = __webpack_require__(146);
+	var template_compiler_1 = __webpack_require__(145);
 	var di_1 = __webpack_require__(6);
 	var RuntimeCompiler = (function (_super) {
 	    __extends(RuntimeCompiler, _super);
@@ -21484,7 +21372,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 146 */
+/* 145 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -21500,21 +21388,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	var exceptions_1 = __webpack_require__(14);
 	var collection_1 = __webpack_require__(12);
 	var async_1 = __webpack_require__(48);
-	var directive_metadata_1 = __webpack_require__(147);
-	var template_ast_1 = __webpack_require__(151);
+	var directive_metadata_1 = __webpack_require__(146);
+	var template_ast_1 = __webpack_require__(150);
 	var di_1 = __webpack_require__(6);
-	var source_module_1 = __webpack_require__(152);
-	var change_detector_compiler_1 = __webpack_require__(153);
-	var style_compiler_1 = __webpack_require__(156);
-	var view_compiler_1 = __webpack_require__(159);
-	var proto_view_compiler_1 = __webpack_require__(160);
-	var template_parser_1 = __webpack_require__(161);
-	var template_normalizer_1 = __webpack_require__(169);
-	var runtime_metadata_1 = __webpack_require__(170);
+	var source_module_1 = __webpack_require__(151);
+	var change_detector_compiler_1 = __webpack_require__(152);
+	var style_compiler_1 = __webpack_require__(155);
+	var view_compiler_1 = __webpack_require__(158);
+	var proto_view_compiler_1 = __webpack_require__(159);
+	var template_parser_1 = __webpack_require__(160);
+	var template_normalizer_1 = __webpack_require__(168);
+	var runtime_metadata_1 = __webpack_require__(169);
 	var view_1 = __webpack_require__(71);
 	var change_detection_1 = __webpack_require__(25);
-	var resolved_metadata_cache_1 = __webpack_require__(96);
-	var util_1 = __webpack_require__(149);
+	var resolved_metadata_cache_1 = __webpack_require__(95);
+	var util_1 = __webpack_require__(148);
 	exports.METADATA_CACHE_MODULE_REF = source_module_1.moduleRef('package:angular2/src/core/linker/resolved_metadata_cache' + util_1.MODULE_SUFFIX);
 	/**
 	 * An internal module of the Angular compiler that begins with component types,
@@ -21835,7 +21723,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 147 */
+/* 146 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var lang_1 = __webpack_require__(5);
@@ -21843,9 +21731,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	var collection_1 = __webpack_require__(12);
 	var change_detection_1 = __webpack_require__(25);
 	var view_1 = __webpack_require__(61);
-	var selector_1 = __webpack_require__(148);
-	var util_1 = __webpack_require__(149);
-	var interfaces_1 = __webpack_require__(150);
+	var selector_1 = __webpack_require__(147);
+	var util_1 = __webpack_require__(148);
+	var interfaces_1 = __webpack_require__(149);
 	// group 1: "property" from "[property]"
 	// group 2: "event" from "(event)"
 	var HOST_REG_EXP = /^(?:(?:\[([^\]]+)\])|(?:\(([^\)]+)\)))$/g;
@@ -22097,7 +21985,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 148 */
+/* 147 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var collection_1 = __webpack_require__(12);
@@ -22459,7 +22347,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 149 */
+/* 148 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var lang_1 = __webpack_require__(5);
@@ -22653,7 +22541,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 150 */
+/* 149 */
 /***/ function(module, exports) {
 
 	(function (LifecycleHooks) {
@@ -22683,7 +22571,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 151 */
+/* 150 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var lang_1 = __webpack_require__(5);
@@ -22932,7 +22820,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 152 */
+/* 151 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var lang_1 = __webpack_require__(5);
@@ -23006,7 +22894,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 153 */
+/* 152 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -23018,16 +22906,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	var source_module_1 = __webpack_require__(152);
+	var source_module_1 = __webpack_require__(151);
 	var change_detection_jit_generator_1 = __webpack_require__(57);
 	var abstract_change_detector_1 = __webpack_require__(43);
 	var change_detection_util_1 = __webpack_require__(38);
 	var constants_1 = __webpack_require__(36);
-	var change_definition_factory_1 = __webpack_require__(154);
+	var change_definition_factory_1 = __webpack_require__(153);
 	var lang_1 = __webpack_require__(5);
 	var change_detection_1 = __webpack_require__(25);
-	var change_detector_codegen_1 = __webpack_require__(155);
-	var util_1 = __webpack_require__(149);
+	var change_detector_codegen_1 = __webpack_require__(154);
+	var util_1 = __webpack_require__(148);
 	var di_1 = __webpack_require__(6);
 	var ABSTRACT_CHANGE_DETECTOR = "AbstractChangeDetector";
 	var UTIL = "ChangeDetectionUtil";
@@ -23096,15 +22984,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 154 */
+/* 153 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var collection_1 = __webpack_require__(12);
 	var lang_1 = __webpack_require__(5);
 	var reflection_1 = __webpack_require__(16);
 	var change_detection_1 = __webpack_require__(25);
-	var template_ast_1 = __webpack_require__(151);
-	var interfaces_1 = __webpack_require__(150);
+	var template_ast_1 = __webpack_require__(150);
+	var interfaces_1 = __webpack_require__(149);
 	function createChangeDetectorDefinitions(componentType, componentStrategy, genConfig, parsedTemplate) {
 	    var pvVisitors = [];
 	    var visitor = new ProtoViewVisitor(null, pvVisitors, componentStrategy);
@@ -23269,7 +23157,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 155 */
+/* 154 */
 /***/ function(module, exports) {
 
 	// Note: This class is only here so that we can reference it from TypeScript code.
@@ -23289,7 +23177,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 156 */
+/* 155 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -23301,15 +23189,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	var source_module_1 = __webpack_require__(152);
+	var source_module_1 = __webpack_require__(151);
 	var view_1 = __webpack_require__(61);
-	var xhr_1 = __webpack_require__(143);
+	var xhr_1 = __webpack_require__(142);
 	var lang_1 = __webpack_require__(5);
 	var async_1 = __webpack_require__(48);
-	var shadow_css_1 = __webpack_require__(157);
-	var url_resolver_1 = __webpack_require__(142);
-	var style_url_resolver_1 = __webpack_require__(158);
-	var util_1 = __webpack_require__(149);
+	var shadow_css_1 = __webpack_require__(156);
+	var url_resolver_1 = __webpack_require__(141);
+	var style_url_resolver_1 = __webpack_require__(157);
+	var util_1 = __webpack_require__(148);
 	var di_1 = __webpack_require__(6);
 	var COMPONENT_VARIABLE = '%COMP%';
 	var HOST_ATTR = "_nghost-" + COMPONENT_VARIABLE;
@@ -23389,7 +23277,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 157 */
+/* 156 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var collection_1 = __webpack_require__(12);
@@ -23891,7 +23779,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 158 */
+/* 157 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Some of the code comes from WebComponents.JS
@@ -23937,7 +23825,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 159 */
+/* 158 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -23951,15 +23839,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var lang_1 = __webpack_require__(5);
 	var collection_1 = __webpack_require__(12);
-	var template_ast_1 = __webpack_require__(151);
-	var source_module_1 = __webpack_require__(152);
+	var template_ast_1 = __webpack_require__(150);
+	var source_module_1 = __webpack_require__(151);
 	var view_1 = __webpack_require__(71);
 	var view_type_1 = __webpack_require__(73);
 	var element_1 = __webpack_require__(72);
 	var view_2 = __webpack_require__(61);
-	var util_1 = __webpack_require__(149);
+	var util_1 = __webpack_require__(148);
 	var di_1 = __webpack_require__(6);
-	var proto_view_compiler_1 = __webpack_require__(160);
+	var proto_view_compiler_1 = __webpack_require__(159);
 	exports.VIEW_JIT_IMPORTS = lang_1.CONST_EXPR({
 	    'AppView': view_1.AppView,
 	    'AppElement': element_1.AppElement,
@@ -24341,7 +24229,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 160 */
+/* 159 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -24360,12 +24248,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var lang_1 = __webpack_require__(5);
 	var collection_1 = __webpack_require__(12);
-	var template_ast_1 = __webpack_require__(151);
-	var source_module_1 = __webpack_require__(152);
+	var template_ast_1 = __webpack_require__(150);
+	var source_module_1 = __webpack_require__(151);
 	var view_1 = __webpack_require__(71);
 	var view_type_1 = __webpack_require__(73);
 	var element_1 = __webpack_require__(72);
-	var util_1 = __webpack_require__(149);
+	var util_1 = __webpack_require__(148);
 	var di_1 = __webpack_require__(6);
 	exports.PROTO_VIEW_JIT_IMPORTS = lang_1.CONST_EXPR({ 'AppProtoView': view_1.AppProtoView, 'AppProtoElement': element_1.AppProtoElement, 'ViewType': view_type_1.ViewType });
 	// TODO: have a single file that reexports everything needed for
@@ -24657,7 +24545,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 161 */
+/* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -24683,17 +24571,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	var lang_2 = __webpack_require__(5);
 	var exceptions_1 = __webpack_require__(14);
 	var change_detection_1 = __webpack_require__(25);
-	var html_parser_1 = __webpack_require__(162);
-	var html_tags_1 = __webpack_require__(166);
-	var parse_util_1 = __webpack_require__(165);
+	var html_parser_1 = __webpack_require__(161);
+	var html_tags_1 = __webpack_require__(165);
+	var parse_util_1 = __webpack_require__(164);
 	var ast_1 = __webpack_require__(30);
-	var template_ast_1 = __webpack_require__(151);
-	var selector_1 = __webpack_require__(148);
-	var element_schema_registry_1 = __webpack_require__(167);
-	var template_preparser_1 = __webpack_require__(168);
-	var style_url_resolver_1 = __webpack_require__(158);
-	var html_ast_1 = __webpack_require__(163);
-	var util_1 = __webpack_require__(149);
+	var template_ast_1 = __webpack_require__(150);
+	var selector_1 = __webpack_require__(147);
+	var element_schema_registry_1 = __webpack_require__(166);
+	var template_preparser_1 = __webpack_require__(167);
+	var style_url_resolver_1 = __webpack_require__(157);
+	var html_ast_1 = __webpack_require__(162);
+	var util_1 = __webpack_require__(148);
 	// Group 1 = "bind-"
 	// Group 2 = "var-" or "#"
 	// Group 3 = "on-"
@@ -25322,7 +25210,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 162 */
+/* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -25341,11 +25229,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var lang_1 = __webpack_require__(5);
 	var collection_1 = __webpack_require__(12);
-	var html_ast_1 = __webpack_require__(163);
+	var html_ast_1 = __webpack_require__(162);
 	var di_1 = __webpack_require__(6);
-	var html_lexer_1 = __webpack_require__(164);
-	var parse_util_1 = __webpack_require__(165);
-	var html_tags_1 = __webpack_require__(166);
+	var html_lexer_1 = __webpack_require__(163);
+	var parse_util_1 = __webpack_require__(164);
+	var html_tags_1 = __webpack_require__(165);
 	var HtmlTreeError = (function (_super) {
 	    __extends(HtmlTreeError, _super);
 	    function HtmlTreeError(elementName, location, msg) {
@@ -25575,7 +25463,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 163 */
+/* 162 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var lang_1 = __webpack_require__(5);
@@ -25624,7 +25512,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 164 */
+/* 163 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -25634,8 +25522,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var lang_1 = __webpack_require__(5);
 	var collection_1 = __webpack_require__(12);
-	var parse_util_1 = __webpack_require__(165);
-	var html_tags_1 = __webpack_require__(166);
+	var parse_util_1 = __webpack_require__(164);
+	var html_tags_1 = __webpack_require__(165);
 	(function (HtmlTokenType) {
 	    HtmlTokenType[HtmlTokenType["TAG_OPEN_START"] = 0] = "TAG_OPEN_START";
 	    HtmlTokenType[HtmlTokenType["TAG_OPEN_END"] = 1] = "TAG_OPEN_END";
@@ -26184,7 +26072,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 165 */
+/* 164 */
 /***/ function(module, exports) {
 
 	var ParseLocation = (function () {
@@ -26261,7 +26149,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 166 */
+/* 165 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var lang_1 = __webpack_require__(5);
@@ -26661,7 +26549,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 167 */
+/* 166 */
 /***/ function(module, exports) {
 
 	var ElementSchemaRegistry = (function () {
@@ -26675,11 +26563,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 168 */
+/* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var lang_1 = __webpack_require__(5);
-	var html_tags_1 = __webpack_require__(166);
+	var html_tags_1 = __webpack_require__(165);
 	var NG_CONTENT_SELECT_ATTR = 'select';
 	var NG_CONTENT_ELEMENT = 'ng-content';
 	var LINK_ELEMENT = 'link';
@@ -26754,7 +26642,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 169 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -26766,18 +26654,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	var directive_metadata_1 = __webpack_require__(147);
+	var directive_metadata_1 = __webpack_require__(146);
 	var lang_1 = __webpack_require__(5);
 	var exceptions_1 = __webpack_require__(14);
 	var async_1 = __webpack_require__(48);
-	var xhr_1 = __webpack_require__(143);
-	var url_resolver_1 = __webpack_require__(142);
-	var style_url_resolver_1 = __webpack_require__(158);
+	var xhr_1 = __webpack_require__(142);
+	var url_resolver_1 = __webpack_require__(141);
+	var style_url_resolver_1 = __webpack_require__(157);
 	var di_1 = __webpack_require__(6);
 	var view_1 = __webpack_require__(61);
-	var html_ast_1 = __webpack_require__(163);
-	var html_parser_1 = __webpack_require__(162);
-	var template_preparser_1 = __webpack_require__(168);
+	var html_ast_1 = __webpack_require__(162);
+	var html_parser_1 = __webpack_require__(161);
+	var template_preparser_1 = __webpack_require__(167);
 	var TemplateNormalizer = (function () {
 	    function TemplateNormalizer(_xhr, _urlResolver, _htmlParser) {
 	        this._xhr = _xhr;
@@ -26886,7 +26774,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 170 */
+/* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -26904,18 +26792,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	var di_1 = __webpack_require__(6);
 	var lang_1 = __webpack_require__(5);
 	var exceptions_1 = __webpack_require__(14);
-	var cpl = __webpack_require__(147);
+	var cpl = __webpack_require__(146);
 	var md = __webpack_require__(23);
-	var directive_resolver_1 = __webpack_require__(90);
-	var pipe_resolver_1 = __webpack_require__(97);
-	var view_resolver_1 = __webpack_require__(91);
-	var directive_lifecycle_reflector_1 = __webpack_require__(171);
-	var interfaces_1 = __webpack_require__(150);
+	var directive_resolver_1 = __webpack_require__(89);
+	var pipe_resolver_1 = __webpack_require__(96);
+	var view_resolver_1 = __webpack_require__(90);
+	var directive_lifecycle_reflector_1 = __webpack_require__(170);
+	var interfaces_1 = __webpack_require__(149);
 	var reflection_1 = __webpack_require__(16);
 	var di_2 = __webpack_require__(6);
-	var platform_directives_and_pipes_1 = __webpack_require__(93);
-	var util_1 = __webpack_require__(149);
-	var url_resolver_1 = __webpack_require__(142);
+	var platform_directives_and_pipes_1 = __webpack_require__(92);
+	var util_1 = __webpack_require__(148);
+	var url_resolver_1 = __webpack_require__(141);
 	var RuntimeMetadataResolver = (function () {
 	    function RuntimeMetadataResolver(_directiveResolver, _pipeResolver, _viewResolver, _platformDirectives, _platformPipes) {
 	        this._directiveResolver = _directiveResolver;
@@ -27058,11 +26946,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 171 */
+/* 170 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var lang_1 = __webpack_require__(5);
-	var interfaces_1 = __webpack_require__(150);
+	var interfaces_1 = __webpack_require__(149);
 	function hasLifecycleHook(lcInterface, token) {
 	    if (!(token instanceof lang_1.Type))
 	        return false;
@@ -27092,7 +26980,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 172 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -27112,9 +27000,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	var di_1 = __webpack_require__(6);
 	var lang_1 = __webpack_require__(5);
 	var collection_1 = __webpack_require__(12);
-	var dom_adapter_1 = __webpack_require__(173);
-	var html_tags_1 = __webpack_require__(166);
-	var element_schema_registry_1 = __webpack_require__(167);
+	var dom_adapter_1 = __webpack_require__(172);
+	var html_tags_1 = __webpack_require__(165);
+	var element_schema_registry_1 = __webpack_require__(166);
 	var NAMESPACE_URIS = lang_1.CONST_EXPR({ 'xlink': 'http://www.w3.org/1999/xlink', 'svg': 'http://www.w3.org/2000/svg' });
 	var DomElementSchemaRegistry = (function (_super) {
 	    __extends(DomElementSchemaRegistry, _super);
@@ -27158,7 +27046,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 173 */
+/* 172 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var lang_1 = __webpack_require__(5);
@@ -27194,15 +27082,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 174 */
+/* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var angular_entrypoint_1 = __webpack_require__(175);
+	var angular_entrypoint_1 = __webpack_require__(174);
 	exports.AngularEntrypoint = angular_entrypoint_1.AngularEntrypoint;
-	var browser_common_1 = __webpack_require__(176);
+	var browser_common_1 = __webpack_require__(175);
 	exports.BROWSER_PROVIDERS = browser_common_1.BROWSER_PROVIDERS;
-	exports.ELEMENT_PROBE_BINDINGS = browser_common_1.ELEMENT_PROBE_BINDINGS;
 	exports.ELEMENT_PROBE_PROVIDERS = browser_common_1.ELEMENT_PROBE_PROVIDERS;
+	exports.ELEMENT_PROBE_PROVIDERS_PROD_MODE = browser_common_1.ELEMENT_PROBE_PROVIDERS_PROD_MODE;
 	exports.inspectNativeElement = browser_common_1.inspectNativeElement;
 	exports.BrowserDomAdapter = browser_common_1.BrowserDomAdapter;
 	exports.By = browser_common_1.By;
@@ -27211,12 +27099,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.enableDebugTools = browser_common_1.enableDebugTools;
 	exports.disableDebugTools = browser_common_1.disableDebugTools;
 	var lang_1 = __webpack_require__(5);
-	var browser_common_2 = __webpack_require__(176);
-	var compiler_1 = __webpack_require__(141);
+	var browser_common_2 = __webpack_require__(175);
+	var compiler_1 = __webpack_require__(140);
 	var core_1 = __webpack_require__(2);
 	var reflection_capabilities_1 = __webpack_require__(18);
-	var xhr_impl_1 = __webpack_require__(194);
-	var compiler_2 = __webpack_require__(141);
+	var xhr_impl_1 = __webpack_require__(193);
+	var compiler_2 = __webpack_require__(140);
 	var di_1 = __webpack_require__(6);
 	/**
 	 * An array of providers that should be passed into `application()` when bootstrapping a component.
@@ -27303,7 +27191,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 175 */
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -27347,39 +27235,39 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 176 */
+/* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var lang_1 = __webpack_require__(5);
 	var di_1 = __webpack_require__(6);
 	var core_1 = __webpack_require__(2);
-	var common_1 = __webpack_require__(98);
+	var common_1 = __webpack_require__(97);
 	var testability_1 = __webpack_require__(68);
-	var dom_adapter_1 = __webpack_require__(173);
-	var dom_events_1 = __webpack_require__(177);
-	var key_events_1 = __webpack_require__(179);
-	var hammer_gestures_1 = __webpack_require__(180);
-	var dom_tokens_1 = __webpack_require__(182);
-	var dom_renderer_1 = __webpack_require__(183);
-	var shared_styles_host_1 = __webpack_require__(191);
-	var shared_styles_host_2 = __webpack_require__(191);
-	var browser_details_1 = __webpack_require__(190);
-	var animation_builder_1 = __webpack_require__(184);
-	var browser_adapter_1 = __webpack_require__(192);
-	var testability_2 = __webpack_require__(195);
-	var wtf_init_1 = __webpack_require__(196);
-	var event_manager_1 = __webpack_require__(178);
-	var dom_tokens_2 = __webpack_require__(182);
+	var dom_adapter_1 = __webpack_require__(172);
+	var dom_events_1 = __webpack_require__(176);
+	var key_events_1 = __webpack_require__(178);
+	var hammer_gestures_1 = __webpack_require__(179);
+	var dom_tokens_1 = __webpack_require__(181);
+	var dom_renderer_1 = __webpack_require__(182);
+	var shared_styles_host_1 = __webpack_require__(190);
+	var shared_styles_host_2 = __webpack_require__(190);
+	var browser_details_1 = __webpack_require__(189);
+	var animation_builder_1 = __webpack_require__(183);
+	var browser_adapter_1 = __webpack_require__(191);
+	var testability_2 = __webpack_require__(194);
+	var wtf_init_1 = __webpack_require__(195);
+	var event_manager_1 = __webpack_require__(177);
+	var common_dom_1 = __webpack_require__(196);
+	var dom_tokens_2 = __webpack_require__(181);
 	exports.DOCUMENT = dom_tokens_2.DOCUMENT;
-	var title_1 = __webpack_require__(197);
+	var title_1 = __webpack_require__(200);
 	exports.Title = title_1.Title;
-	var common_dom_1 = __webpack_require__(198);
-	exports.DebugElementViewListener = common_dom_1.DebugElementViewListener;
-	exports.ELEMENT_PROBE_PROVIDERS = common_dom_1.ELEMENT_PROBE_PROVIDERS;
-	exports.ELEMENT_PROBE_BINDINGS = common_dom_1.ELEMENT_PROBE_BINDINGS;
-	exports.inspectNativeElement = common_dom_1.inspectNativeElement;
-	exports.By = common_dom_1.By;
-	var browser_adapter_2 = __webpack_require__(192);
+	var common_dom_2 = __webpack_require__(196);
+	exports.ELEMENT_PROBE_PROVIDERS = common_dom_2.ELEMENT_PROBE_PROVIDERS;
+	exports.ELEMENT_PROBE_PROVIDERS_PROD_MODE = common_dom_2.ELEMENT_PROBE_PROVIDERS_PROD_MODE;
+	exports.inspectNativeElement = common_dom_2.inspectNativeElement;
+	exports.By = common_dom_2.By;
+	var browser_adapter_2 = __webpack_require__(191);
 	exports.BrowserDomAdapter = browser_adapter_2.BrowserDomAdapter;
 	var tools_1 = __webpack_require__(201);
 	exports.enableDebugTools = tools_1.enableDebugTools;
@@ -27423,7 +27311,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    testability_1.Testability,
 	    browser_details_1.BrowserDetails,
 	    animation_builder_1.AnimationBuilder,
-	    event_manager_1.EventManager
+	    event_manager_1.EventManager,
+	    common_dom_1.ELEMENT_PROBE_PROVIDERS
 	]);
 	function initDomAdapter() {
 	    browser_adapter_1.BrowserDomAdapter.makeCurrent();
@@ -27434,7 +27323,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 177 */
+/* 176 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -27451,9 +27340,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	var dom_adapter_1 = __webpack_require__(173);
+	var dom_adapter_1 = __webpack_require__(172);
 	var core_1 = __webpack_require__(2);
-	var event_manager_1 = __webpack_require__(178);
+	var event_manager_1 = __webpack_require__(177);
 	var DomEventsPlugin = (function (_super) {
 	    __extends(DomEventsPlugin, _super);
 	    function DomEventsPlugin() {
@@ -27483,7 +27372,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 178 */
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -27556,7 +27445,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 179 */
+/* 178 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -27573,10 +27462,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	var dom_adapter_1 = __webpack_require__(173);
+	var dom_adapter_1 = __webpack_require__(172);
 	var lang_1 = __webpack_require__(5);
 	var collection_1 = __webpack_require__(12);
-	var event_manager_1 = __webpack_require__(178);
+	var event_manager_1 = __webpack_require__(177);
 	var di_1 = __webpack_require__(6);
 	var modifierKeys = ['alt', 'control', 'meta', 'shift'];
 	var modifierKeyGetters = {
@@ -27674,7 +27563,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 180 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -27691,7 +27580,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	var hammer_common_1 = __webpack_require__(181);
+	var hammer_common_1 = __webpack_require__(180);
 	var lang_1 = __webpack_require__(5);
 	var exceptions_1 = __webpack_require__(14);
 	var di_1 = __webpack_require__(6);
@@ -27731,7 +27620,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 181 */
+/* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -27739,7 +27628,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var event_manager_1 = __webpack_require__(178);
+	var event_manager_1 = __webpack_require__(177);
 	var collection_1 = __webpack_require__(12);
 	var _eventNames = {
 	    // pan
@@ -27793,7 +27682,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 182 */
+/* 181 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var di_1 = __webpack_require__(6);
@@ -27808,7 +27697,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 183 */
+/* 182 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -27829,15 +27718,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return function (target, key) { decorator(target, key, paramIndex); }
 	};
 	var di_1 = __webpack_require__(6);
-	var animation_builder_1 = __webpack_require__(184);
+	var animation_builder_1 = __webpack_require__(183);
 	var lang_1 = __webpack_require__(5);
 	var exceptions_1 = __webpack_require__(14);
-	var shared_styles_host_1 = __webpack_require__(191);
-	var event_manager_1 = __webpack_require__(178);
-	var dom_tokens_1 = __webpack_require__(182);
+	var shared_styles_host_1 = __webpack_require__(190);
+	var event_manager_1 = __webpack_require__(177);
+	var dom_tokens_1 = __webpack_require__(181);
 	var metadata_1 = __webpack_require__(3);
-	var dom_adapter_1 = __webpack_require__(173);
-	var util_1 = __webpack_require__(189);
+	var dom_adapter_1 = __webpack_require__(172);
+	var util_1 = __webpack_require__(188);
 	var NAMESPACE_URIS = lang_1.CONST_EXPR({ 'xlink': 'http://www.w3.org/1999/xlink', 'svg': 'http://www.w3.org/2000/svg' });
 	var TEMPLATE_COMMENT_TEXT = 'template bindings={}';
 	var TEMPLATE_BINDINGS_EXP = /^template bindings=(.*)$/g;
@@ -28007,6 +27896,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.setElementAttribute(renderElement, propertyName, propertyValue);
 	        }
 	    };
+	    DomRenderer.prototype.setElementDebugInfo = function (renderElement, info) { };
 	    DomRenderer.prototype.setElementClass = function (renderElement, className, isAdd) {
 	        if (isAdd) {
 	            dom_adapter_1.DOM.addClass(renderElement, className);
@@ -28127,7 +28017,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 184 */
+/* 183 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -28140,8 +28030,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var di_1 = __webpack_require__(6);
-	var css_animation_builder_1 = __webpack_require__(185);
-	var browser_details_1 = __webpack_require__(190);
+	var css_animation_builder_1 = __webpack_require__(184);
+	var browser_details_1 = __webpack_require__(189);
 	var AnimationBuilder = (function () {
 	    /**
 	     * Used for DI
@@ -28165,11 +28055,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 185 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var css_animation_options_1 = __webpack_require__(186);
-	var animation_1 = __webpack_require__(187);
+	var css_animation_options_1 = __webpack_require__(185);
+	var animation_1 = __webpack_require__(186);
 	var CssAnimationBuilder = (function () {
 	    /**
 	     * Accepts public properties for CssAnimationBuilder
@@ -28256,7 +28146,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 186 */
+/* 185 */
 /***/ function(module, exports) {
 
 	var CssAnimationOptions = (function () {
@@ -28274,14 +28164,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 187 */
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var lang_1 = __webpack_require__(5);
-	var math_1 = __webpack_require__(188);
-	var util_1 = __webpack_require__(189);
+	var math_1 = __webpack_require__(187);
+	var util_1 = __webpack_require__(188);
 	var collection_1 = __webpack_require__(12);
-	var dom_adapter_1 = __webpack_require__(173);
+	var dom_adapter_1 = __webpack_require__(172);
 	var Animation = (function () {
 	    /**
 	     * Stores the start time and starts the animation
@@ -28461,7 +28351,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 188 */
+/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var lang_1 = __webpack_require__(5);
@@ -28470,7 +28360,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 189 */
+/* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var lang_1 = __webpack_require__(5);
@@ -28487,7 +28377,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 190 */
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -28500,8 +28390,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var di_1 = __webpack_require__(6);
-	var math_1 = __webpack_require__(188);
-	var dom_adapter_1 = __webpack_require__(173);
+	var math_1 = __webpack_require__(187);
+	var dom_adapter_1 = __webpack_require__(172);
 	var BrowserDetails = (function () {
 	    function BrowserDetails() {
 	        this.elapsedTimeIncludesDelay = false;
@@ -28565,7 +28455,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 191 */
+/* 190 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -28585,10 +28475,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __param = (this && this.__param) || function (paramIndex, decorator) {
 	    return function (target, key) { decorator(target, key, paramIndex); }
 	};
-	var dom_adapter_1 = __webpack_require__(173);
+	var dom_adapter_1 = __webpack_require__(172);
 	var di_1 = __webpack_require__(6);
 	var collection_1 = __webpack_require__(12);
-	var dom_tokens_1 = __webpack_require__(182);
+	var dom_tokens_1 = __webpack_require__(181);
 	var SharedStylesHost = (function () {
 	    function SharedStylesHost() {
 	        /** @internal */
@@ -28651,7 +28541,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 192 */
+/* 191 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -28661,8 +28551,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var collection_1 = __webpack_require__(12);
 	var lang_1 = __webpack_require__(5);
-	var dom_adapter_1 = __webpack_require__(173);
-	var generic_browser_adapter_1 = __webpack_require__(193);
+	var dom_adapter_1 = __webpack_require__(172);
+	var generic_browser_adapter_1 = __webpack_require__(192);
 	var _attrToPropMap = {
 	    'class': 'className',
 	    'innerHtml': 'innerHTML',
@@ -29044,7 +28934,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 193 */
+/* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -29054,8 +28944,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var collection_1 = __webpack_require__(12);
 	var lang_1 = __webpack_require__(5);
-	var dom_adapter_1 = __webpack_require__(173);
-	var xhr_impl_1 = __webpack_require__(194);
+	var dom_adapter_1 = __webpack_require__(172);
+	var xhr_impl_1 = __webpack_require__(193);
 	/**
 	 * Provides DOM operations in any browser environment.
 	 */
@@ -29119,7 +29009,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 194 */
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -29129,7 +29019,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var promise_1 = __webpack_require__(49);
 	var lang_1 = __webpack_require__(5);
-	var xhr_1 = __webpack_require__(143);
+	var xhr_1 = __webpack_require__(142);
 	var XHRImpl = (function (_super) {
 	    __extends(XHRImpl, _super);
 	    function XHRImpl() {
@@ -29169,12 +29059,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 195 */
+/* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var collection_1 = __webpack_require__(12);
 	var lang_1 = __webpack_require__(5);
-	var dom_adapter_1 = __webpack_require__(173);
+	var dom_adapter_1 = __webpack_require__(172);
 	var core_1 = __webpack_require__(2);
 	var PublicTestability = (function () {
 	    function PublicTestability(testability) {
@@ -29247,7 +29137,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 196 */
+/* 195 */
 /***/ function(module, exports) {
 
 	/**
@@ -29258,38 +29148,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 197 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var dom_adapter_1 = __webpack_require__(173);
-	/**
-	 * A service that can be used to get and set the title of a current HTML document.
-	 *
-	 * Since an Angular 2 application can't be bootstrapped on the entire HTML document (`<html>` tag)
-	 * it is not possible to bind to the `text` property of the `HTMLTitleElement` elements
-	 * (representing the `<title>` tag). Instead, this service can be used to set and get the current
-	 * title value.
-	 */
-	var Title = (function () {
-	    function Title() {
-	    }
-	    /**
-	     * Get the title of the current HTML document.
-	     * @returns {string}
-	     */
-	    Title.prototype.getTitle = function () { return dom_adapter_1.DOM.getTitle(); };
-	    /**
-	     * Set the title of the current HTML document.
-	     * @param newTitle
-	     */
-	    Title.prototype.setTitle = function (newTitle) { dom_adapter_1.DOM.setTitle(newTitle); };
-	    return Title;
-	})();
-	exports.Title = Title;
-
-
-/***/ },
-/* 198 */
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
 	function __export(m) {
@@ -29298,33 +29157,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * This is a set of classes and objects that can be used both in the browser and on the server.
 	 */
-	var dom_adapter_1 = __webpack_require__(173);
+	var dom_adapter_1 = __webpack_require__(172);
 	exports.DOM = dom_adapter_1.DOM;
 	exports.setRootDomAdapter = dom_adapter_1.setRootDomAdapter;
 	exports.DomAdapter = dom_adapter_1.DomAdapter;
-	var dom_renderer_1 = __webpack_require__(183);
+	var dom_renderer_1 = __webpack_require__(182);
 	exports.DomRenderer = dom_renderer_1.DomRenderer;
-	var dom_tokens_1 = __webpack_require__(182);
+	var dom_tokens_1 = __webpack_require__(181);
 	exports.DOCUMENT = dom_tokens_1.DOCUMENT;
-	var shared_styles_host_1 = __webpack_require__(191);
+	var shared_styles_host_1 = __webpack_require__(190);
 	exports.SharedStylesHost = shared_styles_host_1.SharedStylesHost;
 	exports.DomSharedStylesHost = shared_styles_host_1.DomSharedStylesHost;
-	var dom_events_1 = __webpack_require__(177);
+	var dom_events_1 = __webpack_require__(176);
 	exports.DomEventsPlugin = dom_events_1.DomEventsPlugin;
-	var event_manager_1 = __webpack_require__(178);
+	var event_manager_1 = __webpack_require__(177);
 	exports.EVENT_MANAGER_PLUGINS = event_manager_1.EVENT_MANAGER_PLUGINS;
 	exports.EventManager = event_manager_1.EventManager;
 	exports.EventManagerPlugin = event_manager_1.EventManagerPlugin;
-	__export(__webpack_require__(199));
-	__export(__webpack_require__(200));
+	__export(__webpack_require__(197));
+	__export(__webpack_require__(198));
 
 
 /***/ },
-/* 199 */
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var lang_1 = __webpack_require__(5);
-	var dom_adapter_1 = __webpack_require__(173);
+	var dom_adapter_1 = __webpack_require__(172);
 	/**
 	 * Predicates for use with {@link DebugElement}'s query functions.
 	 */
@@ -29361,7 +29220,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * {@example platform/dom/debug/ts/by/by.ts region='by_directive'}
 	     */
 	    By.directive = function (type) {
-	        return function (debugElement) { return debugElement.hasDirective(type); };
+	        return function (debugElement) { return debugElement.providerTokens.indexOf(type) !== -1; };
 	    };
 	    return By;
 	})();
@@ -29369,103 +29228,210 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 200 */
+/* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
 	var lang_1 = __webpack_require__(5);
-	var collection_1 = __webpack_require__(12);
 	var di_1 = __webpack_require__(6);
-	var view_listener_1 = __webpack_require__(85);
-	var dom_adapter_1 = __webpack_require__(173);
-	var debug_element_1 = __webpack_require__(92);
-	var NG_ID_PROPERTY = 'ngid';
+	var dom_adapter_1 = __webpack_require__(172);
+	var debug_node_1 = __webpack_require__(91);
+	var dom_renderer_1 = __webpack_require__(182);
+	var core_1 = __webpack_require__(2);
+	var debug_renderer_1 = __webpack_require__(199);
 	var INSPECT_GLOBAL_NAME = 'ng.probe';
-	var NG_ID_SEPARATOR = '#';
-	// Need to keep the views in a global Map so that multiple angular apps are supported
-	var _allIdsByView = new collection_1.Map();
-	var _allViewsById = new collection_1.Map();
-	var _nextId = 0;
-	function _setElementId(element, indices) {
-	    if (lang_1.isPresent(element) && dom_adapter_1.DOM.isElementNode(element)) {
-	        dom_adapter_1.DOM.setData(element, NG_ID_PROPERTY, indices.join(NG_ID_SEPARATOR));
-	    }
-	}
-	function _getElementId(element) {
-	    var elId = dom_adapter_1.DOM.getData(element, NG_ID_PROPERTY);
-	    if (lang_1.isPresent(elId)) {
-	        return elId.split(NG_ID_SEPARATOR).map(function (partStr) { return lang_1.NumberWrapper.parseInt(partStr, 10); });
-	    }
-	    else {
-	        return null;
-	    }
-	}
 	/**
 	 * Returns a {@link DebugElement} for the given native DOM element, or
 	 * null if the given native element does not have an Angular view associated
 	 * with it.
 	 */
 	function inspectNativeElement(element) {
-	    var elId = _getElementId(element);
-	    if (lang_1.isPresent(elId)) {
-	        var view = _allViewsById.get(elId[0]);
-	        if (lang_1.isPresent(view)) {
-	            return new debug_element_1.DebugElement_(view.appElements[elId[1]]);
-	        }
-	    }
-	    return null;
+	    return debug_node_1.getDebugNode(element);
 	}
 	exports.inspectNativeElement = inspectNativeElement;
-	var DebugElementViewListener = (function () {
-	    function DebugElementViewListener() {
-	        dom_adapter_1.DOM.setGlobalVar(INSPECT_GLOBAL_NAME, inspectNativeElement);
+	function _createConditionalRootRenderer(rootRenderer) {
+	    if (lang_1.assertionsEnabled()) {
+	        return _createRootRenderer(rootRenderer);
 	    }
-	    DebugElementViewListener.prototype.onViewCreated = function (view) {
-	        var viewId = _nextId++;
-	        _allViewsById.set(viewId, view);
-	        _allIdsByView.set(view, viewId);
-	        for (var i = 0; i < view.appElements.length; i++) {
-	            var el = view.appElements[i];
-	            _setElementId(el.nativeElement, [viewId, i]);
-	        }
-	    };
-	    DebugElementViewListener.prototype.onViewDestroyed = function (view) {
-	        var viewId = _allIdsByView.get(view);
-	        _allIdsByView.delete(view);
-	        _allViewsById.delete(viewId);
-	    };
-	    DebugElementViewListener = __decorate([
-	        di_1.Injectable(), 
-	        __metadata('design:paramtypes', [])
-	    ], DebugElementViewListener);
-	    return DebugElementViewListener;
-	})();
-	exports.DebugElementViewListener = DebugElementViewListener;
+	    return rootRenderer;
+	}
+	function _createRootRenderer(rootRenderer) {
+	    dom_adapter_1.DOM.setGlobalVar(INSPECT_GLOBAL_NAME, inspectNativeElement);
+	    return new debug_renderer_1.DebugDomRootRenderer(rootRenderer);
+	}
 	/**
 	 * Providers which support debugging Angular applications (e.g. via `ng.probe`).
-	 *
-	 * ## Example
-	 *
-	 * {@example platform/dom/debug/ts/debug_element_view_listener/providers.ts region='providers'}
 	 */
 	exports.ELEMENT_PROBE_PROVIDERS = lang_1.CONST_EXPR([
-	    DebugElementViewListener,
-	    lang_1.CONST_EXPR(new di_1.Provider(view_listener_1.AppViewListener, { useExisting: DebugElementViewListener })),
+	    new di_1.Provider(core_1.RootRenderer, { useFactory: _createConditionalRootRenderer, deps: [dom_renderer_1.DomRootRenderer] })
 	]);
+	exports.ELEMENT_PROBE_PROVIDERS_PROD_MODE = lang_1.CONST_EXPR([new di_1.Provider(core_1.RootRenderer, { useFactory: _createRootRenderer, deps: [dom_renderer_1.DomRootRenderer] })]);
+
+
+/***/ },
+/* 199 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var lang_1 = __webpack_require__(5);
+	var debug_node_1 = __webpack_require__(91);
+	var DebugDomRootRenderer = (function () {
+	    function DebugDomRootRenderer(_delegate) {
+	        this._delegate = _delegate;
+	    }
+	    DebugDomRootRenderer.prototype.renderComponent = function (componentProto) {
+	        return new DebugDomRenderer(this, this._delegate.renderComponent(componentProto));
+	    };
+	    return DebugDomRootRenderer;
+	})();
+	exports.DebugDomRootRenderer = DebugDomRootRenderer;
+	var DebugDomRenderer = (function () {
+	    function DebugDomRenderer(_rootRenderer, _delegate) {
+	        this._rootRenderer = _rootRenderer;
+	        this._delegate = _delegate;
+	    }
+	    DebugDomRenderer.prototype.renderComponent = function (componentType) {
+	        return this._rootRenderer.renderComponent(componentType);
+	    };
+	    DebugDomRenderer.prototype.selectRootElement = function (selector) {
+	        var nativeEl = this._delegate.selectRootElement(selector);
+	        var debugEl = new debug_node_1.DebugElement(nativeEl, null);
+	        debug_node_1.indexDebugNode(debugEl);
+	        return nativeEl;
+	    };
+	    DebugDomRenderer.prototype.createElement = function (parentElement, name) {
+	        var nativeEl = this._delegate.createElement(parentElement, name);
+	        var debugEl = new debug_node_1.DebugElement(nativeEl, debug_node_1.getDebugNode(parentElement));
+	        debugEl.name = name;
+	        debug_node_1.indexDebugNode(debugEl);
+	        return nativeEl;
+	    };
+	    DebugDomRenderer.prototype.createViewRoot = function (hostElement) { return this._delegate.createViewRoot(hostElement); };
+	    DebugDomRenderer.prototype.createTemplateAnchor = function (parentElement) {
+	        var comment = this._delegate.createTemplateAnchor(parentElement);
+	        var debugEl = new debug_node_1.DebugNode(comment, debug_node_1.getDebugNode(parentElement));
+	        debug_node_1.indexDebugNode(debugEl);
+	        return comment;
+	    };
+	    DebugDomRenderer.prototype.createText = function (parentElement, value) {
+	        var text = this._delegate.createText(parentElement, value);
+	        var debugEl = new debug_node_1.DebugNode(text, debug_node_1.getDebugNode(parentElement));
+	        debug_node_1.indexDebugNode(debugEl);
+	        return text;
+	    };
+	    DebugDomRenderer.prototype.projectNodes = function (parentElement, nodes) {
+	        var debugParent = debug_node_1.getDebugNode(parentElement);
+	        if (lang_1.isPresent(debugParent) && debugParent instanceof debug_node_1.DebugElement) {
+	            nodes.forEach(function (node) { debugParent.addChild(debug_node_1.getDebugNode(node)); });
+	        }
+	        return this._delegate.projectNodes(parentElement, nodes);
+	    };
+	    DebugDomRenderer.prototype.attachViewAfter = function (node, viewRootNodes) {
+	        var debugNode = debug_node_1.getDebugNode(node);
+	        if (lang_1.isPresent(debugNode)) {
+	            var debugParent = debugNode.parent;
+	            if (viewRootNodes.length > 0 && lang_1.isPresent(debugParent)) {
+	                var debugViewRootNodes = [];
+	                viewRootNodes.forEach(function (rootNode) { return debugViewRootNodes.push(debug_node_1.getDebugNode(rootNode)); });
+	                debugParent.insertChildrenAfter(debugNode, debugViewRootNodes);
+	            }
+	        }
+	        return this._delegate.attachViewAfter(node, viewRootNodes);
+	    };
+	    DebugDomRenderer.prototype.detachView = function (viewRootNodes) {
+	        viewRootNodes.forEach(function (node) {
+	            var debugNode = debug_node_1.getDebugNode(node);
+	            if (lang_1.isPresent(debugNode) && lang_1.isPresent(debugNode.parent)) {
+	                debugNode.parent.removeChild(debugNode);
+	            }
+	        });
+	        return this._delegate.detachView(viewRootNodes);
+	    };
+	    DebugDomRenderer.prototype.destroyView = function (hostElement, viewAllNodes) {
+	        viewAllNodes.forEach(function (node) { debug_node_1.removeDebugNodeFromIndex(debug_node_1.getDebugNode(node)); });
+	        return this._delegate.destroyView(hostElement, viewAllNodes);
+	    };
+	    DebugDomRenderer.prototype.listen = function (renderElement, name, callback) {
+	        var debugEl = debug_node_1.getDebugNode(renderElement);
+	        if (lang_1.isPresent(debugEl)) {
+	            debugEl.listeners.push(new debug_node_1.EventListener(name, callback));
+	        }
+	        return this._delegate.listen(renderElement, name, callback);
+	    };
+	    DebugDomRenderer.prototype.listenGlobal = function (target, name, callback) {
+	        return this._delegate.listenGlobal(target, name, callback);
+	    };
+	    DebugDomRenderer.prototype.setElementProperty = function (renderElement, propertyName, propertyValue) {
+	        var debugEl = debug_node_1.getDebugNode(renderElement);
+	        if (lang_1.isPresent(debugEl) && debugEl instanceof debug_node_1.DebugElement) {
+	            debugEl.properties.set(propertyName, propertyValue);
+	        }
+	        return this._delegate.setElementProperty(renderElement, propertyName, propertyValue);
+	    };
+	    DebugDomRenderer.prototype.setElementAttribute = function (renderElement, attributeName, attributeValue) {
+	        var debugEl = debug_node_1.getDebugNode(renderElement);
+	        if (lang_1.isPresent(debugEl) && debugEl instanceof debug_node_1.DebugElement) {
+	            debugEl.attributes.set(attributeName, attributeValue);
+	        }
+	        return this._delegate.setElementAttribute(renderElement, attributeName, attributeValue);
+	    };
+	    /**
+	     * Used only in debug mode to serialize property changes to comment nodes,
+	     * such as <template> placeholders.
+	     */
+	    DebugDomRenderer.prototype.setBindingDebugInfo = function (renderElement, propertyName, propertyValue) {
+	        return this._delegate.setBindingDebugInfo(renderElement, propertyName, propertyValue);
+	    };
+	    /**
+	     * Used only in development mode to set information needed by the DebugNode for this element.
+	     */
+	    DebugDomRenderer.prototype.setElementDebugInfo = function (renderElement, info) {
+	        var debugEl = debug_node_1.getDebugNode(renderElement);
+	        debugEl.setDebugInfo(info);
+	        return this._delegate.setElementDebugInfo(renderElement, info);
+	    };
+	    DebugDomRenderer.prototype.setElementClass = function (renderElement, className, isAdd) {
+	        return this._delegate.setElementClass(renderElement, className, isAdd);
+	    };
+	    DebugDomRenderer.prototype.setElementStyle = function (renderElement, styleName, styleValue) {
+	        return this._delegate.setElementStyle(renderElement, styleName, styleValue);
+	    };
+	    DebugDomRenderer.prototype.invokeElementMethod = function (renderElement, methodName, args) {
+	        return this._delegate.invokeElementMethod(renderElement, methodName, args);
+	    };
+	    DebugDomRenderer.prototype.setText = function (renderNode, text) { return this._delegate.setText(renderNode, text); };
+	    return DebugDomRenderer;
+	})();
+	exports.DebugDomRenderer = DebugDomRenderer;
+
+
+/***/ },
+/* 200 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var dom_adapter_1 = __webpack_require__(172);
 	/**
-	 * Use {@link ELEMENT_PROBE_PROVIDERS}.
+	 * A service that can be used to get and set the title of a current HTML document.
 	 *
-	 * @deprecated
+	 * Since an Angular 2 application can't be bootstrapped on the entire HTML document (`<html>` tag)
+	 * it is not possible to bind to the `text` property of the `HTMLTitleElement` elements
+	 * (representing the `<title>` tag). Instead, this service can be used to set and get the current
+	 * title value.
 	 */
-	exports.ELEMENT_PROBE_BINDINGS = exports.ELEMENT_PROBE_PROVIDERS;
+	var Title = (function () {
+	    function Title() {
+	    }
+	    /**
+	     * Get the title of the current HTML document.
+	     * @returns {string}
+	     */
+	    Title.prototype.getTitle = function () { return dom_adapter_1.DOM.getTitle(); };
+	    /**
+	     * Set the title of the current HTML document.
+	     * @param newTitle
+	     */
+	    Title.prototype.setTitle = function (newTitle) { dom_adapter_1.DOM.setTitle(newTitle); };
+	    return Title;
+	})();
+	exports.Title = Title;
 
 
 /***/ },
@@ -29506,7 +29472,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var application_ref_1 = __webpack_require__(65);
 	var lang_1 = __webpack_require__(5);
 	var browser_1 = __webpack_require__(203);
-	var dom_adapter_1 = __webpack_require__(173);
+	var dom_adapter_1 = __webpack_require__(172);
 	/**
 	 * Entry point for all Angular debug tools. This object corresponds to the `ng`
 	 * global variable accessible in the dev console.
@@ -34760,7 +34726,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var core_1 = __webpack_require__(2);
 	var platform_location_1 = __webpack_require__(239);
-	var dom_adapter_1 = __webpack_require__(173);
+	var dom_adapter_1 = __webpack_require__(172);
 	/**
 	 * `PlatformLocation` encapsulates all of the direct calls to platform APIs.
 	 * This class should not be used directly by an application developer. Instead, use
@@ -34828,7 +34794,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var compiler_1 = __webpack_require__(141);
+	var compiler_1 = __webpack_require__(140);
 	var core_1 = __webpack_require__(2);
 	var router_link_transform_1 = __webpack_require__(247);
 	var lang_1 = __webpack_require__(5);
@@ -34881,7 +34847,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	var compiler_1 = __webpack_require__(141);
+	var compiler_1 = __webpack_require__(140);
 	var ast_1 = __webpack_require__(30);
 	var exceptions_1 = __webpack_require__(14);
 	var core_1 = __webpack_require__(2);
@@ -35106,7 +35072,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var core_1 = __webpack_require__(2);
 	var async_1 = __webpack_require__(48);
-	var browser_1 = __webpack_require__(174);
+	var browser_1 = __webpack_require__(173);
 	var metadata_1 = __webpack_require__(251);
 	var util_1 = __webpack_require__(252);
 	var constants_1 = __webpack_require__(253);

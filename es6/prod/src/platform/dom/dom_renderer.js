@@ -184,6 +184,7 @@ export class DomRenderer {
             this.setElementAttribute(renderElement, propertyName, propertyValue);
         }
     }
+    setElementDebugInfo(renderElement, info) { }
     setElementClass(renderElement, className, isAdd) {
         if (isAdd) {
             DOM.addClass(renderElement, className);

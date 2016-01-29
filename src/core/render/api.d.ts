@@ -1,9 +1,17 @@
 import { ViewEncapsulation } from 'angular2/src/core/metadata/view';
+import { Injector } from 'angular2/src/core/di/injector';
 export declare class RenderComponentType {
     id: string;
     encapsulation: ViewEncapsulation;
     styles: Array<string | any[]>;
     constructor(id: string, encapsulation: ViewEncapsulation, styles: Array<string | any[]>);
+}
+export declare class RenderDebugInfo {
+    injector: Injector;
+    component: any;
+    providerTokens: any[];
+    locals: Map<string, any>;
+    constructor(injector: Injector, component: any, providerTokens: any[], locals: Map<string, any>);
 }
 export interface ParentRenderer {
     renderComponent(componentType: RenderComponentType): Renderer;
@@ -28,6 +36,7 @@ export declare abstract class Renderer implements ParentRenderer {
      * such as <template> placeholders.
      */
     abstract setBindingDebugInfo(renderElement: any, propertyName: string, propertyValue: string): any;
+    abstract setElementDebugInfo(renderElement: any, info: RenderDebugInfo): any;
     abstract setElementClass(renderElement: any, className: string, isAdd: boolean): any;
     abstract setElementStyle(renderElement: any, styleName: string, styleValue: string): any;
     abstract invokeElementMethod(renderElement: any, methodName: string, args: any[]): any;

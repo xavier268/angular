@@ -13,6 +13,7 @@ import { DebugContext } from 'angular2/src/core/change_detection/interfaces';
 import { AppElement } from './element';
 import { isPresent, isBlank, CONST, CONST_EXPR } from 'angular2/src/facade/lang';
 import { BaseException } from 'angular2/src/facade/exceptions';
+import { RenderDebugInfo } from 'angular2/src/core/render/api';
 import { ViewRef_ } from './view_ref';
 import { ProtoPipes } from 'angular2/src/core/pipes/pipes';
 import { camelCaseToDashCase } from 'angular2/src/core/render/util';
@@ -71,6 +72,12 @@ export class AppView {
         StringMapWrapper.forEach(this.proto.templateVariableBindings, (templateName, _) => { localsMap.set(templateName, null); });
         for (var i = 0; i < appElements.length; i++) {
             var appEl = appElements[i];
+            var providerTokens = [];
+            if (isPresent(appEl.proto.protoInjector)) {
+                for (var j = 0; j < appEl.proto.protoInjector.numberOfProviders; j++) {
+                    providerTokens.push(appEl.proto.protoInjector.getProviderAtIndex(j).key.token);
+                }
+            }
             StringMapWrapper.forEach(appEl.proto.directiveVariableBindings, (directiveIndex, name) => {
                 if (isBlank(directiveIndex)) {
                     localsMap.set(name, appEl.nativeElement);
@@ -79,6 +86,7 @@ export class AppView {
                     localsMap.set(name, appEl.getDirectiveAtIndex(directiveIndex));
                 }
             });
+            this.renderer.setElementDebugInfo(appEl.nativeElement, new RenderDebugInfo(appEl.getInjector(), appEl.getComponent(), providerTokens, localsMap));
         }
         var parentLocals = null;
         if (this.proto.type !== ViewType.COMPONENT) {

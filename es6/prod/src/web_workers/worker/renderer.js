@@ -159,6 +159,7 @@ export class WebWorkerRenderer {
             new FnArg(propertyValue, null)
         ]);
     }
+    setElementDebugInfo(renderElement, info) { }
     setElementClass(renderElement, className, isAdd) {
         this._runOnService('setElementClass', [
             new FnArg(renderElement, RenderStoreObject),
