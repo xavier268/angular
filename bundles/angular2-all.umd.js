@@ -928,7 +928,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @Component({
 	 *   selector: 'app',
 	 *   template: `
-	 *     <interval-dir (every-second)="everySecond()" (every-five-seconds)="everyFiveSeconds()">
+	 *     <interval-dir (everySecond)="everySecond()" (everyFiveSeconds)="everyFiveSeconds()">
 	 *     </interval-dir>
 	 *   `,
 	 *   directives: [IntervalDir]
