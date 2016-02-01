@@ -73,17 +73,6 @@ class TransformerOptions {
   /// at any time.
   final bool lazyTransformers;
 
-  /// Whether to generate compiled templates.
-  ///
-  /// This option is strictly for internal testing and is not available as an
-  /// option on the transformer.
-  /// Setting this to `false` means that our generated .template.dart files do
-  /// not have any compiled templates or change detectors defined in them.
-  /// These files will not be usable, but this allows us to test the code output
-  /// of the transformer without breaking when compiled template internals
-  /// change.
-  final bool genCompiledTemplates;
-
   TransformerOptions._internal(
       this.entryPoints,
       this.entryPointGlobs,
@@ -91,14 +80,13 @@ class TransformerOptions {
       this.mirrorMode,
       this.initReflector,
       this.annotationMatcher,
-      {this.formatCode,
-      this.genChangeDetectionDebugInfo,
-      this.genCompiledTemplates,
-      this.inlineViews,
-      this.lazyTransformers,
+      {this.genChangeDetectionDebugInfo,
+      this.reflectPropertiesAsAttributes,
       this.platformDirectives,
       this.platformPipes,
-      this.reflectPropertiesAsAttributes});
+      this.inlineViews,
+      this.lazyTransformers,
+      this.formatCode});
 
   factory TransformerOptions(List<String> entryPoints,
       {String modeName: 'release',
@@ -107,7 +95,6 @@ class TransformerOptions {
       List<ClassDescriptor> customAnnotationDescriptors: const [],
       bool inlineViews: false,
       bool genChangeDetectionDebugInfo: false,
-      bool genCompiledTemplates: true,
       bool reflectPropertiesAsAttributes: false,
       List<String> platformDirectives,
       List<String> platformPipes,
@@ -121,7 +108,6 @@ class TransformerOptions {
     return new TransformerOptions._internal(entryPoints, entryPointGlobs,
         modeName, mirrorMode, initReflector, annotationMatcher,
         genChangeDetectionDebugInfo: genChangeDetectionDebugInfo,
-        genCompiledTemplates: genCompiledTemplates,
         reflectPropertiesAsAttributes: reflectPropertiesAsAttributes,
         platformDirectives: platformDirectives,
         platformPipes: platformPipes,

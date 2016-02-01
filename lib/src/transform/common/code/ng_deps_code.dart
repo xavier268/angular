@@ -14,7 +14,8 @@ import 'reflection_info_code.dart';
 import 'parameter_code.dart';
 import 'queries_code.dart';
 
-/// Visitor responsible for parsing Dart source into [NgDepsModel] objects.
+/// Visitor responsible for parsing source Dart files (that is, not
+/// `.ng_deps.dart` files) into [NgDepsModel] objects.
 class NgDepsVisitor extends RecursiveAstVisitor<Object> {
   final AssetId processedFile;
   final _importVisitor = new ImportVisitor();
@@ -112,7 +113,7 @@ class NgDepsVisitor extends RecursiveAstVisitor<Object> {
 }
 
 /// Defines the format in which an [NgDepsModel] is expressed as Dart code
-/// when registered with the reflector.
+/// in a `.ng_deps.dart` file.
 class NgDepsWriter extends Object
     with
         AnnotationWriterMixin,
@@ -138,10 +139,10 @@ abstract class NgDepsWriterMixin
 
   void writeNgDepsModel(NgDepsModel model) {
     if (model.libraryUri.isNotEmpty) {
-      buffer.writeln('library ${model.libraryUri}${TEMPLATE_EXTENSION};\n');
+      buffer.writeln('library ${model.libraryUri}${DEPS_EXTENSION};\n');
     }
 
-    // We need to import & export (see below) the source file.
+    // We need to import & export the source file.
     writeImportModel(new ImportModel()..uri = model.sourceFile);
 
     // Used to register reflective information.

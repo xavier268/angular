@@ -1,4 +1,4 @@
-library angular2.test.transform.reflection_remover.reflection_remover_files;
+library angular2.test.transform.reflection_remover.deferred_bootstrap_files;
 
 // This file is intentionally formatted as a string to avoid having the
 // automatic transformer prettify it.
@@ -9,11 +9,11 @@ library angular2.test.transform.reflection_remover.reflection_remover_files;
 // those we are removing.
 
 var code = """
-library web_foo;
+import 'package:angular2/bootstrap_static.dart' deferred as ng;import 'index.ng_deps.dart' as ngStaticInit;
 
-import 'package:angular2/bootstrap_static.dart';import 'index.ng_deps.dart' as ngStaticInit;
-
-void main() async {
-  var appRef = await bootstrapStatic(MyComponent, null, () { ngStaticInit.initReflector(); });
+void main() {
+  ng.loadLibrary().then((_) {
+    ng.bootstrapStatic(MyComponent, null, () { ngStaticInit.initReflector(); });
+  });
 }
 """;

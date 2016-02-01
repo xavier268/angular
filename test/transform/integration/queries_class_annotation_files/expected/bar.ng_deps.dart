@@ -1,9 +1,10 @@
-library bar.template.dart;
+library bar.ng_deps.dart;
 
 import 'bar.dart';
 import 'package:angular2/src/core/reflection/reflection.dart' as _ngRef;
 import 'package:angular2/src/core/metadata.dart';
-import 'package:angular2/src/core/metadata.template.dart' as i0;
+import 'bar.template.dart' as _templates;
+import 'package:angular2/src/core/metadata.ng_deps.dart' as i0;
 export 'bar.dart';
 
 var _visited = false;
@@ -15,12 +16,11 @@ void initReflector() {
         MyComponent,
         new _ngRef.ReflectionInfo(const [
           const Component(
-              outputs: ['eventName1', 'eventName2: propName2'],
+              queries: const {'queryField': const ContentChild('child')},
               selector: '[soup]'),
           const View(template: ''),
-          hostViewFactory_MyComponent
+          _templates.hostViewFactory_MyComponent
         ], const [], () => new MyComponent()))
-    ..registerGetters(
-        {'eventName1': (o) => o.eventName1, 'eventName2': (o) => o.eventName2});
+    ..registerSetters({'queryField': (o, v) => o.queryField = v});
   i0.initReflector();
 }

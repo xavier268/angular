@@ -58,7 +58,7 @@ class AnnotationVisitor extends SimpleAstVisitor<AnnotationModel> {
 }
 
 /// Defines the format in which an [AnnotationModel] is expressed as Dart code
-/// when registered with the reflector.
+/// in a `.ng_deps.dart` file.
 abstract class AnnotationWriterMixin {
   StringBuffer get buffer;
 
