@@ -13290,14 +13290,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        fn();
 	                        collection_1.ListWrapper.remove(ngZone._pendingTimeouts, id);
 	                    };
-	                    id = parentSetTimeout(cb, delay, args);
+	                    id = parentSetTimeout.call(this, cb, delay, args);
 	                    ngZone._pendingTimeouts.push(id);
 	                    return id;
 	                };
 	            },
 	            '$clearTimeout': function (parentClearTimeout) {
 	                return function (id) {
-	                    parentClearTimeout(id);
+	                    parentClearTimeout.call(this, id);
 	                    collection_1.ListWrapper.remove(ngZone._pendingTimeouts, id);
 	                };
 	            },
