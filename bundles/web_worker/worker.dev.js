@@ -5864,14 +5864,14 @@ System.register("angular2/src/core/zone/ng_zone", ["angular2/src/facade/collecti
               fn();
               collection_1.ListWrapper.remove(ngZone._pendingTimeouts, id);
             };
-            id = parentSetTimeout.call(this, cb, delay, args);
+            id = parentSetTimeout(cb, delay, args);
             ngZone._pendingTimeouts.push(id);
             return id;
           };
         },
         '$clearTimeout': function(parentClearTimeout) {
           return function(id) {
-            parentClearTimeout.call(this, id);
+            parentClearTimeout(id);
             collection_1.ListWrapper.remove(ngZone._pendingTimeouts, id);
           };
         },

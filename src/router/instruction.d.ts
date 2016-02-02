@@ -179,7 +179,7 @@ export declare class RedirectInstruction extends ResolvedInstruction {
  * `ComponentInstructions` is a public API. Instances of `ComponentInstruction` are passed
  * to route lifecycle hooks, like {@link CanActivate}.
  *
- * `ComponentInstruction`s are [hash consed](https://en.wikipedia.org/wiki/Hash_consing). You should
+ * `ComponentInstruction`s are [https://en.wikipedia.org/wiki/Hash_consing](hash consed). You should
  * never construct one yourself with "new." Instead, rely on {@link Router/RouteRecognizer} to
  * construct `ComponentInstruction`s.
  *

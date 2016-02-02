@@ -57,15 +57,11 @@ export class UpgradeNg1ComponentAdapterBuilder {
         throw new Error(`Upgraded directive '${this.name}' does not support '${feature}'.`);
     }
     extractBindings() {
-        var btcIsObject = typeof this.directive.bindToController === 'object';
-        if (btcIsObject && Object.keys(this.directive.scope).length) {
-            throw new Error(`Binding definitions on scope and controller at the same time are not supported.`);
-        }
-        var context = (btcIsObject) ? this.directive.bindToController : this.directive.scope;
-        if (typeof context == 'object') {
-            for (var name in context) {
-                if (context.hasOwnProperty(name)) {
-                    var localName = context[name];
+        var scope = this.directive.scope;
+        if (typeof scope == 'object') {
+            for (var name in scope) {
+                if (scope.hasOwnProperty(name)) {
+                    var localName = scope[name];
                     var type = localName.charAt(0);
                     localName = localName.substr(1) || name;
                     var outputName = 'output_' + name;
@@ -92,7 +88,7 @@ export class UpgradeNg1ComponentAdapterBuilder {
                             this.propertyMap[outputName] = localName;
                             break;
                         default:
-                            var json = JSON.stringify(context);
+                            var json = JSON.stringify(scope);
                             throw new Error(`Unexpected mapping '${type}' in '${json}' in '${this.name}' directive.`);
                     }
                 }
