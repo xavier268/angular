@@ -13,10 +13,8 @@ main() {
 }
 
 var formatter = new DartFormatter();
-var transform = new AngularTransformerGroup(new TransformerOptions(
-    ['web/index.dart'],
-    formatCode: true,
-    genCompiledTemplates: false));
+var transform = new AngularTransformerGroup(
+    new TransformerOptions(['web/index.dart'], formatCode: true));
 
 // Each test has its own directory for inputs & an `expected` directory for
 // expected outputs.
@@ -58,10 +56,10 @@ void allTests() {
       'a|web/bar.dart': 'simple_annotation_files/bar.dart'
     },
         outputs: {
-      'a|web/bar.template.dart':
-          'simple_annotation_files/expected/bar.template.dart',
-      'a|web/index.template.dart':
-          'simple_annotation_files/expected/index.template.dart'
+      'a|web/bar.ng_deps.dart':
+          'simple_annotation_files/expected/bar.ng_deps.dart',
+      'a|web/index.ng_deps.dart':
+          'simple_annotation_files/expected/index.ng_deps.dart'
     }),
     new IntegrationTestConfig(
         'should generate proper code for a Component with multiple deps.',
@@ -71,7 +69,7 @@ void allTests() {
       'a|web/bar.dart': 'two_deps_files/bar.dart'
     },
         outputs: {
-      'a|web/bar.template.dart': 'two_deps_files/expected/bar.template.dart'
+      'a|web/bar.ng_deps.dart': 'two_deps_files/expected/bar.ng_deps.dart'
     }),
     new IntegrationTestConfig(
         'should generate proper code for a Component declaring a '
@@ -82,8 +80,7 @@ void allTests() {
       'a|web/bar.dart': 'list_of_types_files/bar.dart'
     },
         outputs: {
-      'a|web/bar.template.dart':
-          'list_of_types_files/expected/bar.template.dart'
+      'a|web/bar.ng_deps.dart': 'list_of_types_files/expected/bar.ng_deps.dart'
     }),
     new IntegrationTestConfig(
         'should generate a factory for a class with no declared ctor.',
@@ -92,8 +89,7 @@ void allTests() {
       'a|web/bar.dart': 'synthetic_ctor_files/bar.dart'
     },
         outputs: {
-      'a|web/bar.template.dart':
-          'synthetic_ctor_files/expected/bar.template.dart'
+      'a|web/bar.ng_deps.dart': 'synthetic_ctor_files/expected/bar.ng_deps.dart'
     }),
     new IntegrationTestConfig('should preserve multiple annotations.', inputs: {
       'a|web/index.dart': 'two_annotations_files/index.dart',
@@ -101,8 +97,8 @@ void allTests() {
       'angular2|lib/src/core/metadata.dart':
           '../../../lib/src/core/metadata.dart'
     }, outputs: {
-      'a|web/bar.template.dart':
-          'two_annotations_files/expected/bar.template.dart'
+      'a|web/bar.ng_deps.dart':
+          'two_annotations_files/expected/bar.ng_deps.dart'
     }),
     new IntegrationTestConfig(
         'should generate getters for output events defined on a Component.',
@@ -111,7 +107,7 @@ void allTests() {
       'a|web/bar.dart': 'event_getter_files/bar.dart'
     },
         outputs: {
-      'a|web/bar.template.dart': 'event_getter_files/expected/bar.template.dart'
+      'a|web/bar.ng_deps.dart': 'event_getter_files/expected/bar.ng_deps.dart'
     }),
     new IntegrationTestConfig(
         'should handle Directive dependencies declared on a View.',
@@ -121,8 +117,7 @@ void allTests() {
       'a|web/bar.dart': 'directive_dep_files/bar.dart'
     },
         outputs: {
-      'a|web/bar.template.dart':
-          'directive_dep_files/expected/bar.template.dart'
+      'a|web/bar.ng_deps.dart': 'directive_dep_files/expected/bar.ng_deps.dart'
     }),
     new IntegrationTestConfig(
         'should handle chained Directive dependencies declared on a View.',
@@ -133,20 +128,18 @@ void allTests() {
       'a|web/baz.dart': 'directive_chain_files/baz.dart'
     },
         outputs: {
-      'a|web/bar.template.dart':
-          'directive_chain_files/expected/bar.template.dart'
+      'a|web/bar.ng_deps.dart':
+          'directive_chain_files/expected/bar.ng_deps.dart'
     }),
     new IntegrationTestConfig(
-        'should handle empty template files that define directive aliases.',
+        'should handle empty ng_deps files that define directive aliases.',
         inputs: {
       'a|web/foo.dart': 'empty_ng_deps_files/foo.dart',
       'a|web/bar.dart': 'empty_ng_deps_files/bar.dart'
     },
         outputs: {
-      'a|web/foo.template.dart':
-          'empty_ng_deps_files/expected/foo.template.dart',
-      'a|web/bar.template.dart':
-          'empty_ng_deps_files/expected/bar.template.dart'
+      'a|web/foo.ng_deps.dart': 'empty_ng_deps_files/expected/foo.ng_deps.dart',
+      'a|web/bar.ng_deps.dart': 'empty_ng_deps_files/expected/bar.ng_deps.dart'
     }),
     new IntegrationTestConfig(
         'should generate setters for annotated properties.',
@@ -154,8 +147,8 @@ void allTests() {
       'a|web/bar.dart': 'queries_prop_annotation_files/bar.dart'
     },
         outputs: {
-      'a|web/bar.template.dart':
-          'queries_prop_annotation_files/expected/bar.template.dart'
+      'a|web/bar.ng_deps.dart':
+          'queries_prop_annotation_files/expected/bar.ng_deps.dart'
     }),
     new IntegrationTestConfig(
         'should generate setters for `queries` values in Directives.',
@@ -163,18 +156,14 @@ void allTests() {
       'a|web/bar.dart': 'queries_class_annotation_files/bar.dart'
     },
         outputs: {
-      'a|web/bar.template.dart':
-          'queries_class_annotation_files/expected/bar.template.dart'
+      'a|web/bar.ng_deps.dart':
+          'queries_class_annotation_files/expected/bar.ng_deps.dart'
     }),
     new IntegrationTestConfig(
         'should handle @override annotations in properties on Directives.',
-        inputs: {
-      'a|web/bar.dart': 'override_annotation_files/bar.dart'
-    },
-        outputs: {
-      'a|web/bar.template.dart':
-          'override_annotation_files/expected/bar.template.dart'
-    })
+        inputs: {'a|web/bar.dart': 'override_annotation_files/bar.dart'},
+        outputs:
+            {'a|web/bar.ng_deps.dart': 'override_annotation_files/expected/bar.ng_deps.dart'})
   ];
 
   var cache = {};
@@ -192,9 +181,6 @@ void allTests() {
     config.assetPathToExpectedOutputPath.forEach((key, value) {
       config.assetPathToExpectedOutputPath[key] = cache.putIfAbsent(value, () {
         var code = _readFile(value);
-        if (code == null) {
-          throw 'Failed to read $value';
-        }
         return value.endsWith('dart') ? formatter.format(code) : code;
       });
     });
@@ -222,8 +208,8 @@ void _testDeferredRewriter() {
   inputs.addAll(commonInputs);
   inputs.keys.forEach((k) => inputs[k] = _readFile(inputs[k]));
   var outputs = {
-    'a|web/bar.template.dart':
-        _readFile('deferred_files/expected/bar.template.dart'),
+    'a|web/bar.ng_deps.dart':
+        _readFile('deferred_files/expected/bar.ng_deps.dart'),
     'a|web/bar.dart': deferredOuts.barContents,
     'a|web/index.dart': deferredOuts.indexContents
   };
