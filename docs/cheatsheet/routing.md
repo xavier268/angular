@@ -10,16 +10,16 @@ Routing and navigation
 @cheatsheetItem
 syntax(ts):
 `@RouteConfig([
-  { path: '/:myParam', component: MyComponent, name: 'MyCmp' },
-  { path: '/staticPath', component: ..., name: ...},
-  { path: '/*wildCardParam', component: ..., name: ...}
+  { path: '/:myParam', component: MyComponent, as: 'MyCmp' },
+  { path: '/staticPath', component: ..., as: ...},
+  { path: '/*wildCardParam', component: ..., as: ...}
 ])
 class MyComponent() {}`|`@RouteConfig`
 syntax(js):
 `var MyComponent = ng.router.RouteConfig([
-  { path: '/:myParam', component: MyComponent, name: 'MyCmp' },
-  { path: '/staticPath', component: ..., name: ...},
-  { path: '/*wildCardParam', component: ..., name: ...}
+  { path: '/:myParam', component: MyComponent, as: 'MyCmp' },
+  { path: '/staticPath', component: ..., as: ...},
+  { path: '/*wildCardParam', component: ..., as: ...}
 ]).Class({
   constructor: function() {}
 });`|`ng.router.RouteConfig`
