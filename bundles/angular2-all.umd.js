@@ -928,7 +928,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @Component({
 	 *   selector: 'app',
 	 *   template: `
-	 *     <interval-dir (every-second)="everySecond()" (every-five-seconds)="everyFiveSeconds()">
+	 *     <interval-dir (everySecond)="everySecond()" (everyFiveSeconds)="everyFiveSeconds()">
 	 *     </interval-dir>
 	 *   `,
 	 *   directives: [IntervalDir]
@@ -5871,7 +5871,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @Component({
 	         *   selector: 'app',
 	         *   template: `
-	         *     <interval-dir (every-second)="everySecond()" (every-five-seconds)="everyFiveSeconds()">
+	         *     <interval-dir (everySecond)="everySecond()" (everyFiveSeconds)="everyFiveSeconds()">
 	         *     </interval-dir>
 	         *   `,
 	         *   directives: [IntervalDir]
@@ -6174,7 +6174,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @Component({
 	 *   selector: 'app',
 	 *   template: `
-	 *     <interval-dir (every-second)="everySecond()" (every-five-seconds)="everyFiveSeconds()">
+	 *     <interval-dir (everySecond)="everySecond()" (everyFiveSeconds)="everyFiveSeconds()">
 	 *     </interval-dir>
 	 *   `,
 	 *   directives: [IntervalDir]
@@ -13290,14 +13290,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        fn();
 	                        collection_1.ListWrapper.remove(ngZone._pendingTimeouts, id);
 	                    };
-	                    id = parentSetTimeout(cb, delay, args);
+	                    id = parentSetTimeout.call(this, cb, delay, args);
 	                    ngZone._pendingTimeouts.push(id);
 	                    return id;
 	                };
 	            },
 	            '$clearTimeout': function (parentClearTimeout) {
 	                return function (id) {
-	                    parentClearTimeout(id);
+	                    parentClearTimeout.call(this, id);
 	                    collection_1.ListWrapper.remove(ngZone._pendingTimeouts, id);
 	                };
 	            },
@@ -32945,7 +32945,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * `ComponentInstructions` is a public API. Instances of `ComponentInstruction` are passed
 	 * to route lifecycle hooks, like {@link CanActivate}.
 	 *
-	 * `ComponentInstruction`s are [https://en.wikipedia.org/wiki/Hash_consing](hash consed). You should
+	 * `ComponentInstruction`s are [hash consed](https://en.wikipedia.org/wiki/Hash_consing). You should
 	 * never construct one yourself with "new." Instead, rely on {@link Router/RouteRecognizer} to
 	 * construct `ComponentInstruction`s.
 	 *
@@ -35912,11 +35912,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        throw new Error("Upgraded directive '" + this.name + "' does not support '" + feature + "'.");
 	    };
 	    UpgradeNg1ComponentAdapterBuilder.prototype.extractBindings = function () {
-	        var scope = this.directive.scope;
-	        if (typeof scope == 'object') {
-	            for (var name in scope) {
-	                if (scope.hasOwnProperty(name)) {
-	                    var localName = scope[name];
+	        var btcIsObject = typeof this.directive.bindToController === 'object';
+	        if (btcIsObject && Object.keys(this.directive.scope).length) {
+	            throw new Error("Binding definitions on scope and controller at the same time are not supported.");
+	        }
+	        var context = (btcIsObject) ? this.directive.bindToController : this.directive.scope;
+	        if (typeof context == 'object') {
+	            for (var name in context) {
+	                if (context.hasOwnProperty(name)) {
+	                    var localName = context[name];
 	                    var type = localName.charAt(0);
 	                    localName = localName.substr(1) || name;
 	                    var outputName = 'output_' + name;
@@ -35943,7 +35947,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                            this.propertyMap[outputName] = localName;
 	                            break;
 	                        default:
-	                            var json = JSON.stringify(scope);
+	                            var json = JSON.stringify(context);
 	                            throw new Error("Unexpected mapping '" + type + "' in '" + json + "' in '" + this.name + "' directive.");
 	                    }
 	                }
