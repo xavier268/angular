@@ -1,7 +1,7 @@
 library angular2.src.core.change_detection.change_detection;
 
 import "differs/iterable_differs.dart"
-    show IterableDiffers, IterableDifferFactory;
+    show IterableDiffers, IterableDifferFactory, TrackByFn;
 import "differs/default_iterable_differ.dart" show DefaultIterableDifferFactory;
 import "differs/keyvalue_differs.dart"
     show KeyValueDiffers, KeyValueDifferFactory;
@@ -40,7 +40,7 @@ export "directive_record.dart" show DirectiveIndex, DirectiveRecord;
 export "dynamic_change_detector.dart" show DynamicChangeDetector;
 export "change_detector_ref.dart" show ChangeDetectorRef;
 export "differs/iterable_differs.dart"
-    show IterableDiffers, IterableDiffer, IterableDifferFactory;
+    show IterableDiffers, IterableDiffer, IterableDifferFactory, TrackByFn;
 export "differs/keyvalue_differs.dart"
     show KeyValueDiffers, KeyValueDiffer, KeyValueDifferFactory;
 export "pipe_transform.dart" show PipeTransform;

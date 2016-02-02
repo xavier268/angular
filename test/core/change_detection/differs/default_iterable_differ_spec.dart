@@ -5,10 +5,17 @@ import "package:angular2/testing_internal.dart"
 import "package:angular2/src/core/change_detection/differs/default_iterable_differ.dart"
     show DefaultIterableDiffer, DefaultIterableDifferFactory;
 import "package:angular2/src/facade/lang.dart" show NumberWrapper;
-import "package:angular2/src/facade/collection.dart"
-    show ListWrapper, MapWrapper;
+import "package:angular2/src/facade/collection.dart" show ListWrapper;
 import "../../../core/change_detection/iterable.dart" show TestIterable;
 import "../../../core/change_detection/util.dart" show iterableChangesAsString;
+
+class ItemWithId {
+  String id;
+  ItemWithId(this.id) {}
+  toString() {
+    return '''{id: ${ this . id}}''';
+  }
+}
 
 // todo(vicb): UnmodifiableListView / frozen object when implemented
 main() {
@@ -244,6 +251,68 @@ main() {
           expect(() => differ.diff("invalid"))
               .toThrowErrorWith("Error trying to diff 'invalid'");
         });
+      });
+    });
+    describe("trackBy function", () {
+      var differ;
+      var trackByItemId = (num index, dynamic item) => item.id;
+      var buildItemList = (List<String> list) {
+        return list.map((val) {
+          return new ItemWithId(val);
+        }).toList();
+      };
+      beforeEach(() {
+        differ = new DefaultIterableDiffer(trackByItemId);
+      });
+      it("should not treat maps as new with track by function", () {
+        var l = buildItemList(["a", "b", "c"]);
+        differ.check(l);
+        expect(differ.toString()).toEqual(iterableChangesAsString(collection: [
+          '''{id: a}[null->0]''',
+          '''{id: b}[null->1]''',
+          '''{id: c}[null->2]'''
+        ], additions: [
+          '''{id: a}[null->0]''',
+          '''{id: b}[null->1]''',
+          '''{id: c}[null->2]'''
+        ]));
+        l = buildItemList(["a", "b", "c"]);
+        differ.check(l);
+        expect(differ.toString()).toEqual(iterableChangesAsString(
+            collection: ['''{id: a}''', '''{id: b}''', '''{id: c}'''],
+            previous: ['''{id: a}''', '''{id: b}''', '''{id: c}''']));
+      });
+      it("should track moves normally with track by function", () {
+        var l = buildItemList(["a", "b", "c"]);
+        differ.check(l);
+        l = buildItemList(["b", "a", "c"]);
+        differ.check(l);
+        expect(differ.toString()).toEqual(iterableChangesAsString(
+            collection: ["{id: b}[1->0]", "{id: a}[0->1]", "{id: c}"],
+            previous: ["{id: a}[0->1]", "{id: b}[1->0]", "{id: c}"],
+            moves: ["{id: b}[1->0]", "{id: a}[0->1]"]));
+      });
+      it("should track duplicate reinsertion normally with track by function",
+          () {
+        var l = buildItemList(["a", "a"]);
+        differ.check(l);
+        l = buildItemList(["b", "a", "a"]);
+        differ.check(l);
+        expect(differ.toString()).toEqual(iterableChangesAsString(
+            collection: ["{id: b}[null->0]", "{id: a}[0->1]", "{id: a}[1->2]"],
+            previous: ["{id: a}[0->1]", "{id: a}[1->2]"],
+            moves: ["{id: a}[0->1]", "{id: a}[1->2]"],
+            additions: ["{id: b}[null->0]"]));
+      });
+      it("should track removals normally with track by function", () {
+        var l = buildItemList(["a", "b", "c"]);
+        differ.check(l);
+        ListWrapper.removeAt(l, 2);
+        differ.check(l);
+        expect(differ.toString()).toEqual(iterableChangesAsString(
+            collection: ["{id: a}", "{id: b}"],
+            previous: ["{id: a}", "{id: b}", "{id: c}[2->null]"],
+            removals: ["{id: c}[2->null]"]));
       });
     });
   });

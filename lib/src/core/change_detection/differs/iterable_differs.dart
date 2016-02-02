@@ -17,11 +17,17 @@ abstract class IterableDiffer {
 }
 
 /**
+  * An optional function passed into [NgFor] that defines how to track
+  * items in an iterable (e.g. by index or id)
+ */
+typedef dynamic TrackByFn(num index, dynamic item);
+
+/**
  * Provides a factory for [IterableDiffer].
  */
 abstract class IterableDifferFactory {
   bool supports(dynamic objects);
-  IterableDiffer create(ChangeDetectorRef cdRef);
+  IterableDiffer create(ChangeDetectorRef cdRef, [TrackByFn trackByFn]);
 }
 
 /**
