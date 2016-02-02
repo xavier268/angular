@@ -76,9 +76,5 @@ String _toExtension(
           '$toExtension';
     }
   }
-  throw new ArgumentError.value(
-      uri,
-      'uri',
-      'Provided value ends with an unexpected extension. '
-      'Expected extension(s): [${fromExtensions.join(', ')}].');
+  return uri;
 }
