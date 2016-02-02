@@ -318,7 +318,7 @@ class RedirectInstruction extends ResolvedInstruction {
  * `ComponentInstructions` is a public API. Instances of `ComponentInstruction` are passed
  * to route lifecycle hooks, like [CanActivate].
  *
- * `ComponentInstruction`s are [https://en.wikipedia.org/wiki/Hash_consing](hash consed). You should
+ * `ComponentInstruction`s are [hash consed](https://en.wikipedia.org/wiki/Hash_consing). You should
  * never construct one yourself with "new." Instead, rely on [Router/RouteRecognizer] to
  * construct `ComponentInstruction`s.
  *
