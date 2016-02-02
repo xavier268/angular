@@ -1,4 +1,4 @@
-library angular2.test.transform.reflection_remover.method_annotation_files;
+library angular2.test.transform.reflection_remover.deferred_bootstrap_files;
 
 // This file is intentionally formatted as a string to avoid having the
 // automatic transformer prettify it.
@@ -8,13 +8,12 @@ library angular2.test.transform.reflection_remover.method_annotation_files;
 // original code and we therefore add our generated code on the same line as
 // those we are removing.
 
-const code = """
-library web_foo;
+var code = """
+import 'package:angular2/bootstrap_static.dart' deferred as ng;import 'index.template.dart' as ngStaticInit;
 
-import 'package:angular2/bootstrap_static.dart';import 'index.template.dart' as ngStaticInit;
-
-class TestBootstrapper {
-  @AngularEntrypoint("Method entrypoint")
-  void testBootstrap() {ngStaticInit.initReflector();}
+void main() {
+  ng.loadLibrary().then((_) {
+    ng.bootstrapStatic(MyComponent, null, () { ngStaticInit.initReflector(); });
+  });
 }
 """;
