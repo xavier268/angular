@@ -1,7 +1,6 @@
 library angular2.src.common.forms.validators;
 
-import "package:angular2/src/facade/lang.dart"
-    show isBlank, isPresent, isString;
+import "package:angular2/src/facade/lang.dart" show isBlank, isPresent;
 import "package:angular2/src/facade/promise.dart" show PromiseWrapper;
 import "package:angular2/src/facade/async.dart" show ObservableWrapper;
 import "package:angular2/src/facade/collection.dart"
@@ -46,8 +45,7 @@ class Validators {
    * Validator that requires controls to have a non-empty value.
    */
   static Map<String, bool> required(modelModule.Control control) {
-    return isBlank(control.value) ||
-            (isString(control.value) && control.value == "")
+    return isBlank(control.value) || control.value == ""
         ? {"required": true}
         : null;
   }
