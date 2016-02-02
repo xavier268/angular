@@ -6485,9 +6485,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function DefaultIterableDifferFactory() {
 	    }
 	    DefaultIterableDifferFactory.prototype.supports = function (obj) { return collection_1.isListLikeIterable(obj); };
-	    DefaultIterableDifferFactory.prototype.create = function (cdRef, trackByFn) {
-	        return new DefaultIterableDiffer(trackByFn);
-	    };
+	    DefaultIterableDifferFactory.prototype.create = function (cdRef) { return new DefaultIterableDiffer(); };
 	    DefaultIterableDifferFactory = __decorate([
 	        lang_1.CONST(), 
 	        __metadata('design:paramtypes', [])
@@ -6495,12 +6493,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return DefaultIterableDifferFactory;
 	})();
 	exports.DefaultIterableDifferFactory = DefaultIterableDifferFactory;
-	var trackByIdentity = function (index, item) { return item; };
 	var DefaultIterableDiffer = (function () {
-	    function DefaultIterableDiffer(_trackByFn) {
-	        this._trackByFn = _trackByFn;
-	        this._length = null;
+	    function DefaultIterableDiffer() {
 	        this._collection = null;
+	        this._length = null;
 	        // Keeps track of the used records at any point in time (during & across `_check()` calls)
 	        this._linkedRecords = null;
 	        // Keeps track of the removed records at any point in time during `_check()` calls.
@@ -6514,7 +6510,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this._movesTail = null;
 	        this._removalsHead = null;
 	        this._removalsTail = null;
-	        this._trackByFn = lang_2.isPresent(this._trackByFn) ? this._trackByFn : trackByIdentity;
 	    }
 	    Object.defineProperty(DefaultIterableDiffer.prototype, "collection", {
 	        get: function () { return this._collection; },
@@ -6578,23 +6573,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var mayBeDirty = false;
 	        var index;
 	        var item;
-	        var itemTrackBy;
 	        if (lang_2.isArray(collection)) {
 	            var list = collection;
 	            this._length = collection.length;
 	            for (index = 0; index < this._length; index++) {
 	                item = list[index];
-	                itemTrackBy = this._trackByFn(index, item);
-	                if (record === null || !lang_2.looseIdentical(record.trackById, itemTrackBy)) {
-	                    record = this._mismatch(record, item, itemTrackBy, index);
+	                if (record === null || !lang_2.looseIdentical(record.item, item)) {
+	                    record = this._mismatch(record, item, index);
 	                    mayBeDirty = true;
 	                }
-	                else {
-	                    if (mayBeDirty) {
-	                        // TODO(misko): can we limit this to duplicates only?
-	                        record = this._verifyReinsertion(record, item, itemTrackBy, index);
-	                    }
-	                    record.item = item;
+	                else if (mayBeDirty) {
+	                    // TODO(misko): can we limit this to duplicates only?
+	                    record = this._verifyReinsertion(record, item, index);
 	                }
 	                record = record._next;
 	            }
@@ -6602,14 +6592,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        else {
 	            index = 0;
 	            collection_1.iterateListLike(collection, function (item) {
-	                itemTrackBy = _this._trackByFn(index, item);
-	                if (record === null || !lang_2.looseIdentical(record.trackById, itemTrackBy)) {
-	                    record = _this._mismatch(record, item, itemTrackBy, index);
+	                if (record === null || !lang_2.looseIdentical(record.item, item)) {
+	                    record = _this._mismatch(record, item, index);
 	                    mayBeDirty = true;
 	                }
 	                else if (mayBeDirty) {
 	                    // TODO(misko): can we limit this to duplicates only?
-	                    record = _this._verifyReinsertion(record, item, itemTrackBy, index);
+	                    record = _this._verifyReinsertion(record, item, index);
 	                }
 	                record = record._next;
 	                index++;
@@ -6665,7 +6654,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *
 	     * @internal
 	     */
-	    DefaultIterableDiffer.prototype._mismatch = function (record, item, itemTrackBy, index) {
+	    DefaultIterableDiffer.prototype._mismatch = function (record, item, index) {
 	        // The previous record after which we will append the current one.
 	        var previousRecord;
 	        if (record === null) {
@@ -6677,22 +6666,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this._remove(record);
 	        }
 	        // Attempt to see if we have seen the item before.
-	        record = this._linkedRecords === null ? null : this._linkedRecords.get(itemTrackBy, index);
+	        record = this._linkedRecords === null ? null : this._linkedRecords.get(item, index);
 	        if (record !== null) {
 	            // We have seen this before, we need to move it forward in the collection.
 	            this._moveAfter(record, previousRecord, index);
 	        }
 	        else {
 	            // Never seen it, check evicted list.
-	            record = this._unlinkedRecords === null ? null : this._unlinkedRecords.get(itemTrackBy);
+	            record = this._unlinkedRecords === null ? null : this._unlinkedRecords.get(item);
 	            if (record !== null) {
 	                // It is an item which we have evicted earlier: reinsert it back into the list.
 	                this._reinsertAfter(record, previousRecord, index);
 	            }
 	            else {
 	                // It is a new item: add it.
-	                record =
-	                    this._addAfter(new CollectionChangeRecord(item, itemTrackBy), previousRecord, index);
+	                record = this._addAfter(new CollectionChangeRecord(item), previousRecord, index);
 	            }
 	        }
 	        return record;
@@ -6724,8 +6712,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *
 	     * @internal
 	     */
-	    DefaultIterableDiffer.prototype._verifyReinsertion = function (record, item, itemTrackBy, index) {
-	        var reinsertRecord = this._unlinkedRecords === null ? null : this._unlinkedRecords.get(itemTrackBy);
+	    DefaultIterableDiffer.prototype._verifyReinsertion = function (record, item, index) {
+	        var reinsertRecord = this._unlinkedRecords === null ? null : this._unlinkedRecords.get(item);
 	        if (reinsertRecord !== null) {
 	            record = this._reinsertAfter(reinsertRecord, record._prev, index);
 	        }
@@ -6733,7 +6721,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            record.currentIndex = index;
 	            this._addToMoves(record, index);
 	        }
-	        record.item = item;
 	        return record;
 	    };
 	    /**
@@ -6914,16 +6901,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return record;
 	    };
 	    DefaultIterableDiffer.prototype.toString = function () {
+	        var record;
 	        var list = [];
-	        this.forEachItem(function (record) { return list.push(record); });
+	        for (record = this._itHead; record !== null; record = record._next) {
+	            list.push(record);
+	        }
 	        var previous = [];
-	        this.forEachPreviousItem(function (record) { return previous.push(record); });
+	        for (record = this._previousItHead; record !== null; record = record._nextPrevious) {
+	            previous.push(record);
+	        }
 	        var additions = [];
-	        this.forEachAddedItem(function (record) { return additions.push(record); });
+	        for (record = this._additionsHead; record !== null; record = record._nextAdded) {
+	            additions.push(record);
+	        }
 	        var moves = [];
-	        this.forEachMovedItem(function (record) { return moves.push(record); });
+	        for (record = this._movesHead; record !== null; record = record._nextMoved) {
+	            moves.push(record);
+	        }
 	        var removals = [];
-	        this.forEachRemovedItem(function (record) { return removals.push(record); });
+	        for (record = this._removalsHead; record !== null; record = record._nextRemoved) {
+	            removals.push(record);
+	        }
 	        return "collection: " + list.join(', ') + "\n" + "previous: " + previous.join(', ') + "\n" +
 	            "additions: " + additions.join(', ') + "\n" + "moves: " + moves.join(', ') + "\n" +
 	            "removals: " + removals.join(', ') + "\n";
@@ -6932,9 +6930,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	})();
 	exports.DefaultIterableDiffer = DefaultIterableDiffer;
 	var CollectionChangeRecord = (function () {
-	    function CollectionChangeRecord(item, trackById) {
+	    function CollectionChangeRecord(item) {
 	        this.item = item;
-	        this.trackById = trackById;
 	        this.currentIndex = null;
 	        this.previousIndex = null;
 	        /** @internal */
@@ -6994,13 +6991,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this._tail = record;
 	        }
 	    };
-	    // Returns a CollectionChangeRecord having CollectionChangeRecord.trackById == trackById and
+	    // Returns a CollectionChangeRecord having CollectionChangeRecord.item == item and
 	    // CollectionChangeRecord.currentIndex >= afterIndex
-	    _DuplicateItemRecordList.prototype.get = function (trackById, afterIndex) {
+	    _DuplicateItemRecordList.prototype.get = function (item, afterIndex) {
 	        var record;
 	        for (record = this._head; record !== null; record = record._nextDup) {
 	            if ((afterIndex === null || afterIndex < record.currentIndex) &&
-	                lang_2.looseIdentical(record.trackById, trackById)) {
+	                lang_2.looseIdentical(record.item, item)) {
 	                return record;
 	            }
 	        }
@@ -7044,7 +7041,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    _DuplicateMap.prototype.put = function (record) {
 	        // todo(vicb) handle corner cases
-	        var key = lang_2.getMapKey(record.trackById);
+	        var key = lang_2.getMapKey(record.item);
 	        var duplicates = this.map.get(key);
 	        if (!lang_2.isPresent(duplicates)) {
 	            duplicates = new _DuplicateItemRecordList();
@@ -7053,17 +7050,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        duplicates.add(record);
 	    };
 	    /**
-	     * Retrieve the `value` using key. Because the CollectionChangeRecord value may be one which we
+	     * Retrieve the `value` using key. Because the CollectionChangeRecord value maybe one which we
 	     * have already iterated over, we use the afterIndex to pretend it is not there.
 	     *
 	     * Use case: `[a, b, c, a, a]` if we are at index `3` which is the second `a` then asking if we
 	     * have any more `a`s needs to return the last `a` not the first or second.
 	     */
-	    _DuplicateMap.prototype.get = function (trackById, afterIndex) {
+	    _DuplicateMap.prototype.get = function (value, afterIndex) {
 	        if (afterIndex === void 0) { afterIndex = null; }
-	        var key = lang_2.getMapKey(trackById);
+	        var key = lang_2.getMapKey(value);
 	        var recordList = this.map.get(key);
-	        return lang_2.isBlank(recordList) ? null : recordList.get(trackById, afterIndex);
+	        return lang_2.isBlank(recordList) ? null : recordList.get(value, afterIndex);
 	    };
 	    /**
 	     * Removes a {@link CollectionChangeRecord} from the list of duplicates.
@@ -7071,7 +7068,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * The list of duplicates also is removed from the map if it gets empty.
 	     */
 	    _DuplicateMap.prototype.remove = function (record) {
-	        var key = lang_2.getMapKey(record.trackById);
+	        var key = lang_2.getMapKey(record.item);
 	        // todo(vicb)
 	        // assert(this.map.containsKey(key));
 	        var recordList = this.map.get(key);
@@ -17692,7 +17689,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        set: function (value) {
 	            this._ngForOf = value;
 	            if (lang_1.isBlank(this._differ) && lang_1.isPresent(value)) {
-	                this._differ = this._iterableDiffers.find(value).create(this._cdr, this._ngForTrackBy);
+	                this._differ = this._iterableDiffers.find(value).create(this._cdr);
 	            }
 	        },
 	        enumerable: true,
@@ -17704,11 +17701,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this._templateRef = value;
 	            }
 	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(NgFor.prototype, "ngForTrackBy", {
-	        set: function (value) { this._ngForTrackBy = value; },
 	        enumerable: true,
 	        configurable: true
 	    });
@@ -17779,7 +17771,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return tuples;
 	    };
 	    NgFor = __decorate([
-	        core_1.Directive({ selector: '[ngFor][ngForOf]', inputs: ['ngForTrackBy', 'ngForOf', 'ngForTemplate'] }), 
+	        core_1.Directive({ selector: '[ngFor][ngForOf]', inputs: ['ngForOf', 'ngForTemplate'] }), 
 	        __metadata('design:paramtypes', [core_1.ViewContainerRef, core_1.TemplateRef, core_1.IterableDiffers, core_1.ChangeDetectorRef])
 	    ], NgFor);
 	    return NgFor;
@@ -35920,11 +35912,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        throw new Error("Upgraded directive '" + this.name + "' does not support '" + feature + "'.");
 	    };
 	    UpgradeNg1ComponentAdapterBuilder.prototype.extractBindings = function () {
-	        var scope = this.directive.scope;
-	        if (typeof scope == 'object') {
-	            for (var name in scope) {
-	                if (scope.hasOwnProperty(name)) {
-	                    var localName = scope[name];
+	        var btcIsObject = typeof this.directive.bindToController === 'object';
+	        if (btcIsObject && Object.keys(this.directive.scope).length) {
+	            throw new Error("Binding definitions on scope and controller at the same time are not supported.");
+	        }
+	        var context = (btcIsObject) ? this.directive.bindToController : this.directive.scope;
+	        if (typeof context == 'object') {
+	            for (var name in context) {
+	                if (context.hasOwnProperty(name)) {
+	                    var localName = context[name];
 	                    var type = localName.charAt(0);
 	                    localName = localName.substr(1) || name;
 	                    var outputName = 'output_' + name;
@@ -35951,7 +35947,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                            this.propertyMap[outputName] = localName;
 	                            break;
 	                        default:
-	                            var json = JSON.stringify(scope);
+	                            var json = JSON.stringify(context);
 	                            throw new Error("Unexpected mapping '" + type + "' in '" + json + "' in '" + this.name + "' directive.");
 	                    }
 	                }

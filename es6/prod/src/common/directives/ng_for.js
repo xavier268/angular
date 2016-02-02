@@ -68,7 +68,7 @@ export let NgFor = class {
     set ngForOf(value) {
         this._ngForOf = value;
         if (isBlank(this._differ) && isPresent(value)) {
-            this._differ = this._iterableDiffers.find(value).create(this._cdr, this._ngForTrackBy);
+            this._differ = this._iterableDiffers.find(value).create(this._cdr);
         }
     }
     set ngForTemplate(value) {
@@ -76,7 +76,6 @@ export let NgFor = class {
             this._templateRef = value;
         }
     }
-    set ngForTrackBy(value) { this._ngForTrackBy = value; }
     ngDoCheck() {
         if (isPresent(this._differ)) {
             var changes = this._differ.diff(this._ngForOf);
@@ -139,7 +138,7 @@ export let NgFor = class {
     }
 };
 NgFor = __decorate([
-    Directive({ selector: '[ngFor][ngForOf]', inputs: ['ngForTrackBy', 'ngForOf', 'ngForTemplate'] }), 
+    Directive({ selector: '[ngFor][ngForOf]', inputs: ['ngForOf', 'ngForTemplate'] }), 
     __metadata('design:paramtypes', [ViewContainerRef, TemplateRef, IterableDiffers, ChangeDetectorRef])
 ], NgFor);
 class RecordViewTuple {

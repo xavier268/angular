@@ -1,13 +1,12 @@
 import { ChangeDetectorRef } from '../change_detector_ref';
-import { IterableDiffer, IterableDifferFactory, TrackByFn } from '../differs/iterable_differs';
+import { IterableDiffer, IterableDifferFactory } from '../differs/iterable_differs';
 export declare class DefaultIterableDifferFactory implements IterableDifferFactory {
     supports(obj: Object): boolean;
-    create(cdRef: ChangeDetectorRef, trackByFn?: TrackByFn): DefaultIterableDiffer;
+    create(cdRef: ChangeDetectorRef): DefaultIterableDiffer;
 }
 export declare class DefaultIterableDiffer implements IterableDiffer {
-    private _trackByFn;
-    private _length;
     private _collection;
+    private _length;
     private _linkedRecords;
     private _unlinkedRecords;
     private _previousItHead;
@@ -19,7 +18,6 @@ export declare class DefaultIterableDiffer implements IterableDiffer {
     private _movesTail;
     private _removalsHead;
     private _removalsTail;
-    constructor(_trackByFn?: TrackByFn);
     collection: any;
     length: number;
     forEachItem(fn: Function): void;
@@ -35,9 +33,8 @@ export declare class DefaultIterableDiffer implements IterableDiffer {
 }
 export declare class CollectionChangeRecord {
     item: any;
-    trackById: any;
     currentIndex: number;
     previousIndex: number;
-    constructor(item: any, trackById: any);
+    constructor(item: any);
     toString(): string;
 }
