@@ -57,7 +57,7 @@ class ObservableListDiff extends DefaultIterableDiffer {
 class ObservableListDiffFactory implements IterableDifferFactory {
   const ObservableListDiffFactory();
   bool supports(obj) => obj is ObservableList;
-  IterableDiffer create(ChangeDetectorRef cdRef, [Function trackByFn]) {
+  IterableDiffer create(ChangeDetectorRef cdRef) {
     return new ObservableListDiff(cdRef);
   }
 }

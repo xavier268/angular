@@ -18,7 +18,6 @@ import "package:angular2/src/facade/collection.dart" show ListWrapper;
 import "package:angular2/core.dart"
     show Component, View, TemplateRef, ContentChild;
 import "package:angular2/src/common/directives/ng_for.dart" show NgFor;
-import "package:angular2/platform/common_dom.dart" show By;
 
 main() {
   describe("ngFor", () {
@@ -424,31 +423,6 @@ main() {
             async.done();
           });
         }));
-    it(
-        "should use custom track by if function is provided",
-        inject([TestComponentBuilder, AsyncTestCompleter],
-            (TestComponentBuilder tcb, async) {
-          var template =
-              '''<template ngFor #item [ngForOf]="items" [ngForTrackBy]="customTrackBy" #i="index">
-               <p>{{items[i]}}</p>
-              </template>''';
-          tcb
-              .overrideTemplate(TestComponent, template)
-              .createAsync(TestComponent)
-              .then((fixture) {
-            var buildItemList = () {
-              fixture.debugElement.componentInstance.items = [
-                {"id": "a"}
-              ];
-              fixture.detectChanges();
-              return fixture.debugElement.queryAll(By.css("p"))[0];
-            };
-            var firstP = buildItemList();
-            var finalP = buildItemList();
-            expect(finalP.nativeElement).toBe(firstP.nativeElement);
-            async.done();
-          });
-        }));
   });
 }
 
@@ -465,9 +439,6 @@ class TestComponent {
   dynamic items;
   TestComponent() {
     this.items = [1, 2];
-  }
-  String customTrackBy(num index, dynamic item) {
-    return item["id"];
   }
 }
 

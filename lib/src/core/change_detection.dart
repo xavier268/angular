@@ -19,5 +19,4 @@ export "change_detection/change_detection.dart"
         IterableDifferFactory,
         KeyValueDiffers,
         KeyValueDiffer,
-        KeyValueDifferFactory,
-        TrackByFn;
+        KeyValueDifferFactory;

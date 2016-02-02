@@ -2,31 +2,28 @@ library angular2.src.core.change_detection.differs.default_iterable_differ;
 
 import "package:angular2/src/facade/exceptions.dart" show BaseException;
 import "package:angular2/src/facade/collection.dart"
-    show isListLikeIterable, iterateListLike, ListWrapper;
+    show isListLikeIterable, iterateListLike, ListWrapper, MapWrapper;
 import "package:angular2/src/facade/lang.dart"
     show isBlank, isPresent, stringify, getMapKey, looseIdentical, isArray;
 import "../change_detector_ref.dart" show ChangeDetectorRef;
 import "../differs/iterable_differs.dart"
-    show IterableDiffer, IterableDifferFactory, TrackByFn;
+    show IterableDiffer, IterableDifferFactory;
 
 class DefaultIterableDifferFactory implements IterableDifferFactory {
   bool supports(Object obj) {
     return isListLikeIterable(obj);
   }
 
-  DefaultIterableDiffer create(ChangeDetectorRef cdRef, [TrackByFn trackByFn]) {
-    return new DefaultIterableDiffer(trackByFn);
+  DefaultIterableDiffer create(ChangeDetectorRef cdRef) {
+    return new DefaultIterableDiffer();
   }
 
   const DefaultIterableDifferFactory();
 }
 
-var trackByIdentity = (num index, dynamic item) => item;
-
 class DefaultIterableDiffer implements IterableDiffer {
-  TrackByFn _trackByFn;
-  num _length = null;
   var _collection = null;
+  num _length = null;
   // Keeps track of the used records at any point in time (during & across `_check()` calls)
   _DuplicateMap _linkedRecords = null;
   // Keeps track of the removed records at any point in time during `_check()` calls.
@@ -40,10 +37,6 @@ class DefaultIterableDiffer implements IterableDiffer {
   CollectionChangeRecord _movesTail = null;
   CollectionChangeRecord _removalsHead = null;
   CollectionChangeRecord _removalsTail = null;
-  DefaultIterableDiffer([this._trackByFn]) {
-    this._trackByFn =
-        isPresent(this._trackByFn) ? this._trackByFn : trackByIdentity;
-  }
   get collection {
     return this._collection;
   }
@@ -117,37 +110,29 @@ class DefaultIterableDiffer implements IterableDiffer {
     bool mayBeDirty = false;
     num index;
     var item;
-    var itemTrackBy;
     if (isArray(collection)) {
       var list = collection;
       this._length = collection.length;
       for (index = 0; index < this._length; index++) {
         item = list[index];
-        itemTrackBy = this._trackByFn(index, item);
-        if (identical(record, null) ||
-            !looseIdentical(record.trackById, itemTrackBy)) {
-          record = this._mismatch(record, item, itemTrackBy, index);
+        if (identical(record, null) || !looseIdentical(record.item, item)) {
+          record = this._mismatch(record, item, index);
           mayBeDirty = true;
-        } else {
-          if (mayBeDirty) {
-            // TODO(misko): can we limit this to duplicates only?
-            record = this._verifyReinsertion(record, item, itemTrackBy, index);
-          }
-          record.item = item;
+        } else if (mayBeDirty) {
+          // TODO(misko): can we limit this to duplicates only?
+          record = this._verifyReinsertion(record, item, index);
         }
         record = record._next;
       }
     } else {
       index = 0;
       iterateListLike(collection, (item) {
-        itemTrackBy = this._trackByFn(index, item);
-        if (identical(record, null) ||
-            !looseIdentical(record.trackById, itemTrackBy)) {
-          record = this._mismatch(record, item, itemTrackBy, index);
+        if (identical(record, null) || !looseIdentical(record.item, item)) {
+          record = this._mismatch(record, item, index);
           mayBeDirty = true;
         } else if (mayBeDirty) {
           // TODO(misko): can we limit this to duplicates only?
-          record = this._verifyReinsertion(record, item, itemTrackBy, index);
+          record = this._verifyReinsertion(record, item, index);
         }
         record = record._next;
         index++;
@@ -210,8 +195,8 @@ class DefaultIterableDiffer implements IterableDiffer {
    *
    * @internal
    */
-  CollectionChangeRecord _mismatch(CollectionChangeRecord record, dynamic item,
-      dynamic itemTrackBy, num index) {
+  CollectionChangeRecord _mismatch(
+      CollectionChangeRecord record, item, num index) {
     // The previous record after which we will append the current one.
     CollectionChangeRecord previousRecord;
     if (identical(record, null)) {
@@ -224,7 +209,7 @@ class DefaultIterableDiffer implements IterableDiffer {
     // Attempt to see if we have seen the item before.
     record = identical(this._linkedRecords, null)
         ? null
-        : this._linkedRecords.get(itemTrackBy, index);
+        : this._linkedRecords.get(item, index);
     if (!identical(record, null)) {
       // We have seen this before, we need to move it forward in the collection.
       this._moveAfter(record, previousRecord, index);
@@ -232,14 +217,14 @@ class DefaultIterableDiffer implements IterableDiffer {
       // Never seen it, check evicted list.
       record = identical(this._unlinkedRecords, null)
           ? null
-          : this._unlinkedRecords.get(itemTrackBy);
+          : this._unlinkedRecords.get(item);
       if (!identical(record, null)) {
         // It is an item which we have evicted earlier: reinsert it back into the list.
         this._reinsertAfter(record, previousRecord, index);
       } else {
         // It is a new item: add it.
-        record = this._addAfter(new CollectionChangeRecord(item, itemTrackBy),
-            previousRecord, index);
+        record = this
+            ._addAfter(new CollectionChangeRecord(item), previousRecord, index);
       }
     }
     return record;
@@ -272,19 +257,16 @@ class DefaultIterableDiffer implements IterableDiffer {
    *
    * @internal
    */
-  CollectionChangeRecord _verifyReinsertion(CollectionChangeRecord record,
-      dynamic item, dynamic itemTrackBy, num index) {
-    CollectionChangeRecord reinsertRecord =
-        identical(this._unlinkedRecords, null)
-            ? null
-            : this._unlinkedRecords.get(itemTrackBy);
+  CollectionChangeRecord _verifyReinsertion(
+      CollectionChangeRecord record, item, num index) {
+    CollectionChangeRecord reinsertRecord = identical(
+        this._unlinkedRecords, null) ? null : this._unlinkedRecords.get(item);
     if (!identical(reinsertRecord, null)) {
       record = this._reinsertAfter(reinsertRecord, record._prev, index);
     } else if (record.currentIndex != index) {
       record.currentIndex = index;
       this._addToMoves(record, index);
     }
-    record.item = item;
     return record;
   }
 
@@ -488,16 +470,37 @@ class DefaultIterableDiffer implements IterableDiffer {
   }
 
   String toString() {
+    CollectionChangeRecord record;
     var list = [];
-    this.forEachItem((record) => list.add(record));
+    for (record = this._itHead;
+        !identical(record, null);
+        record = record._next) {
+      list.add(record);
+    }
     var previous = [];
-    this.forEachPreviousItem((record) => previous.add(record));
+    for (record = this._previousItHead;
+        !identical(record, null);
+        record = record._nextPrevious) {
+      previous.add(record);
+    }
     var additions = [];
-    this.forEachAddedItem((record) => additions.add(record));
+    for (record = this._additionsHead;
+        !identical(record, null);
+        record = record._nextAdded) {
+      additions.add(record);
+    }
     var moves = [];
-    this.forEachMovedItem((record) => moves.add(record));
+    for (record = this._movesHead;
+        !identical(record, null);
+        record = record._nextMoved) {
+      moves.add(record);
+    }
     var removals = [];
-    this.forEachRemovedItem((record) => removals.add(record));
+    for (record = this._removalsHead;
+        !identical(record, null);
+        record = record._nextRemoved) {
+      removals.add(record);
+    }
     return "collection: " +
         list.join(", ") +
         "\n" +
@@ -518,7 +521,6 @@ class DefaultIterableDiffer implements IterableDiffer {
 
 class CollectionChangeRecord {
   dynamic item;
-  dynamic trackById;
   num currentIndex = null;
   num previousIndex = null;
   /** @internal */
@@ -539,7 +541,7 @@ class CollectionChangeRecord {
   CollectionChangeRecord _nextAdded = null;
   /** @internal */
   CollectionChangeRecord _nextMoved = null;
-  CollectionChangeRecord(this.item, this.trackById) {}
+  CollectionChangeRecord(this.item) {}
   String toString() {
     return identical(this.previousIndex, this.currentIndex)
         ? stringify(this.item)
@@ -580,16 +582,16 @@ class _DuplicateItemRecordList {
       this._tail = record;
     }
   }
-  // Returns a CollectionChangeRecord having CollectionChangeRecord.trackById == trackById and
+  // Returns a CollectionChangeRecord having CollectionChangeRecord.item == item and
 
   // CollectionChangeRecord.currentIndex >= afterIndex
-  CollectionChangeRecord get(dynamic trackById, num afterIndex) {
+  CollectionChangeRecord get(dynamic item, num afterIndex) {
     CollectionChangeRecord record;
     for (record = this._head;
         !identical(record, null);
         record = record._nextDup) {
       if ((identical(afterIndex, null) || afterIndex < record.currentIndex) &&
-          looseIdentical(record.trackById, trackById)) {
+          looseIdentical(record.item, item)) {
         return record;
       }
     }
@@ -637,7 +639,7 @@ class _DuplicateMap {
   var map = new Map<dynamic, _DuplicateItemRecordList>();
   put(CollectionChangeRecord record) {
     // todo(vicb) handle corner cases
-    var key = getMapKey(record.trackById);
+    var key = getMapKey(record.item);
     var duplicates = this.map[key];
     if (!isPresent(duplicates)) {
       duplicates = new _DuplicateItemRecordList();
@@ -647,16 +649,16 @@ class _DuplicateMap {
   }
 
   /**
-   * Retrieve the `value` using key. Because the CollectionChangeRecord value may be one which we
+   * Retrieve the `value` using key. Because the CollectionChangeRecord value maybe one which we
    * have already iterated over, we use the afterIndex to pretend it is not there.
    *
    * Use case: `[a, b, c, a, a]` if we are at index `3` which is the second `a` then asking if we
    * have any more `a`s needs to return the last `a` not the first or second.
    */
-  CollectionChangeRecord get(dynamic trackById, [num afterIndex = null]) {
-    var key = getMapKey(trackById);
+  CollectionChangeRecord get(dynamic value, [num afterIndex = null]) {
+    var key = getMapKey(value);
     var recordList = this.map[key];
-    return isBlank(recordList) ? null : recordList.get(trackById, afterIndex);
+    return isBlank(recordList) ? null : recordList.get(value, afterIndex);
   }
 
   /**
@@ -665,7 +667,7 @@ class _DuplicateMap {
    * The list of duplicates also is removed from the map if it gets empty.
    */
   CollectionChangeRecord remove(CollectionChangeRecord record) {
-    var key = getMapKey(record.trackById);
+    var key = getMapKey(record.item);
     // todo(vicb)
 
     // assert(this.map.containsKey(key));
