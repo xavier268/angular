@@ -1,7 +1,19 @@
 library angular2.test.compiler.change_definition_factory_spec;
 
 import "package:angular2/testing_internal.dart"
-    show beforeEach, describe, expect, inject, it, beforeEachProviders;
+    show
+        AsyncTestCompleter,
+        beforeEach,
+        ddescribe,
+        describe,
+        el,
+        expect,
+        iit,
+        inject,
+        it,
+        xit,
+        TestComponentBuilder,
+        beforeEachProviders;
 import "package:angular2/src/facade/collection.dart" show MapWrapper;
 import "package:angular2/src/compiler/directive_metadata.dart"
     show CompileDirectiveMetadata, CompileTypeMetadata;
@@ -10,10 +22,14 @@ import "package:angular2/src/core/change_detection/change_detection.dart"
     show
         Parser,
         Lexer,
+        ChangeDetectorDefinition,
         ChangeDetectorGenConfig,
         DynamicProtoChangeDetector,
         ChangeDetectionStrategy,
+        ChangeDispatcher,
+        DirectiveIndex,
         Locals,
+        BindingTarget,
         ChangeDetector;
 import "package:angular2/src/core/change_detection/pipes.dart" show Pipes;
 import "package:angular2/src/compiler/change_definition_factory.dart"

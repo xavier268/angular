@@ -26,7 +26,14 @@ import "package:angular2/src/compiler/source_module.dart"
     show SourceModule, SourceExpression, SourceExpressions, moduleRef;
 import "package:angular2/src/compiler/template_parser.dart" show TemplateParser;
 import "package:angular2/src/core/change_detection/change_detection.dart"
-    show ChangeDetectorGenConfig, ChangeDetectionStrategy, Locals;
+    show
+        ChangeDetectorGenConfig,
+        ChangeDetectionStrategy,
+        ChangeDispatcher,
+        DirectiveIndex,
+        Locals,
+        BindingTarget,
+        ChangeDetector;
 import "eval_module.dart" show evalModule;
 import "test_bindings.dart" show TEST_PROVIDERS;
 import "change_detector_mocks.dart" show TestDispatcher, TestPipes;
