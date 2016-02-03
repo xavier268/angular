@@ -40,6 +40,9 @@ main() {
       it("should not error on a non-empty string", () {
         expect(Validators.required(new Control("not empty"))).toEqual(null);
       });
+      it("should accept zero as valid", () {
+        expect(Validators.required(new Control(0))).toEqual(null);
+      });
     });
     describe("minLength", () {
       it("should not error on an empty string", () {

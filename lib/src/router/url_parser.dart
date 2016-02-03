@@ -225,7 +225,7 @@ List<String> serializeParams(Map<String, dynamic> paramMap) {
   var params = [];
   if (isPresent(paramMap)) {
     StringMapWrapper.forEach(paramMap, (value, key) {
-      if (value == true) {
+      if (identical(value, true)) {
         params.add(key);
       } else {
         params.add(key + "=" + value);

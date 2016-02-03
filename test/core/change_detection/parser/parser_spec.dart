@@ -403,6 +403,12 @@ main() {
       it("should parse conditional expression", () {
         checkInterpolation("{{ a < b ? a : b }}");
       });
+      it("should parse expression with newline characters", () {
+        checkInterpolation(
+            '''{{ \'foo\' +
+ \'bar\' + \'baz\' }}''',
+            '''{{ "foo" + "bar" + "baz" }}''');
+      });
     });
     describe("parseSimpleBinding", () {
       it("should parse a field access", () {
