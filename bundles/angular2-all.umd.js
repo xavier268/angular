@@ -29728,7 +29728,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *       // Send a response to the request
 	 *       connection.mockRespond(response);
 	 *     });
-	 *   });
+	 *   }
+	 * });
 	 *
 	 * http.get('people.json').observer({
 	 *   next: res => {
@@ -29854,7 +29855,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *       // Send a response to the request
 	 *       connection.mockRespond(response);
 	 *     });
-	 *   });
+	 *   }
+	 * });
 
 	 * jsonp.get('people.json').observer({
 	 *   next: res => {
