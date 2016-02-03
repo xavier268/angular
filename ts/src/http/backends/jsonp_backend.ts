@@ -8,7 +8,6 @@ import {BrowserJsonp} from './browser_jsonp';
 import {makeTypeError} from 'angular2/src/facade/exceptions';
 import {StringWrapper, isPresent} from 'angular2/src/facade/lang';
 import {Observable} from 'rxjs/Observable';
-import {Observer} from 'rxjs/Observer';
 
 const JSONP_ERR_NO_CALLBACK = 'JSONP injected script did not invoke callback.';
 const JSONP_ERR_WRONG_METHOD = 'JSONP requests must use GET request method.';
@@ -52,7 +51,7 @@ export class JSONPConnection_ extends JSONPConnection {
       throw makeTypeError(JSONP_ERR_WRONG_METHOD);
     }
     this.request = req;
-    this.response = new Observable((responseObserver: Observer<Response>) => {
+    this.response = new Observable(responseObserver => {
 
       this.readyState = ReadyState.Loading;
       let id = this._id = _dom.nextRequestID();
@@ -71,7 +70,7 @@ export class JSONPConnection_ extends JSONPConnection {
 
       let script = this._script = _dom.build(url);
 
-      let onLoad = (event: Event) => {
+      let onLoad = event => {
         if (this.readyState === ReadyState.Cancelled) return;
         this.readyState = ReadyState.Done;
         _dom.cleanup(script);
@@ -94,7 +93,7 @@ export class JSONPConnection_ extends JSONPConnection {
         responseObserver.complete();
       };
 
-      let onError = (error: Error) => {
+      let onError = error => {
         if (this.readyState === ReadyState.Cancelled) return;
         this.readyState = ReadyState.Done;
         _dom.cleanup(script);
