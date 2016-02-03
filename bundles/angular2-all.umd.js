@@ -30317,7 +30317,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Returns string of all headers.
 	     */
-	    Headers.prototype.toJSON = function () { return lang_1.Json.stringify(this.values()); };
+	    Headers.prototype.toJSON = function () {
+	        var serializableHeaders = {};
+	        this._headersMap.forEach(function (values, name) {
+	            var list = [];
+	            collection_1.iterateListLike(values, function (val) { return list = collection_1.ListWrapper.concat(list, val.split(',')); });
+	            serializableHeaders[name] = list;
+	        });
+	        return serializableHeaders;
+	    };
 	    /**
 	     * Returns list of header values for a given name.
 	     */
