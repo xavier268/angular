@@ -4073,7 +4073,7 @@ System.register("angular2/src/core/change_detection/parser/parser", ["angular2/s
   var reflection_1 = require("angular2/src/core/reflection/reflection");
   var ast_1 = require("angular2/src/core/change_detection/parser/ast");
   var _implicitReceiver = new ast_1.ImplicitReceiver();
-  var INTERPOLATION_REGEXP = /\{\{([\s\S]*?)\}\}/g;
+  var INTERPOLATION_REGEXP = /\{\{(.*?)\}\}/g;
   var ParseException = (function(_super) {
     __extends(ParseException, _super);
     function ParseException(message, input, errLocation, ctxLocation) {
@@ -20401,7 +20401,7 @@ System.register("angular2/src/router/url_parser", ["angular2/src/facade/collecti
     var params = [];
     if (lang_1.isPresent(paramMap)) {
       collection_1.StringMapWrapper.forEach(paramMap, function(value, key) {
-        if (value == true) {
+        if (value === true) {
           params.push(key);
         } else {
           params.push(key + '=' + value);

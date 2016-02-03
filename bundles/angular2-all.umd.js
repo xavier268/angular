@@ -8462,7 +8462,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var ast_1 = __webpack_require__(30);
 	var _implicitReceiver = new ast_1.ImplicitReceiver();
 	// TODO(tbosch): Cannot make this const/final right now because of the transpiler...
-	var INTERPOLATION_REGEXP = /\{\{([\s\S]*?)\}\}/g;
+	var INTERPOLATION_REGEXP = /\{\{(.*?)\}\}/g;
 	var ParseException = (function (_super) {
 	    __extends(ParseException, _super);
 	    function ParseException(message, input, errLocation, ctxLocation) {
@@ -33448,7 +33448,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var params = [];
 	    if (lang_1.isPresent(paramMap)) {
 	        collection_1.StringMapWrapper.forEach(paramMap, function (value, key) {
-	            if (value == true) {
+	            if (value === true) {
 	                params.push(key);
 	            }
 	            else {
