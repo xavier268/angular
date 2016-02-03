@@ -2300,17 +2300,21 @@ System.register("angular2/src/core/change_detection/differs/default_iterable_dif
     DefaultIterableDifferFactory.prototype.supports = function(obj) {
       return collection_1.isListLikeIterable(obj);
     };
-    DefaultIterableDifferFactory.prototype.create = function(cdRef) {
-      return new DefaultIterableDiffer();
+    DefaultIterableDifferFactory.prototype.create = function(cdRef, trackByFn) {
+      return new DefaultIterableDiffer(trackByFn);
     };
     DefaultIterableDifferFactory = __decorate([lang_1.CONST(), __metadata('design:paramtypes', [])], DefaultIterableDifferFactory);
     return DefaultIterableDifferFactory;
   })();
   exports.DefaultIterableDifferFactory = DefaultIterableDifferFactory;
+  var trackByIdentity = function(index, item) {
+    return item;
+  };
   var DefaultIterableDiffer = (function() {
-    function DefaultIterableDiffer() {
-      this._collection = null;
+    function DefaultIterableDiffer(_trackByFn) {
+      this._trackByFn = _trackByFn;
       this._length = null;
+      this._collection = null;
       this._linkedRecords = null;
       this._unlinkedRecords = null;
       this._previousItHead = null;
@@ -2322,6 +2326,7 @@ System.register("angular2/src/core/change_detection/differs/default_iterable_dif
       this._movesTail = null;
       this._removalsHead = null;
       this._removalsTail = null;
+      this._trackByFn = lang_2.isPresent(this._trackByFn) ? this._trackByFn : trackByIdentity;
     }
     Object.defineProperty(DefaultIterableDiffer.prototype, "collection", {
       get: function() {
@@ -2387,27 +2392,33 @@ System.register("angular2/src/core/change_detection/differs/default_iterable_dif
       var mayBeDirty = false;
       var index;
       var item;
+      var itemTrackBy;
       if (lang_2.isArray(collection)) {
         var list = collection;
         this._length = collection.length;
         for (index = 0; index < this._length; index++) {
           item = list[index];
-          if (record === null || !lang_2.looseIdentical(record.item, item)) {
-            record = this._mismatch(record, item, index);
+          itemTrackBy = this._trackByFn(index, item);
+          if (record === null || !lang_2.looseIdentical(record.trackById, itemTrackBy)) {
+            record = this._mismatch(record, item, itemTrackBy, index);
             mayBeDirty = true;
-          } else if (mayBeDirty) {
-            record = this._verifyReinsertion(record, item, index);
+          } else {
+            if (mayBeDirty) {
+              record = this._verifyReinsertion(record, item, itemTrackBy, index);
+            }
+            record.item = item;
           }
           record = record._next;
         }
       } else {
         index = 0;
         collection_1.iterateListLike(collection, function(item) {
-          if (record === null || !lang_2.looseIdentical(record.item, item)) {
-            record = _this._mismatch(record, item, index);
+          itemTrackBy = _this._trackByFn(index, item);
+          if (record === null || !lang_2.looseIdentical(record.trackById, itemTrackBy)) {
+            record = _this._mismatch(record, item, itemTrackBy, index);
             mayBeDirty = true;
           } else if (mayBeDirty) {
-            record = _this._verifyReinsertion(record, item, index);
+            record = _this._verifyReinsertion(record, item, itemTrackBy, index);
           }
           record = record._next;
           index++;
@@ -2444,7 +2455,7 @@ System.register("angular2/src/core/change_detection/differs/default_iterable_dif
         this._removalsHead = this._removalsTail = null;
       }
     };
-    DefaultIterableDiffer.prototype._mismatch = function(record, item, index) {
+    DefaultIterableDiffer.prototype._mismatch = function(record, item, itemTrackBy, index) {
       var previousRecord;
       if (record === null) {
         previousRecord = this._itTail;
@@ -2452,27 +2463,28 @@ System.register("angular2/src/core/change_detection/differs/default_iterable_dif
         previousRecord = record._prev;
         this._remove(record);
       }
-      record = this._linkedRecords === null ? null : this._linkedRecords.get(item, index);
+      record = this._linkedRecords === null ? null : this._linkedRecords.get(itemTrackBy, index);
       if (record !== null) {
         this._moveAfter(record, previousRecord, index);
       } else {
-        record = this._unlinkedRecords === null ? null : this._unlinkedRecords.get(item);
+        record = this._unlinkedRecords === null ? null : this._unlinkedRecords.get(itemTrackBy);
         if (record !== null) {
           this._reinsertAfter(record, previousRecord, index);
         } else {
-          record = this._addAfter(new CollectionChangeRecord(item), previousRecord, index);
+          record = this._addAfter(new CollectionChangeRecord(item, itemTrackBy), previousRecord, index);
         }
       }
       return record;
     };
-    DefaultIterableDiffer.prototype._verifyReinsertion = function(record, item, index) {
-      var reinsertRecord = this._unlinkedRecords === null ? null : this._unlinkedRecords.get(item);
+    DefaultIterableDiffer.prototype._verifyReinsertion = function(record, item, itemTrackBy, index) {
+      var reinsertRecord = this._unlinkedRecords === null ? null : this._unlinkedRecords.get(itemTrackBy);
       if (reinsertRecord !== null) {
         record = this._reinsertAfter(reinsertRecord, record._prev, index);
       } else if (record.currentIndex != index) {
         record.currentIndex = index;
         this._addToMoves(record, index);
       }
+      record.item = item;
       return record;
     };
     DefaultIterableDiffer.prototype._truncate = function(record) {
@@ -2602,35 +2614,35 @@ System.register("angular2/src/core/change_detection/differs/default_iterable_dif
       return record;
     };
     DefaultIterableDiffer.prototype.toString = function() {
-      var record;
       var list = [];
-      for (record = this._itHead; record !== null; record = record._next) {
-        list.push(record);
-      }
+      this.forEachItem(function(record) {
+        return list.push(record);
+      });
       var previous = [];
-      for (record = this._previousItHead; record !== null; record = record._nextPrevious) {
-        previous.push(record);
-      }
+      this.forEachPreviousItem(function(record) {
+        return previous.push(record);
+      });
       var additions = [];
-      for (record = this._additionsHead; record !== null; record = record._nextAdded) {
-        additions.push(record);
-      }
+      this.forEachAddedItem(function(record) {
+        return additions.push(record);
+      });
       var moves = [];
-      for (record = this._movesHead; record !== null; record = record._nextMoved) {
-        moves.push(record);
-      }
+      this.forEachMovedItem(function(record) {
+        return moves.push(record);
+      });
       var removals = [];
-      for (record = this._removalsHead; record !== null; record = record._nextRemoved) {
-        removals.push(record);
-      }
+      this.forEachRemovedItem(function(record) {
+        return removals.push(record);
+      });
       return "collection: " + list.join(', ') + "\n" + "previous: " + previous.join(', ') + "\n" + "additions: " + additions.join(', ') + "\n" + "moves: " + moves.join(', ') + "\n" + "removals: " + removals.join(', ') + "\n";
     };
     return DefaultIterableDiffer;
   })();
   exports.DefaultIterableDiffer = DefaultIterableDiffer;
   var CollectionChangeRecord = (function() {
-    function CollectionChangeRecord(item) {
+    function CollectionChangeRecord(item, trackById) {
       this.item = item;
+      this.trackById = trackById;
       this.currentIndex = null;
       this.previousIndex = null;
       this._nextPrevious = null;
@@ -2666,10 +2678,10 @@ System.register("angular2/src/core/change_detection/differs/default_iterable_dif
         this._tail = record;
       }
     };
-    _DuplicateItemRecordList.prototype.get = function(item, afterIndex) {
+    _DuplicateItemRecordList.prototype.get = function(trackById, afterIndex) {
       var record;
       for (record = this._head; record !== null; record = record._nextDup) {
-        if ((afterIndex === null || afterIndex < record.currentIndex) && lang_2.looseIdentical(record.item, item)) {
+        if ((afterIndex === null || afterIndex < record.currentIndex) && lang_2.looseIdentical(record.trackById, trackById)) {
           return record;
         }
       }
@@ -2697,7 +2709,7 @@ System.register("angular2/src/core/change_detection/differs/default_iterable_dif
       this.map = new Map();
     }
     _DuplicateMap.prototype.put = function(record) {
-      var key = lang_2.getMapKey(record.item);
+      var key = lang_2.getMapKey(record.trackById);
       var duplicates = this.map.get(key);
       if (!lang_2.isPresent(duplicates)) {
         duplicates = new _DuplicateItemRecordList();
@@ -2705,16 +2717,16 @@ System.register("angular2/src/core/change_detection/differs/default_iterable_dif
       }
       duplicates.add(record);
     };
-    _DuplicateMap.prototype.get = function(value, afterIndex) {
+    _DuplicateMap.prototype.get = function(trackById, afterIndex) {
       if (afterIndex === void 0) {
         afterIndex = null;
       }
-      var key = lang_2.getMapKey(value);
+      var key = lang_2.getMapKey(trackById);
       var recordList = this.map.get(key);
-      return lang_2.isBlank(recordList) ? null : recordList.get(value, afterIndex);
+      return lang_2.isBlank(recordList) ? null : recordList.get(trackById, afterIndex);
     };
     _DuplicateMap.prototype.remove = function(record) {
-      var key = lang_2.getMapKey(record.item);
+      var key = lang_2.getMapKey(record.trackById);
       var recordList = this.map.get(key);
       if (recordList.remove(record)) {
         this.map.delete(key);
@@ -8002,7 +8014,7 @@ System.register("angular2/src/common/directives/ng_for", ["angular2/core", "angu
       set: function(value) {
         this._ngForOf = value;
         if (lang_1.isBlank(this._differ) && lang_1.isPresent(value)) {
-          this._differ = this._iterableDiffers.find(value).create(this._cdr);
+          this._differ = this._iterableDiffers.find(value).create(this._cdr, this._ngForTrackBy);
         }
       },
       enumerable: true,
@@ -8013,6 +8025,13 @@ System.register("angular2/src/common/directives/ng_for", ["angular2/core", "angu
         if (lang_1.isPresent(value)) {
           this._templateRef = value;
         }
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Object.defineProperty(NgFor.prototype, "ngForTrackBy", {
+      set: function(value) {
+        this._ngForTrackBy = value;
       },
       enumerable: true,
       configurable: true
@@ -8084,7 +8103,7 @@ System.register("angular2/src/common/directives/ng_for", ["angular2/core", "angu
     };
     NgFor = __decorate([core_1.Directive({
       selector: '[ngFor][ngForOf]',
-      inputs: ['ngForOf', 'ngForTemplate']
+      inputs: ['ngForTrackBy', 'ngForOf', 'ngForTemplate']
     }), __metadata('design:paramtypes', [core_1.ViewContainerRef, core_1.TemplateRef, core_1.IterableDiffers, core_1.ChangeDetectorRef])], NgFor);
     return NgFor;
   })();
