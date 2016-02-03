@@ -53,7 +53,7 @@ import "ast.dart"
 
 var _implicitReceiver = new ImplicitReceiver();
 // TODO(tbosch): Cannot make this const/final right now because of the transpiler...
-var INTERPOLATION_REGEXP = new RegExp(r'\{\{([\s\S]*?)\}\}');
+var INTERPOLATION_REGEXP = new RegExp(r'\{\{(.*?)\}\}');
 
 class ParseException extends BaseException {
   ParseException(String message, String input, String errLocation,
