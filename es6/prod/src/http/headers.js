@@ -1,6 +1,6 @@
-import { isBlank } from 'angular2/src/facade/lang';
+import { isBlank, Json } from 'angular2/src/facade/lang';
 import { BaseException } from 'angular2/src/facade/exceptions';
-import { isListLikeIterable, iterateListLike, Map, MapWrapper, StringMapWrapper, ListWrapper } from 'angular2/src/facade/collection';
+import { isListLikeIterable, Map, MapWrapper, StringMapWrapper, ListWrapper } from 'angular2/src/facade/collection';
 /**
  * Polyfill for [Headers](https://developer.mozilla.org/en-US/docs/Web/API/Headers/Headers), as
  * specified in the [Fetch Spec](https://fetch.spec.whatwg.org/#headers-class).
@@ -101,15 +101,7 @@ export class Headers {
     /**
      * Returns string of all headers.
      */
-    toJSON() {
-        let serializableHeaders = {};
-        this._headersMap.forEach((values, name) => {
-            let list = [];
-            iterateListLike(values, val => list = ListWrapper.concat(list, val.split(',')));
-            serializableHeaders[name] = list;
-        });
-        return serializableHeaders;
-    }
+    toJSON() { return Json.stringify(this.values()); }
     /**
      * Returns list of header values for a given name.
      */

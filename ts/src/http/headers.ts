@@ -9,7 +9,6 @@ import {
 import {BaseException, WrappedException} from 'angular2/src/facade/exceptions';
 import {
   isListLikeIterable,
-  iterateListLike,
   Map,
   MapWrapper,
   StringMapWrapper,
@@ -132,17 +131,7 @@ export class Headers {
   /**
    * Returns string of all headers.
    */
-  toJSON(): {[key: string]: any} {
-    let serializableHeaders = {};
-    this._headersMap.forEach((values: string[], name: string) => {
-      let list = [];
-
-      iterateListLike(values, val => list = ListWrapper.concat(list, val.split(',')));
-
-      serializableHeaders[name] = list;
-    });
-    return serializableHeaders;
-  }
+  toJSON(): string { return Json.stringify(this.values()); }
 
   /**
    * Returns list of header values for a given name.
