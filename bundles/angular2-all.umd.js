@@ -8462,7 +8462,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var ast_1 = __webpack_require__(30);
 	var _implicitReceiver = new ast_1.ImplicitReceiver();
 	// TODO(tbosch): Cannot make this const/final right now because of the transpiler...
-	var INTERPOLATION_REGEXP = /\{\{(.*?)\}\}/g;
+	var INTERPOLATION_REGEXP = /\{\{([\s\S]*?)\}\}/g;
 	var ParseException = (function (_super) {
 	    __extends(ParseException, _super);
 	    function ParseException(message, input, errLocation, ctxLocation) {
