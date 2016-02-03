@@ -19292,7 +19292,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Validator that requires controls to have a non-empty value.
 	     */
 	    Validators.required = function (control) {
-	        return lang_1.isBlank(control.value) || control.value == "" ? { "required": true } : null;
+	        return lang_1.isBlank(control.value) || (lang_1.isString(control.value) && control.value == "") ?
+	            { "required": true } :
+	            null;
 	    };
 	    /**
 	     * Validator that requires controls to have a value of a minimum length.
