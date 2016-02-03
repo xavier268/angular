@@ -298,6 +298,7 @@ var NG_COMMON = [
   "NgFor.ngDoCheck()",
   "NgFor.ngForOf=",
   "NgFor.ngForTemplate=",
+  "NgFor.ngForTrackBy=",
   "NgForm",
   "NgForm.addControl()",
   "NgForm.addControlGroup()",
