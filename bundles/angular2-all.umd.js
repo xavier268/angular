@@ -4823,7 +4823,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        throw new Error("Cannot create a factory for '" + lang_1.stringify(t) + "' because its constructor has more than 20 arguments");
 	    };
 	    /** @internal */
-	    ReflectionCapabilities.prototype._zipTypesAndAnnotaions = function (paramTypes, paramAnnotations) {
+	    ReflectionCapabilities.prototype._zipTypesAndAnnotations = function (paramTypes, paramAnnotations) {
 	        var result;
 	        if (typeof paramTypes === 'undefined') {
 	            result = new Array(paramAnnotations.length);
@@ -4859,7 +4859,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var paramAnnotations = this._reflect.getMetadata('parameters', typeOrFunc);
 	            var paramTypes = this._reflect.getMetadata('design:paramtypes', typeOrFunc);
 	            if (lang_1.isPresent(paramTypes) || lang_1.isPresent(paramAnnotations)) {
-	                return this._zipTypesAndAnnotaions(paramTypes, paramAnnotations);
+	                return this._zipTypesAndAnnotations(paramTypes, paramAnnotations);
 	            }
 	        }
 	        // The array has to be filled with `undefined` because holes would be skipped by `some`
@@ -19292,9 +19292,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Validator that requires controls to have a non-empty value.
 	     */
 	    Validators.required = function (control) {
-	        return lang_1.isBlank(control.value) || (lang_1.isString(control.value) && control.value == "") ?
-	            { "required": true } :
-	            null;
+	        return lang_1.isBlank(control.value) || control.value == "" ? { "required": true } : null;
 	    };
 	    /**
 	     * Validator that requires controls to have a value of a minimum length.
