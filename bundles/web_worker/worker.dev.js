@@ -1891,7 +1891,7 @@ System.register("angular2/src/core/reflection/reflection_capabilities", ["angula
       ;
       throw new Error("Cannot create a factory for '" + lang_1.stringify(t) + "' because its constructor has more than 20 arguments");
     };
-    ReflectionCapabilities.prototype._zipTypesAndAnnotaions = function(paramTypes, paramAnnotations) {
+    ReflectionCapabilities.prototype._zipTypesAndAnnotations = function(paramTypes, paramAnnotations) {
       var result;
       if (typeof paramTypes === 'undefined') {
         result = new Array(paramAnnotations.length);
@@ -1920,7 +1920,7 @@ System.register("angular2/src/core/reflection/reflection_capabilities", ["angula
         var paramAnnotations = this._reflect.getMetadata('parameters', typeOrFunc);
         var paramTypes = this._reflect.getMetadata('design:paramtypes', typeOrFunc);
         if (lang_1.isPresent(paramTypes) || lang_1.isPresent(paramAnnotations)) {
-          return this._zipTypesAndAnnotaions(paramTypes, paramAnnotations);
+          return this._zipTypesAndAnnotations(paramTypes, paramAnnotations);
         }
       }
       var parameters = new Array(typeOrFunc.length);
