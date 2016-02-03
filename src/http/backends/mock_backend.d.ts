@@ -2,6 +2,7 @@ import { Request } from '../static_request';
 import { Response } from '../static_response';
 import { ReadyState } from '../enums';
 import { Connection, ConnectionBackend } from '../interfaces';
+import { ReplaySubject } from 'rxjs/subject/ReplaySubject';
 /**
  *
  * Mock Connection to represent a {@link Connection} for tests.
@@ -21,7 +22,7 @@ export declare class MockConnection implements Connection {
      * {@link EventEmitter} of {@link Response}. Can be subscribed to in order to be notified when a
      * response is available.
      */
-    response: any;
+    response: ReplaySubject<Response>;
     constructor(req: Request);
     /**
      * Sends a mock response to the connection. This response is the value that is emitted to the
@@ -154,5 +155,5 @@ export declare class MockBackend implements ConnectionBackend {
      * emitter of this `MockBackend` instance. This method will usually only be used by tests
      * against the framework itself, not by end-users.
      */
-    createConnection(req: Request): Connection;
+    createConnection(req: Request): MockConnection;
 }
