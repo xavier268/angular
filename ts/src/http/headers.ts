@@ -9,7 +9,6 @@ import {
 import {BaseException, WrappedException} from 'angular2/src/facade/exceptions';
 import {
   isListLikeIterable,
-  iterateListLike,
   Map,
   MapWrapper,
   StringMapWrapper,
@@ -58,9 +57,8 @@ export class Headers {
     }
 
     // headers instanceof StringMap
-    StringMapWrapper.forEach(headers, (v: any, k: string) => {
-      this._headersMap.set(k, isListLikeIterable(v) ? v : [v]);
-    });
+    StringMapWrapper.forEach(
+        headers, (v, k) => { this._headersMap.set(k, isListLikeIterable(v) ? v : [v]); });
   }
 
   /**
@@ -112,13 +110,13 @@ export class Headers {
    * Sets or overrides header value for given name.
    */
   set(header: string, value: string | string[]): void {
-    var list: string[] = [];
+    var list = [];
 
     if (isListLikeIterable(value)) {
       var pushValue = (<string[]>value).join(',');
       list.push(pushValue);
     } else {
-      list.push(<string>value);
+      list.push(value);
     }
 
     this._headersMap.set(header, list);
@@ -132,17 +130,7 @@ export class Headers {
   /**
    * Returns string of all headers.
    */
-  toJSON(): {[key: string]: any} {
-    let serializableHeaders = {};
-    this._headersMap.forEach((values: string[], name: string) => {
-      let list = [];
-
-      iterateListLike(values, val => list = ListWrapper.concat(list, val.split(',')));
-
-      serializableHeaders[name] = list;
-    });
-    return serializableHeaders;
-  }
+  toJSON(): string { return Json.stringify(this.values()); }
 
   /**
    * Returns list of header values for a given name.

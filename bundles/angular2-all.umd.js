@@ -829,7 +829,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *   shown: boolean;
 	 *
 	 *   constructor(private @Query(Item) items:QueryList<Item>) {
-	 *     items.changes.subscribe(() => console.log(items.length));
+	 *     items.onChange(() => console.log(items.length));
 	 *   }
 	 * }
 	 * ```
@@ -1323,7 +1323,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *   shown: boolean;
 	 *
 	 *   constructor(private @Query(Item) items:QueryList<Item>) {
-	 *     items.changes.subscribe(() => console.log(items.length));
+	 *     items.onChange(() => console.log(items.length));
 	 *   }
 	 * }
 	 * ```
@@ -4823,7 +4823,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        throw new Error("Cannot create a factory for '" + lang_1.stringify(t) + "' because its constructor has more than 20 arguments");
 	    };
 	    /** @internal */
-	    ReflectionCapabilities.prototype._zipTypesAndAnnotations = function (paramTypes, paramAnnotations) {
+	    ReflectionCapabilities.prototype._zipTypesAndAnnotaions = function (paramTypes, paramAnnotations) {
 	        var result;
 	        if (typeof paramTypes === 'undefined') {
 	            result = new Array(paramAnnotations.length);
@@ -4859,7 +4859,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var paramAnnotations = this._reflect.getMetadata('parameters', typeOrFunc);
 	            var paramTypes = this._reflect.getMetadata('design:paramtypes', typeOrFunc);
 	            if (lang_1.isPresent(paramTypes) || lang_1.isPresent(paramAnnotations)) {
-	                return this._zipTypesAndAnnotations(paramTypes, paramAnnotations);
+	                return this._zipTypesAndAnnotaions(paramTypes, paramAnnotations);
 	            }
 	        }
 	        // The array has to be filled with `undefined` because holes would be skipped by `some`
@@ -8462,7 +8462,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var ast_1 = __webpack_require__(30);
 	var _implicitReceiver = new ast_1.ImplicitReceiver();
 	// TODO(tbosch): Cannot make this const/final right now because of the transpiler...
-	var INTERPOLATION_REGEXP = /\{\{([\s\S]*?)\}\}/g;
+	var INTERPOLATION_REGEXP = /\{\{(.*?)\}\}/g;
 	var ParseException = (function (_super) {
 	    __extends(ParseException, _super);
 	    function ParseException(message, input, errLocation, ctxLocation) {
@@ -16654,7 +16654,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (lang_1.isPresent(obj)) {
 	                this._subscribe(obj);
 	            }
-	            this._latestReturnedValue = this._latestValue;
 	            return this._latestValue;
 	        }
 	        if (obj !== this._obj) {
@@ -19293,9 +19292,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Validator that requires controls to have a non-empty value.
 	     */
 	    Validators.required = function (control) {
-	        return lang_1.isBlank(control.value) || (lang_1.isString(control.value) && control.value == "") ?
-	            { "required": true } :
-	            null;
+	        return lang_1.isBlank(control.value) || control.value == "" ? { "required": true } : null;
 	    };
 	    /**
 	     * Validator that requires controls to have a value of a minimum length.
@@ -29728,8 +29725,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *       // Send a response to the request
 	 *       connection.mockRespond(response);
 	 *     });
-	 *   }
-	 * });
+	 *   });
 	 *
 	 * http.get('people.json').observer({
 	 *   next: res => {
@@ -29743,9 +29739,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // TODO(pascal): use factory type annotations once supported in DI
 	    // issue: https://github.com/angular/angular/issues/3183
 	    core_1.provide(http_1.Http, {
-	        useFactory: function (xhrBackend, requestOptions) {
-	            return new http_1.Http(xhrBackend, requestOptions);
-	        },
+	        useFactory: function (xhrBackend, requestOptions) { return new http_1.Http(xhrBackend, requestOptions); },
 	        deps: [xhr_backend_1.XHRBackend, base_request_options_1.RequestOptions]
 	    }),
 	    browser_xhr_1.BrowserXhr,
@@ -29855,8 +29849,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *       // Send a response to the request
 	 *       connection.mockRespond(response);
 	 *     });
-	 *   }
-	 * });
+	 *   });
 
 	 * jsonp.get('people.json').observer({
 	 *   next: res => {
@@ -29870,9 +29863,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // TODO(pascal): use factory type annotations once supported in DI
 	    // issue: https://github.com/angular/angular/issues/3183
 	    core_1.provide(http_1.Jsonp, {
-	        useFactory: function (jsonpBackend, requestOptions) {
-	            return new http_1.Jsonp(jsonpBackend, requestOptions);
-	        },
+	        useFactory: function (jsonpBackend, requestOptions) { return new http_1.Jsonp(jsonpBackend, requestOptions); },
 	        deps: [jsonp_backend_1.JSONPBackend, base_request_options_1.RequestOptions]
 	    }),
 	    browser_jsonp_1.BrowserJsonp,
@@ -30074,8 +30065,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Jsonp.prototype.request = function (url, options) {
 	        var responseObservable;
 	        if (lang_1.isString(url)) {
-	            url =
-	                new static_request_1.Request(mergeOptions(this._defaultOptions, options, enums_1.RequestMethod.Get, url));
+	            url = new static_request_1.Request(mergeOptions(this._defaultOptions, options, enums_1.RequestMethod.Get, url));
 	        }
 	        if (url instanceof static_request_1.Request) {
 	            if (url.method !== enums_1.RequestMethod.Get) {
@@ -30248,9 +30238,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return;
 	        }
 	        // headers instanceof StringMap
-	        collection_1.StringMapWrapper.forEach(headers, function (v, k) {
-	            _this._headersMap.set(k, collection_1.isListLikeIterable(v) ? v : [v]);
-	        });
+	        collection_1.StringMapWrapper.forEach(headers, function (v, k) { _this._headersMap.set(k, collection_1.isListLikeIterable(v) ? v : [v]); });
 	    }
 	    /**
 	     * Returns a new Headers instance from the given DOMString of Response Headers
@@ -30317,15 +30305,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Returns string of all headers.
 	     */
-	    Headers.prototype.toJSON = function () {
-	        var serializableHeaders = {};
-	        this._headersMap.forEach(function (values, name) {
-	            var list = [];
-	            collection_1.iterateListLike(values, function (val) { return list = collection_1.ListWrapper.concat(list, val.split(',')); });
-	            serializableHeaders[name] = list;
-	        });
-	        return serializableHeaders;
-	    };
+	    Headers.prototype.toJSON = function () { return lang_1.Json.stringify(this.values()); };
 	    /**
 	     * Returns list of header values for a given name.
 	     */
@@ -30352,10 +30332,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function normalizeMethodName(method) {
 	    if (lang_1.isString(method)) {
 	        var originalMethod = method;
-	        method = method
-	            .replace(/(\w)(\w*)/g, function (g0, g1, g2) {
-	            return g1.toUpperCase() + g2.toLowerCase();
-	        });
+	        method = method.replace(/(\w)(\w*)/g, function (g0, g1, g2) { return g1.toUpperCase() + g2.toLowerCase(); });
 	        method = enums_1.RequestMethod[method];
 	        if (typeof method !== 'number')
 	            throw exceptions_1.makeTypeError("Invalid request method. The method \"" + originalMethod + "\" is not supported.");
@@ -33448,7 +33425,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var params = [];
 	    if (lang_1.isPresent(paramMap)) {
 	        collection_1.StringMapWrapper.forEach(paramMap, function (value, key) {
-	            if (value === true) {
+	            if (value == true) {
 	                params.push(key);
 	            }
 	            else {

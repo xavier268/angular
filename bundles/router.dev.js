@@ -805,7 +805,7 @@ System.register("angular2/src/router/url_parser", ["angular2/src/facade/collecti
     var params = [];
     if (lang_1.isPresent(paramMap)) {
       collection_1.StringMapWrapper.forEach(paramMap, function(value, key) {
-        if (value === true) {
+        if (value == true) {
           params.push(key);
         } else {
           params.push(key + '=' + value);

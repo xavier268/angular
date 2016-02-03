@@ -124,8 +124,7 @@ export { URLSearchParams } from './src/http/url_search_params';
  *       // Send a response to the request
  *       connection.mockRespond(response);
  *     });
- *   }
- * });
+ *   });
  *
  * http.get('people.json').observer({
  *   next: res => {
@@ -249,8 +248,7 @@ export const HTTP_BINDINGS = HTTP_PROVIDERS;
  *       // Send a response to the request
  *       connection.mockRespond(response);
  *     });
- *   }
- * });
+ *   });
 
  * jsonp.get('people.json').observer({
  *   next: res => {

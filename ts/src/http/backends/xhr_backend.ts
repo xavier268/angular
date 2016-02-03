@@ -8,9 +8,7 @@ import {Injectable} from 'angular2/core';
 import {BrowserXhr} from './browser_xhr';
 import {isPresent} from 'angular2/src/facade/lang';
 import {Observable} from 'rxjs/Observable';
-import {Observer} from 'rxjs/Observer';
 import {isSuccess, getResponseURL} from '../http_utils';
-
 /**
 * Creates connections using `XMLHttpRequest`. Given a fully-qualified
 * request, an `XHRConnection` will immediately create an `XMLHttpRequest` object and send the
@@ -29,7 +27,7 @@ export class XHRConnection implements Connection {
   readyState: ReadyState;
   constructor(req: Request, browserXHR: BrowserXhr, baseResponseOptions?: ResponseOptions) {
     this.request = req;
-    this.response = new Observable((responseObserver: Observer<Response>) => {
+    this.response = new Observable(responseObserver => {
       let _xhr: XMLHttpRequest = browserXHR.build();
       _xhr.open(RequestMethod[req.method].toUpperCase(), req.url);
       // load event handler
@@ -66,7 +64,7 @@ export class XHRConnection implements Connection {
         responseObserver.error(response);
       };
       // error event handler
-      let onError = (err: any) => {
+      let onError = (err) => {
         var responseOptions = new ResponseOptions({body: err, type: ResponseType.Error});
         if (isPresent(baseResponseOptions)) {
           responseOptions = baseResponseOptions.merge(responseOptions);
