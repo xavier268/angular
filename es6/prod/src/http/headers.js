@@ -38,7 +38,9 @@ export class Headers {
             return;
         }
         // headers instanceof StringMap
-        StringMapWrapper.forEach(headers, (v, k) => { this._headersMap.set(k, isListLikeIterable(v) ? v : [v]); });
+        StringMapWrapper.forEach(headers, (v, k) => {
+            this._headersMap.set(k, isListLikeIterable(v) ? v : [v]);
+        });
     }
     /**
      * Returns a new Headers instance from the given DOMString of Response Headers
