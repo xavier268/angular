@@ -4161,7 +4161,7 @@ System.register("angular2/src/core/change_detection/parser/parser", ["angular2/s
   var reflection_1 = require("angular2/src/core/reflection/reflection");
   var ast_1 = require("angular2/src/core/change_detection/parser/ast");
   var _implicitReceiver = new ast_1.ImplicitReceiver();
-  var INTERPOLATION_REGEXP = /\{\{(.*?)\}\}/g;
+  var INTERPOLATION_REGEXP = /\{\{([\s\S]*?)\}\}/g;
   var ParseException = (function(_super) {
     __extends(ParseException, _super);
     function ParseException(message, input, errLocation, ctxLocation) {
