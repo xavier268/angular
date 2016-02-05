@@ -22,7 +22,6 @@ System.register("angular2/src/facade/lang", [], true, function(require, exports,
   } else {
     globalScope = window;
   }
-  ;
   exports.IS_DART = false;
   var _global = globalScope;
   exports.global = _global;
@@ -3891,18 +3890,14 @@ System.register("angular2/src/core/change_detection/parser/lexer", ["angular2/sr
       return null;
     };
     _Scanner.prototype.scanCharacter = function(start, code) {
-      assert(this.peek == code);
       this.advance();
       return newCharacterToken(start, code);
     };
     _Scanner.prototype.scanOperator = function(start, str) {
-      assert(this.peek == lang_1.StringWrapper.charCodeAt(str, 0));
-      assert(collection_1.SetWrapper.has(OPERATORS, str));
       this.advance();
       return newOperatorToken(start, str);
     };
     _Scanner.prototype.scanComplexOperator = function(start, one, twoCode, two, threeCode, three) {
-      assert(this.peek == lang_1.StringWrapper.charCodeAt(one, 0));
       this.advance();
       var str = one;
       if (this.peek == twoCode) {
@@ -3913,11 +3908,9 @@ System.register("angular2/src/core/change_detection/parser/lexer", ["angular2/sr
         this.advance();
         str += three;
       }
-      assert(collection_1.SetWrapper.has(OPERATORS, str));
       return newOperatorToken(start, str);
     };
     _Scanner.prototype.scanIdentifier = function() {
-      assert(isIdentifierStart(this.peek));
       var start = this.index;
       this.advance();
       while (isIdentifierPart(this.peek))
@@ -3930,7 +3923,6 @@ System.register("angular2/src/core/change_detection/parser/lexer", ["angular2/sr
       }
     };
     _Scanner.prototype.scanNumber = function(start) {
-      assert(isDigit(this.peek));
       var simple = (this.index === start);
       this.advance();
       while (true) {
@@ -3953,7 +3945,6 @@ System.register("angular2/src/core/change_detection/parser/lexer", ["angular2/sr
       return newNumberToken(start, value);
     };
     _Scanner.prototype.scanString = function() {
-      assert(this.peek == exports.$SQ || this.peek == exports.$DQ);
       var start = this.index;
       var quote = this.peek;
       this.advance();
@@ -13385,7 +13376,7 @@ System.register("angular2/src/core/zone/ng_zone", ["angular2/src/facade/collecti
       var ngZone = this;
       var errorHandling;
       if (enableLongStackTrace) {
-        errorHandling = collection_1.StringMapWrapper.merge(Zone.longStackTraceZone, {onError: function(e) {
+        errorHandling = collection_1.StringMapWrapper.merge(lang_1.global.Zone.longStackTraceZone, {onError: function(e) {
             ngZone._notifyOnError(this, e);
           }});
       } else {

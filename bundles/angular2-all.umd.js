@@ -1453,7 +1453,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	else {
 	    globalScope = window;
 	}
-	;
 	exports.IS_DART = false;
 	// Need to declare a new variable for global here since TypeScript
 	// exports the original value of the symbol.
@@ -8221,13 +8220,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return null;
 	    };
 	    _Scanner.prototype.scanCharacter = function (start, code) {
-	        assert(this.peek == code);
 	        this.advance();
 	        return newCharacterToken(start, code);
 	    };
 	    _Scanner.prototype.scanOperator = function (start, str) {
-	        assert(this.peek == lang_1.StringWrapper.charCodeAt(str, 0));
-	        assert(collection_1.SetWrapper.has(OPERATORS, str));
 	        this.advance();
 	        return newOperatorToken(start, str);
 	    };
@@ -8243,7 +8239,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @returns {Token}
 	     */
 	    _Scanner.prototype.scanComplexOperator = function (start, one, twoCode, two, threeCode, three) {
-	        assert(this.peek == lang_1.StringWrapper.charCodeAt(one, 0));
 	        this.advance();
 	        var str = one;
 	        if (this.peek == twoCode) {
@@ -8254,11 +8249,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.advance();
 	            str += three;
 	        }
-	        assert(collection_1.SetWrapper.has(OPERATORS, str));
 	        return newOperatorToken(start, str);
 	    };
 	    _Scanner.prototype.scanIdentifier = function () {
-	        assert(isIdentifierStart(this.peek));
 	        var start = this.index;
 	        this.advance();
 	        while (isIdentifierPart(this.peek))
@@ -8272,7 +8265,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    };
 	    _Scanner.prototype.scanNumber = function (start) {
-	        assert(isDigit(this.peek));
 	        var simple = (this.index === start);
 	        this.advance(); // Skip initial digit.
 	        while (true) {
@@ -8300,7 +8292,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return newNumberToken(start, value);
 	    };
 	    _Scanner.prototype.scanString = function () {
-	        assert(this.peek == exports.$SQ || this.peek == exports.$DQ);
 	        var start = this.index;
 	        var quote = this.peek;
 	        this.advance(); // Skip initial quote.
@@ -13214,7 +13205,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var ngZone = this;
 	        var errorHandling;
 	        if (enableLongStackTrace) {
-	            errorHandling = collection_1.StringMapWrapper.merge(Zone.longStackTraceZone, { onError: function (e) { ngZone._notifyOnError(this, e); } });
+	            errorHandling =
+	                collection_1.StringMapWrapper.merge(lang_1.global.Zone.longStackTraceZone, { onError: function (e) { ngZone._notifyOnError(this, e); } });
 	        }
 	        else {
 	            errorHandling = { onError: function (e) { ngZone._notifyOnError(this, e); } };
