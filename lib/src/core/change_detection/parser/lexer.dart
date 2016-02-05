@@ -270,14 +270,11 @@ class _Scanner {
   }
 
   Token scanCharacter(num start, num code) {
-    assert(this.peek == code);
     this.advance();
     return newCharacterToken(start, code);
   }
 
   Token scanOperator(num start, String str) {
-    assert(this.peek == StringWrapper.charCodeAt(str, 0));
-    assert(SetWrapper.has(OPERATORS, str));
     this.advance();
     return newOperatorToken(start, str);
   }
@@ -295,7 +292,6 @@ class _Scanner {
    */
   Token scanComplexOperator(num start, String one, num twoCode, String two,
       [num threeCode, String three]) {
-    assert(this.peek == StringWrapper.charCodeAt(one, 0));
     this.advance();
     String str = one;
     if (this.peek == twoCode) {
@@ -306,12 +302,10 @@ class _Scanner {
       this.advance();
       str += three;
     }
-    assert(SetWrapper.has(OPERATORS, str));
     return newOperatorToken(start, str);
   }
 
   Token scanIdentifier() {
-    assert(isIdentifierStart(this.peek));
     num start = this.index;
     this.advance();
     while (isIdentifierPart(this.peek)) this.advance();
@@ -324,7 +318,6 @@ class _Scanner {
   }
 
   Token scanNumber(num start) {
-    assert(isDigit(this.peek));
     bool simple = (identical(this.index, start));
     this.advance();
     while (true) {
@@ -349,7 +342,6 @@ class _Scanner {
   }
 
   Token scanString() {
-    assert(this.peek == $SQ || this.peek == $DQ);
     num start = this.index;
     num quote = this.peek;
     this.advance();
