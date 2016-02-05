@@ -5041,7 +5041,7 @@ System.register("angular2/src/core/change_detection/directive_record", ["angular
   return module.exports;
 });
 
-System.register("angular2/src/core/change_detection/change_detector_ref", ["angular2/src/core/change_detection/constants"], true, function(require, exports, module) {
+System.register("angular2/src/core/change_detection/change_detector_ref", ["angular2/src/core/change_detection/constants", "angular2/src/core/di"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -5054,9 +5054,27 @@ System.register("angular2/src/core/change_detection/change_detector_ref", ["angu
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
   };
+  var __decorate = (this && this.__decorate) || function(decorators, target, key, desc) {
+    var c = arguments.length,
+        r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+        d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function")
+      r = Reflect.decorate(decorators, target, key, desc);
+    else
+      for (var i = decorators.length - 1; i >= 0; i--)
+        if (d = decorators[i])
+          r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+  };
+  var __metadata = (this && this.__metadata) || function(k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
+      return Reflect.metadata(k, v);
+  };
   var constants_1 = require("angular2/src/core/change_detection/constants");
+  var di_1 = require("angular2/src/core/di");
   var ChangeDetectorRef = (function() {
     function ChangeDetectorRef() {}
+    ChangeDetectorRef = __decorate([di_1.Injectable(), __metadata('design:paramtypes', [])], ChangeDetectorRef);
     return ChangeDetectorRef;
   })();
   exports.ChangeDetectorRef = ChangeDetectorRef;
@@ -6087,11 +6105,28 @@ System.register("angular2/src/core/linker/view_type", [], true, function(require
   return module.exports;
 });
 
-System.register("angular2/src/core/linker/element_ref", ["angular2/src/facade/exceptions"], true, function(require, exports, module) {
+System.register("angular2/src/core/linker/element_ref", ["angular2/src/facade/exceptions", "angular2/src/core/di"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
+  var __decorate = (this && this.__decorate) || function(decorators, target, key, desc) {
+    var c = arguments.length,
+        r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+        d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function")
+      r = Reflect.decorate(decorators, target, key, desc);
+    else
+      for (var i = decorators.length - 1; i >= 0; i--)
+        if (d = decorators[i])
+          r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+  };
+  var __metadata = (this && this.__metadata) || function(k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
+      return Reflect.metadata(k, v);
+  };
   var exceptions_1 = require("angular2/src/facade/exceptions");
+  var di_1 = require("angular2/src/core/di");
   var ElementRef = (function() {
     function ElementRef() {}
     Object.defineProperty(ElementRef.prototype, "nativeElement", {
@@ -6101,6 +6136,7 @@ System.register("angular2/src/core/linker/element_ref", ["angular2/src/facade/ex
       enumerable: true,
       configurable: true
     });
+    ElementRef = __decorate([di_1.Injectable(), __metadata('design:paramtypes', [])], ElementRef);
     return ElementRef;
   })();
   exports.ElementRef = ElementRef;
@@ -6129,7 +6165,7 @@ System.register("angular2/src/core/linker/element_ref", ["angular2/src/facade/ex
   return module.exports;
 });
 
-System.register("angular2/src/core/linker/view_container_ref", ["angular2/src/facade/collection", "angular2/src/facade/exceptions", "angular2/src/facade/lang"], true, function(require, exports, module) {
+System.register("angular2/src/core/linker/view_container_ref", ["angular2/src/facade/collection", "angular2/src/facade/exceptions", "angular2/src/core/di", "angular2/src/facade/lang"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -6142,8 +6178,25 @@ System.register("angular2/src/core/linker/view_container_ref", ["angular2/src/fa
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
   };
+  var __decorate = (this && this.__decorate) || function(decorators, target, key, desc) {
+    var c = arguments.length,
+        r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+        d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function")
+      r = Reflect.decorate(decorators, target, key, desc);
+    else
+      for (var i = decorators.length - 1; i >= 0; i--)
+        if (d = decorators[i])
+          r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+  };
+  var __metadata = (this && this.__metadata) || function(k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
+      return Reflect.metadata(k, v);
+  };
   var collection_1 = require("angular2/src/facade/collection");
   var exceptions_1 = require("angular2/src/facade/exceptions");
+  var di_1 = require("angular2/src/core/di");
   var lang_1 = require("angular2/src/facade/lang");
   var ViewContainerRef = (function() {
     function ViewContainerRef() {}
@@ -6167,6 +6220,7 @@ System.register("angular2/src/core/linker/view_container_ref", ["angular2/src/fa
       configurable: true
     });
     ;
+    ViewContainerRef = __decorate([di_1.Injectable(), __metadata('design:paramtypes', [])], ViewContainerRef);
     return ViewContainerRef;
   })();
   exports.ViewContainerRef = ViewContainerRef;
@@ -6255,10 +6309,27 @@ System.register("angular2/src/core/linker/view_container_ref", ["angular2/src/fa
   return module.exports;
 });
 
-System.register("angular2/src/core/render/api", [], true, function(require, exports, module) {
+System.register("angular2/src/core/render/api", ["angular2/src/core/di"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
+  var __decorate = (this && this.__decorate) || function(decorators, target, key, desc) {
+    var c = arguments.length,
+        r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+        d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function")
+      r = Reflect.decorate(decorators, target, key, desc);
+    else
+      for (var i = decorators.length - 1; i >= 0; i--)
+        if (d = decorators[i])
+          r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+  };
+  var __metadata = (this && this.__metadata) || function(k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
+      return Reflect.metadata(k, v);
+  };
+  var di_1 = require("angular2/src/core/di");
   var RenderComponentType = (function() {
     function RenderComponentType(id, encapsulation, styles) {
       this.id = id;
@@ -6280,6 +6351,7 @@ System.register("angular2/src/core/render/api", [], true, function(require, expo
   exports.RenderDebugInfo = RenderDebugInfo;
   var Renderer = (function() {
     function Renderer() {}
+    Renderer = __decorate([di_1.Injectable(), __metadata('design:paramtypes', [])], Renderer);
     return Renderer;
   })();
   exports.Renderer = Renderer;
@@ -6292,7 +6364,7 @@ System.register("angular2/src/core/render/api", [], true, function(require, expo
   return module.exports;
 });
 
-System.register("angular2/src/core/linker/template_ref", [], true, function(require, exports, module) {
+System.register("angular2/src/core/linker/template_ref", ["angular2/src/core/di"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -6305,6 +6377,23 @@ System.register("angular2/src/core/linker/template_ref", [], true, function(requ
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
   };
+  var __decorate = (this && this.__decorate) || function(decorators, target, key, desc) {
+    var c = arguments.length,
+        r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+        d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function")
+      r = Reflect.decorate(decorators, target, key, desc);
+    else
+      for (var i = decorators.length - 1; i >= 0; i--)
+        if (d = decorators[i])
+          r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+  };
+  var __metadata = (this && this.__metadata) || function(k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
+      return Reflect.metadata(k, v);
+  };
+  var di_1 = require("angular2/src/core/di");
   var TemplateRef = (function() {
     function TemplateRef() {}
     Object.defineProperty(TemplateRef.prototype, "elementRef", {
@@ -6314,6 +6403,7 @@ System.register("angular2/src/core/linker/template_ref", [], true, function(requ
       enumerable: true,
       configurable: true
     });
+    TemplateRef = __decorate([di_1.Injectable(), __metadata('design:paramtypes', [])], TemplateRef);
     return TemplateRef;
   })();
   exports.TemplateRef = TemplateRef;
@@ -19932,7 +20022,7 @@ System.register("angular2/src/router/route_config_impl", ["angular2/src/facade/l
   return module.exports;
 });
 
-System.register("angular2/src/router/instruction", ["angular2/src/facade/collection", "angular2/src/facade/lang", "angular2/src/facade/async"], true, function(require, exports, module) {
+System.register("angular2/src/router/instruction", ["angular2/src/facade/collection", "angular2/src/facade/lang", "angular2/src/facade/async", "angular2/core"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -19945,9 +20035,26 @@ System.register("angular2/src/router/instruction", ["angular2/src/facade/collect
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
   };
+  var __decorate = (this && this.__decorate) || function(decorators, target, key, desc) {
+    var c = arguments.length,
+        r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+        d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function")
+      r = Reflect.decorate(decorators, target, key, desc);
+    else
+      for (var i = decorators.length - 1; i >= 0; i--)
+        if (d = decorators[i])
+          r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+  };
+  var __metadata = (this && this.__metadata) || function(k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
+      return Reflect.metadata(k, v);
+  };
   var collection_1 = require("angular2/src/facade/collection");
   var lang_1 = require("angular2/src/facade/lang");
   var async_1 = require("angular2/src/facade/async");
+  var core_1 = require("angular2/core");
   var RouteParams = (function() {
     function RouteParams(params) {
       this.params = params;
@@ -19955,6 +20062,7 @@ System.register("angular2/src/router/instruction", ["angular2/src/facade/collect
     RouteParams.prototype.get = function(param) {
       return lang_1.normalizeBlank(collection_1.StringMapWrapper.get(this.params, param));
     };
+    RouteParams = __decorate([core_1.Injectable(), __metadata('design:paramtypes', [Object])], RouteParams);
     return RouteParams;
   })();
   exports.RouteParams = RouteParams;
@@ -23860,6 +23968,15 @@ System.register("angular2/src/compiler/directive_metadata", ["angular2/src/facad
   var global = System.global,
       __define = global.define;
   global.define = undefined;
+  var __extends = (this && this.__extends) || function(d, b) {
+    for (var p in b)
+      if (b.hasOwnProperty(p))
+        d[p] = b[p];
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
   var lang_1 = require("angular2/src/facade/lang");
   var exceptions_1 = require("angular2/src/facade/exceptions");
   var collection_1 = require("angular2/src/facade/collection");
@@ -23869,8 +23986,26 @@ System.register("angular2/src/compiler/directive_metadata", ["angular2/src/facad
   var util_1 = require("angular2/src/compiler/util");
   var interfaces_1 = require("angular2/src/core/linker/interfaces");
   var HOST_REG_EXP = /^(?:(?:\[([^\]]+)\])|(?:\(([^\)]+)\)))$/g;
-  var CompileMetadataWithType = (function() {
-    function CompileMetadataWithType() {}
+  var CompileMetadataWithIdentifier = (function() {
+    function CompileMetadataWithIdentifier() {}
+    CompileMetadataWithIdentifier.fromJson = function(data) {
+      return _COMPILE_METADATA_FROM_JSON[data['class']](data);
+    };
+    Object.defineProperty(CompileMetadataWithIdentifier.prototype, "identifier", {
+      get: function() {
+        return exceptions_1.unimplemented();
+      },
+      enumerable: true,
+      configurable: true
+    });
+    return CompileMetadataWithIdentifier;
+  })();
+  exports.CompileMetadataWithIdentifier = CompileMetadataWithIdentifier;
+  var CompileMetadataWithType = (function(_super) {
+    __extends(CompileMetadataWithType, _super);
+    function CompileMetadataWithType() {
+      _super.apply(this, arguments);
+    }
     CompileMetadataWithType.fromJson = function(data) {
       return _COMPILE_METADATA_FROM_JSON[data['class']](data);
     };
@@ -23881,38 +24016,205 @@ System.register("angular2/src/compiler/directive_metadata", ["angular2/src/facad
       enumerable: true,
       configurable: true
     });
+    Object.defineProperty(CompileMetadataWithType.prototype, "identifier", {
+      get: function() {
+        return exceptions_1.unimplemented();
+      },
+      enumerable: true,
+      configurable: true
+    });
     return CompileMetadataWithType;
-  })();
+  })(CompileMetadataWithIdentifier);
   exports.CompileMetadataWithType = CompileMetadataWithType;
+  var CompileIdentifierMetadata = (function() {
+    function CompileIdentifierMetadata(_a) {
+      var _b = _a === void 0 ? {} : _a,
+          runtime = _b.runtime,
+          name = _b.name,
+          moduleUrl = _b.moduleUrl,
+          prefix = _b.prefix;
+      this.runtime = runtime;
+      this.name = name;
+      this.prefix = prefix;
+      this.moduleUrl = moduleUrl;
+    }
+    CompileIdentifierMetadata.fromJson = function(data) {
+      return new CompileIdentifierMetadata({
+        name: data['name'],
+        prefix: data['prefix'],
+        moduleUrl: data['moduleUrl']
+      });
+    };
+    CompileIdentifierMetadata.prototype.toJson = function() {
+      return {
+        'class': 'Identifier',
+        'name': this.name,
+        'moduleUrl': this.moduleUrl,
+        'prefix': this.prefix
+      };
+    };
+    Object.defineProperty(CompileIdentifierMetadata.prototype, "identifier", {
+      get: function() {
+        return this;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    return CompileIdentifierMetadata;
+  })();
+  exports.CompileIdentifierMetadata = CompileIdentifierMetadata;
+  var CompileDiDependencyMetadata = (function() {
+    function CompileDiDependencyMetadata(_a) {
+      var _b = _a === void 0 ? {} : _a,
+          isAttribute = _b.isAttribute,
+          isSelf = _b.isSelf,
+          isHost = _b.isHost,
+          isSkipSelf = _b.isSkipSelf,
+          isOptional = _b.isOptional,
+          query = _b.query,
+          viewQuery = _b.viewQuery,
+          token = _b.token;
+      this.isAttribute = lang_1.normalizeBool(isAttribute);
+      this.isSelf = lang_1.normalizeBool(isSelf);
+      this.isHost = lang_1.normalizeBool(isHost);
+      this.isSkipSelf = lang_1.normalizeBool(isSkipSelf);
+      this.isOptional = lang_1.normalizeBool(isOptional);
+      this.query = query;
+      this.viewQuery = viewQuery;
+      this.token = token;
+    }
+    CompileDiDependencyMetadata.fromJson = function(data) {
+      return new CompileDiDependencyMetadata({token: objFromJson(data['token'], CompileIdentifierMetadata.fromJson)});
+    };
+    CompileDiDependencyMetadata.prototype.toJson = function() {
+      return {'token': objToJson(this.token)};
+    };
+    return CompileDiDependencyMetadata;
+  })();
+  exports.CompileDiDependencyMetadata = CompileDiDependencyMetadata;
+  var CompileProviderMetadata = (function() {
+    function CompileProviderMetadata(_a) {
+      var token = _a.token,
+          useClass = _a.useClass,
+          useValue = _a.useValue,
+          useExisting = _a.useExisting,
+          useFactory = _a.useFactory,
+          deps = _a.deps,
+          multi = _a.multi;
+      this.token = token;
+      this.useClass = useClass;
+      this.useValue = useValue;
+      this.useExisting = useExisting;
+      this.useFactory = useFactory;
+      this.deps = deps;
+      this.multi = multi;
+    }
+    CompileProviderMetadata.fromJson = function(data) {
+      return new CompileProviderMetadata({
+        token: objFromJson(data['token'], CompileIdentifierMetadata.fromJson),
+        useClass: objFromJson(data['useClass'], CompileTypeMetadata.fromJson)
+      });
+    };
+    CompileProviderMetadata.prototype.toJson = function() {
+      return {
+        'token': objToJson(this.token),
+        'useClass': objToJson(this.useClass)
+      };
+    };
+    return CompileProviderMetadata;
+  })();
+  exports.CompileProviderMetadata = CompileProviderMetadata;
+  var CompileFactoryMetadata = (function() {
+    function CompileFactoryMetadata(_a) {
+      var runtime = _a.runtime,
+          name = _a.name,
+          moduleUrl = _a.moduleUrl,
+          diDeps = _a.diDeps;
+      this.runtime = runtime;
+      this.name = name;
+      this.moduleUrl = moduleUrl;
+      this.diDeps = diDeps;
+    }
+    Object.defineProperty(CompileFactoryMetadata.prototype, "identifier", {
+      get: function() {
+        return this;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    CompileFactoryMetadata.prototype.toJson = function() {
+      return null;
+    };
+    return CompileFactoryMetadata;
+  })();
+  exports.CompileFactoryMetadata = CompileFactoryMetadata;
   var CompileTypeMetadata = (function() {
     function CompileTypeMetadata(_a) {
       var _b = _a === void 0 ? {} : _a,
           runtime = _b.runtime,
           name = _b.name,
           moduleUrl = _b.moduleUrl,
-          isHost = _b.isHost;
+          prefix = _b.prefix,
+          isHost = _b.isHost,
+          diDeps = _b.diDeps;
       this.runtime = runtime;
       this.name = name;
       this.moduleUrl = moduleUrl;
+      this.prefix = prefix;
       this.isHost = lang_1.normalizeBool(isHost);
+      this.diDeps = lang_1.normalizeBlank(diDeps);
     }
     CompileTypeMetadata.fromJson = function(data) {
       return new CompileTypeMetadata({
         name: data['name'],
         moduleUrl: data['moduleUrl'],
-        isHost: data['isHost']
+        prefix: data['prefix'],
+        isHost: data['isHost'],
+        diDeps: arrayFromJson(data['diDeps'], CompileDiDependencyMetadata.fromJson)
       });
     };
+    Object.defineProperty(CompileTypeMetadata.prototype, "identifier", {
+      get: function() {
+        return this;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Object.defineProperty(CompileTypeMetadata.prototype, "type", {
+      get: function() {
+        return this;
+      },
+      enumerable: true,
+      configurable: true
+    });
     CompileTypeMetadata.prototype.toJson = function() {
       return {
+        'class': 'Type',
         'name': this.name,
         'moduleUrl': this.moduleUrl,
-        'isHost': this.isHost
+        'prefix': this.prefix,
+        'isHost': this.isHost,
+        'diDeps': arrayToJson(this.diDeps)
       };
     };
     return CompileTypeMetadata;
   })();
   exports.CompileTypeMetadata = CompileTypeMetadata;
+  var CompileQueryMetadata = (function() {
+    function CompileQueryMetadata(_a) {
+      var _b = _a === void 0 ? {} : _a,
+          selectors = _b.selectors,
+          descendants = _b.descendants,
+          first = _b.first,
+          propertyName = _b.propertyName;
+      this.selectors = selectors;
+      this.descendants = descendants;
+      this.first = first;
+      this.propertyName = propertyName;
+    }
+    return CompileQueryMetadata;
+  })();
+  exports.CompileQueryMetadata = CompileQueryMetadata;
   var CompileTemplateMetadata = (function() {
     function CompileTemplateMetadata(_a) {
       var _b = _a === void 0 ? {} : _a,
@@ -23967,6 +24269,10 @@ System.register("angular2/src/compiler/directive_metadata", ["angular2/src/facad
           hostProperties = _b.hostProperties,
           hostAttributes = _b.hostAttributes,
           lifecycleHooks = _b.lifecycleHooks,
+          providers = _b.providers,
+          viewProviders = _b.viewProviders,
+          queries = _b.queries,
+          viewQueries = _b.viewQueries,
           template = _b.template;
       this.type = type;
       this.isComponent = isComponent;
@@ -23980,6 +24286,10 @@ System.register("angular2/src/compiler/directive_metadata", ["angular2/src/facad
       this.hostProperties = hostProperties;
       this.hostAttributes = hostAttributes;
       this.lifecycleHooks = lifecycleHooks;
+      this.providers = lang_1.normalizeBlank(providers);
+      this.viewProviders = lang_1.normalizeBlank(viewProviders);
+      this.queries = queries;
+      this.viewQueries = viewQueries;
       this.template = template;
     }
     CompileDirectiveMetadata.create = function(_a) {
@@ -23994,6 +24304,10 @@ System.register("angular2/src/compiler/directive_metadata", ["angular2/src/facad
           outputs = _b.outputs,
           host = _b.host,
           lifecycleHooks = _b.lifecycleHooks,
+          providers = _b.providers,
+          viewProviders = _b.viewProviders,
+          queries = _b.queries,
+          viewQueries = _b.viewQueries,
           template = _b.template;
       var hostListeners = {};
       var hostProperties = {};
@@ -24037,9 +24351,20 @@ System.register("angular2/src/compiler/directive_metadata", ["angular2/src/facad
         hostProperties: hostProperties,
         hostAttributes: hostAttributes,
         lifecycleHooks: lang_1.isPresent(lifecycleHooks) ? lifecycleHooks : [],
+        providers: providers,
+        viewProviders: viewProviders,
+        queries: queries,
+        viewQueries: viewQueries,
         template: template
       });
     };
+    Object.defineProperty(CompileDirectiveMetadata.prototype, "identifier", {
+      get: function() {
+        return this.type;
+      },
+      enumerable: true,
+      configurable: true
+    });
     CompileDirectiveMetadata.fromJson = function(data) {
       return new CompileDirectiveMetadata({
         isComponent: data['isComponent'],
@@ -24056,7 +24381,8 @@ System.register("angular2/src/compiler/directive_metadata", ["angular2/src/facad
         lifecycleHooks: data['lifecycleHooks'].map(function(hookValue) {
           return interfaces_1.LIFECYCLE_HOOKS_VALUES[hookValue];
         }),
-        template: lang_1.isPresent(data['template']) ? CompileTemplateMetadata.fromJson(data['template']) : data['template']
+        template: lang_1.isPresent(data['template']) ? CompileTemplateMetadata.fromJson(data['template']) : data['template'],
+        providers: arrayFromJson(data['providers'], CompileProviderMetadata.fromJson)
       });
     };
     CompileDirectiveMetadata.prototype.toJson = function() {
@@ -24076,7 +24402,8 @@ System.register("angular2/src/compiler/directive_metadata", ["angular2/src/facad
         'lifecycleHooks': this.lifecycleHooks.map(function(hook) {
           return lang_1.serializeEnum(hook);
         }),
-        'template': lang_1.isPresent(this.template) ? this.template.toJson() : this.template
+        'template': lang_1.isPresent(this.template) ? this.template.toJson() : this.template,
+        'providers': arrayToJson(this.providers)
       };
     };
     return CompileDirectiveMetadata;
@@ -24105,7 +24432,11 @@ System.register("angular2/src/compiler/directive_metadata", ["angular2/src/facad
       lifecycleHooks: [],
       isComponent: true,
       dynamicLoadable: false,
-      selector: '*'
+      selector: '*',
+      providers: [],
+      viewProviders: [],
+      queries: [],
+      viewQueries: []
     });
   }
   exports.createHostComponentMeta = createHostComponentMeta;
@@ -24119,6 +24450,13 @@ System.register("angular2/src/compiler/directive_metadata", ["angular2/src/facad
       this.name = name;
       this.pure = lang_1.normalizeBool(pure);
     }
+    Object.defineProperty(CompilePipeMetadata.prototype, "identifier", {
+      get: function() {
+        return this.type;
+      },
+      enumerable: true,
+      configurable: true
+    });
     CompilePipeMetadata.fromJson = function(data) {
       return new CompilePipeMetadata({
         type: lang_1.isPresent(data['type']) ? CompileTypeMetadata.fromJson(data['type']) : data['type'],
@@ -24139,8 +24477,24 @@ System.register("angular2/src/compiler/directive_metadata", ["angular2/src/facad
   exports.CompilePipeMetadata = CompilePipeMetadata;
   var _COMPILE_METADATA_FROM_JSON = {
     'Directive': CompileDirectiveMetadata.fromJson,
-    'Pipe': CompilePipeMetadata.fromJson
+    'Pipe': CompilePipeMetadata.fromJson,
+    'Type': CompileTypeMetadata.fromJson,
+    'Identifier': CompileIdentifierMetadata.fromJson
   };
+  function arrayFromJson(obj, fn) {
+    return lang_1.isBlank(obj) ? null : obj.map(fn);
+  }
+  function arrayToJson(obj) {
+    return lang_1.isBlank(obj) ? null : obj.map(function(o) {
+      return o.toJson();
+    });
+  }
+  function objFromJson(obj, fn) {
+    return (lang_1.isString(obj) || lang_1.isBlank(obj)) ? obj : fn(obj);
+  }
+  function objToJson(obj) {
+    return (lang_1.isString(obj) || lang_1.isBlank(obj)) ? obj : obj.toJson();
+  }
   global.define = __define;
   return module.exports;
 });
@@ -35137,6 +35491,7 @@ System.register("angular2/src/compiler/template_compiler", ["angular2/src/facade
           hostProperties: directive.hostProperties,
           hostAttributes: directive.hostAttributes,
           lifecycleHooks: directive.lifecycleHooks,
+          providers: directive.providers,
           template: normalizedTemplate
         });
       });
@@ -35765,6 +36120,7 @@ System.register("angular2/src/router/router", ["angular2/src/facade/async", "ang
       var ancestorInstructions = this._getAncestorInstructions();
       return this.registry.generate(linkParams, ancestorInstructions);
     };
+    Router = __decorate([core_1.Injectable(), __metadata('design:paramtypes', [route_registry_1.RouteRegistry, Router, Object])], Router);
     return Router;
   })();
   exports.Router = Router;
