@@ -4,6 +4,7 @@ import "package:angular2/src/facade/collection.dart"
     show Map, MapWrapper, StringMapWrapper, ListWrapper;
 import "package:angular2/src/facade/lang.dart" show isPresent, isBlank, Type;
 import "package:angular2/src/facade/async.dart" show Future, PromiseWrapper;
+import "package:angular2/core.dart" show Injectable;
 
 /**
  * `RouteParams` is an immutable map of parameters for the given route
@@ -35,6 +36,7 @@ import "package:angular2/src/facade/async.dart" show Future, PromiseWrapper;
  * bootstrap(AppCmp, ROUTER_PROVIDERS);
  * ```
  */
+@Injectable()
 class RouteParams {
   Map<String, String> params;
   RouteParams(this.params) {}

@@ -2,7 +2,7 @@ library angular2.src.core.linker.view_container_ref;
 
 import "package:angular2/src/facade/collection.dart" show ListWrapper;
 import "package:angular2/src/facade/exceptions.dart" show unimplemented;
-import "package:angular2/src/core/di.dart" show ResolvedProvider;
+import "package:angular2/src/core/di.dart" show ResolvedProvider, Injectable;
 import "package:angular2/src/facade/lang.dart" show isPresent, isBlank;
 import "element.dart" show AppElement;
 import "element_ref.dart" show ElementRef, ElementRef_;
@@ -36,6 +36,7 @@ import "view_ref.dart"
  *
  * <!-- TODO(i): we are also considering ElementRef#viewContainer api -->
  */
+@Injectable()
 abstract class ViewContainerRef {
   /**
    * Anchor element that specifies the location of this container in the containing View.

@@ -1,6 +1,7 @@
 library angular2.src.core.linker.element_ref;
 
 import "package:angular2/src/facade/exceptions.dart" show unimplemented;
+import "package:angular2/src/core/di.dart" show Injectable;
 import "element.dart" show AppElement;
 
 /**
@@ -13,6 +14,7 @@ import "element.dart" show AppElement;
  * An `ElementRef` is backed by a render-specific element. In the browser, this is usually a DOM
  * element.
  */
+@Injectable()
 abstract class ElementRef {
   /**
    * The underlying native element or `null` if direct access to native elements is not supported

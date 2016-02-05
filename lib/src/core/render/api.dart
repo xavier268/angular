@@ -1,7 +1,7 @@
 library angular2.src.core.render.api;
 
 import "package:angular2/src/core/metadata/view.dart" show ViewEncapsulation;
-import "package:angular2/src/core/di/injector.dart" show Injector;
+import "package:angular2/src/core/di.dart" show Injector, Injectable;
 
 class RenderComponentType {
   String id;
@@ -23,6 +23,7 @@ abstract class ParentRenderer {
   Renderer renderComponent(RenderComponentType componentType);
 }
 
+@Injectable()
 abstract class Renderer implements ParentRenderer {
   Renderer renderComponent(RenderComponentType componentType);
   dynamic selectRootElement(String selector);
