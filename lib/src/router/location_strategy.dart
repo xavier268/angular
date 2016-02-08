@@ -6,7 +6,7 @@ import "platform_location.dart" show UrlChangeListener;
 /**
  * `LocationStrategy` is responsible for representing and reading route state
  * from the browser's URL. Angular provides two strategies:
- * [HashLocationStrategy] and [PathLocationStrategy] (default).
+ * [HashLocationStrategy] (default) and [PathLocationStrategy].
  *
  * This is used under the hood of the [Location] service.
  *
@@ -55,6 +55,7 @@ abstract class LocationStrategy {
  *
  * bootstrap(AppCmp, [
  *   ROUTER_PROVIDERS,
+ *   PathLocationStrategy,
  *   provide(APP_BASE_HREF, {useValue: '/my/app'})
  * ]);
  * ```

@@ -28,10 +28,10 @@ class RouteConfig {
  *
  * ### Example
  * ```
- * import {RouteConfig, Route} from 'angular2/router';
+ * import {RouteConfig} from 'angular2/router';
  *
  * @RouteConfig([
- *   new Route({path: '/home', component: HomeCmp, name: 'HomeCmp' })
+ *   {path: '/home', component: HomeCmp, name: 'HomeCmp' }
  * ])
  * class MyApp {}
  * ```
@@ -105,11 +105,10 @@ class AuxRoute implements RouteDefinition {
  *
  * ### Example
  * ```
- * import {RouteConfig, AsyncRoute} from 'angular2/router';
+ * import {RouteConfig} from 'angular2/router';
  *
  * @RouteConfig([
- *   new AsyncRoute({path: '/home', loader: () => Promise.resolve(MyLoadedCmp), name:
- * 'MyLoadedCmp'})
+ *   {path: '/home', loader: () => Promise.resolve(MyLoadedCmp), name: 'MyLoadedCmp'}
  * ])
  * class MyApp {}
  * ```
@@ -141,11 +140,11 @@ class AsyncRoute implements RouteDefinition {
  *
  * ### Example
  * ```
- * import {RouteConfig, Route, Redirect} from 'angular2/router';
+ * import {RouteConfig} from 'angular2/router';
  *
  * @RouteConfig([
- *   new Redirect({path: '/', redirectTo: ['/Home'] }),
- *   new Route({path: '/home', component: HomeCmp, name: 'Home'})
+ *   {path: '/', redirectTo: ['/Home'] },
+ *   {path: '/home', component: HomeCmp, name: 'Home'}
  * ])
  * class MyApp {}
  * ```
