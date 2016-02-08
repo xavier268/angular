@@ -5336,7 +5336,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * var t = new OpaqueToken("value");
 	 *
 	 * var injector = Injector.resolveAndCreate([
-	 *   provide(t, {useValue: "providedValue"})
+	 *   provide(t, {useValue: "bindingValue"})
 	 * ]);
 	 *
 	 * expect(injector.get(t)).toEqual("bindingValue");
@@ -31787,7 +31787,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	                    var emitPath = instruction.toUrlPath();
 	                    var emitQuery = instruction.toUrlQuery();
-	                    if (emitPath.length > 0 && emitPath[0] != '/') {
+	                    if (emitPath.length > 0) {
 	                        emitPath = '/' + emitPath;
 	                    }
 	                    // Because we've opted to use All hashchange events occur outside Angular.
@@ -31814,7 +31814,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (_skipLocationChange === void 0) { _skipLocationChange = false; }
 	        var emitPath = instruction.toUrlPath();
 	        var emitQuery = instruction.toUrlQuery();
-	        if (emitPath.length > 0 && emitPath[0] != '/') {
+	        if (emitPath.length > 0) {
 	            emitPath = '/' + emitPath;
 	        }
 	        var promise = _super.prototype.commit.call(this, instruction);
