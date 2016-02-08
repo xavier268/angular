@@ -920,8 +920,7 @@ class WrappedValue implements ControlValueAccessor {
 
 @Component(selector: "my-input", template: "")
 class MyInput implements ControlValueAccessor {
-  @Output("input")
-  EventEmitter<dynamic> onInput = new EventEmitter();
+  @Output("input") EventEmitter<dynamic> onInput = new EventEmitter();
   String value;
   MyInput(NgControl cd) {
     cd.valueAccessor = this;
@@ -965,8 +964,7 @@ class LoginIsEmptyValidator {}
       useExisting: UniqLoginValidator, multi: true)
 ])
 class UniqLoginValidator implements Validator {
-  @Input("uniq-login-validator")
-  var expected;
+  @Input("uniq-login-validator") var expected;
   validate(c) {
     return uniqLoginAsyncValidator(this.expected)(c);
   }

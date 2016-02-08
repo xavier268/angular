@@ -2563,14 +2563,10 @@ class ComponentWithTemplate {
 @Directive(selector: "with-prop-decorators")
 class DirectiveWithPropDecorators {
   var target;
-  @Input("elProp")
-  String dirProp;
-  @Output("elEvent")
-  var event = new EventEmitter();
-  @HostBinding("attr.my-attr")
-  String myAttr;
-  @HostListener("click", const ["\$event.target"])
-  onClick(target) {
+  @Input("elProp") String dirProp;
+  @Output("elEvent") var event = new EventEmitter();
+  @HostBinding("attr.my-attr") String myAttr;
+  @HostListener("click", const ["\$event.target"]) onClick(target) {
     this.target = target;
   }
 
