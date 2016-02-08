@@ -16,11 +16,12 @@ import "package:angular2/src/facade/async.dart" show Future, PromiseWrapper;
  * ```
  * import {Component} from 'angular2/core';
  * import {bootstrap} from 'angular2/platform/browser';
- * import {Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteConfig} from 'angular2/router';
+ * import {Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteConfig, RouteParams} from
+ * 'angular2/router';
  *
  * @Component({directives: [ROUTER_DIRECTIVES]})
  * @RouteConfig([
- *  {path: '/user/:id', component: UserCmp, as: 'UserCmp'},
+ *  {path: '/user/:id', component: UserCmp, name: 'UserCmp'},
  * ])
  * class AppCmp {}
  *
@@ -51,14 +52,14 @@ class RouteParams {
  * ### Example
  *
  * ```
- * import {Component, View} from 'angular2/core';
+ * import {Component} from 'angular2/core';
  * import {bootstrap} from 'angular2/platform/browser';
- * import {Router, ROUTER_DIRECTIVES, routerBindings, RouteConfig} from 'angular2/router';
+ * import {Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteConfig, RouteData} from
+ * 'angular2/router';
  *
- * @Component({...})
- * @View({directives: [ROUTER_DIRECTIVES]})
+ * @Component({directives: [ROUTER_DIRECTIVES]})
  * @RouteConfig([
- *  {path: '/user/:id', component: UserCmp, as: 'UserCmp', data: {isAdmin: true}},
+ *  {path: '/user/:id', component: UserCmp, name: 'UserCmp', data: {isAdmin: true}},
  * ])
  * class AppCmp {}
  *
@@ -71,7 +72,7 @@ class RouteParams {
  *   }
  * }
  *
- * bootstrap(AppCmp, routerBindings(AppCmp));
+ * bootstrap(AppCmp, ROUTER_PROVIDERS);
  * ```
  */
 class RouteData {
