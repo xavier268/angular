@@ -3,7 +3,7 @@ import { UrlChangeListener } from './platform_location';
 /**
  * `LocationStrategy` is responsible for representing and reading route state
  * from the browser's URL. Angular provides two strategies:
- * {@link HashLocationStrategy} and {@link PathLocationStrategy} (default).
+ * {@link HashLocationStrategy} (default) and {@link PathLocationStrategy}.
  *
  * This is used under the hood of the {@link Location} service.
  *
@@ -50,6 +50,7 @@ export declare abstract class LocationStrategy {
  *
  * bootstrap(AppCmp, [
  *   ROUTER_PROVIDERS,
+ *   PathLocationStrategy,
  *   provide(APP_BASE_HREF, {useValue: '/my/app'})
  * ]);
  * ```

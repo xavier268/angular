@@ -6215,8 +6215,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @Directive({selector: '[ngModel]'})
 	 * class NgModelStatus {
 	 *   constructor(public control:NgModel) {}
-	 *   @HostBinding('[class.valid]') get valid { return this.control.valid; }
-	 *   @HostBinding('[class.invalid]') get invalid { return this.control.invalid; }
+	 *   @HostBinding('class.valid') get valid { return this.control.valid; }
+	 *   @HostBinding('class.invalid') get invalid { return this.control.invalid; }
 	 * }
 	 *
 	 * @Component({
@@ -32382,10 +32382,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * ### Example
 	 * ```
-	 * import {RouteConfig, Route} from 'angular2/router';
+	 * import {RouteConfig} from 'angular2/router';
 	 *
 	 * @RouteConfig([
-	 *   new Route({path: '/home', component: HomeCmp, name: 'HomeCmp' })
+	 *   {path: '/home', component: HomeCmp, name: 'HomeCmp' }
 	 * ])
 	 * class MyApp {}
 	 * ```
@@ -32465,11 +32465,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * ### Example
 	 * ```
-	 * import {RouteConfig, AsyncRoute} from 'angular2/router';
+	 * import {RouteConfig} from 'angular2/router';
 	 *
 	 * @RouteConfig([
-	 *   new AsyncRoute({path: '/home', loader: () => Promise.resolve(MyLoadedCmp), name:
-	 * 'MyLoadedCmp'})
+	 *   {path: '/home', loader: () => Promise.resolve(MyLoadedCmp), name: 'MyLoadedCmp'}
 	 * ])
 	 * class MyApp {}
 	 * ```
@@ -32503,11 +32502,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * ### Example
 	 * ```
-	 * import {RouteConfig, Route, Redirect} from 'angular2/router';
+	 * import {RouteConfig} from 'angular2/router';
 	 *
 	 * @RouteConfig([
-	 *   new Redirect({path: '/', redirectTo: ['/Home'] }),
-	 *   new Route({path: '/home', component: HomeCmp, name: 'Home'})
+	 *   {path: '/', redirectTo: ['/Home'] },
+	 *   {path: '/home', component: HomeCmp, name: 'Home'}
 	 * ])
 	 * class MyApp {}
 	 * ```
@@ -32671,12 +32670,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * ```
 	 * import {Component} from 'angular2/core';
 	 * import {bootstrap} from 'angular2/platform/browser';
-	 * import {Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteConfig, RouteParams} from
-	 * 'angular2/router';
+	 * import {Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteConfig} from 'angular2/router';
 	 *
 	 * @Component({directives: [ROUTER_DIRECTIVES]})
 	 * @RouteConfig([
-	 *  {path: '/user/:id', component: UserCmp, name: 'UserCmp'},
+	 *  {path: '/user/:id', component: UserCmp, as: 'UserCmp'},
 	 * ])
 	 * class AppCmp {}
 	 *
@@ -32707,14 +32705,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * ### Example
 	 *
 	 * ```
-	 * import {Component} from 'angular2/core';
+	 * import {Component, View} from 'angular2/core';
 	 * import {bootstrap} from 'angular2/platform/browser';
-	 * import {Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteConfig, RouteData} from
-	 * 'angular2/router';
+	 * import {Router, ROUTER_DIRECTIVES, routerBindings, RouteConfig} from 'angular2/router';
 	 *
-	 * @Component({directives: [ROUTER_DIRECTIVES]})
+	 * @Component({...})
+	 * @View({directives: [ROUTER_DIRECTIVES]})
 	 * @RouteConfig([
-	 *  {path: '/user/:id', component: UserCmp, name: 'UserCmp', data: {isAdmin: true}},
+	 *  {path: '/user/:id', component: UserCmp, as: 'UserCmp', data: {isAdmin: true}},
 	 * ])
 	 * class AppCmp {}
 	 *
@@ -32727,7 +32725,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *   }
 	 * }
 	 *
-	 * bootstrap(AppCmp, ROUTER_PROVIDERS);
+	 * bootstrap(AppCmp, routerBindings(AppCmp));
 	 * ```
 	 */
 	var RouteData = (function () {
@@ -33916,7 +33914,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * `LocationStrategy` is responsible for representing and reading route state
 	 * from the browser's URL. Angular provides two strategies:
-	 * {@link HashLocationStrategy} and {@link PathLocationStrategy} (default).
+	 * {@link HashLocationStrategy} (default) and {@link PathLocationStrategy}.
 	 *
 	 * This is used under the hood of the {@link Location} service.
 	 *
@@ -33959,6 +33957,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * bootstrap(AppCmp, [
 	 *   ROUTER_PROVIDERS,
+	 *   PathLocationStrategy,
 	 *   provide(APP_BASE_HREF, {useValue: '/my/app'})
 	 * ]);
 	 * ```
