@@ -36,7 +36,6 @@ var _resolveToFalse = PromiseWrapper.resolve(false);
  * `Instruction`.
  * The router uses the `RouteRegistry` to get an `Instruction`.
  */
-@Injectable()
 class Router {
   RouteRegistry registry;
   Router parent;
