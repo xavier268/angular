@@ -430,7 +430,7 @@ class RootRouter extends Router {
           }
           var emitPath = instruction.toUrlPath();
           var emitQuery = instruction.toUrlQuery();
-          if (emitPath.length > 0 && emitPath[0] != "/") {
+          if (emitPath.length > 0) {
             emitPath = "/" + emitPath;
           }
           // Because we've opted to use All hashchange events occur outside Angular.
@@ -459,7 +459,7 @@ class RootRouter extends Router {
       [bool _skipLocationChange = false]) {
     var emitPath = instruction.toUrlPath();
     var emitQuery = instruction.toUrlQuery();
-    if (emitPath.length > 0 && emitPath[0] != "/") {
+    if (emitPath.length > 0) {
       emitPath = "/" + emitPath;
     }
     var promise = super.commit(instruction);
