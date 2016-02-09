@@ -11,8 +11,6 @@ import "directives/default_value_accessor.dart" show DefaultValueAccessor;
 import "directives/checkbox_value_accessor.dart"
     show CheckboxControlValueAccessor;
 import "directives/number_value_accessor.dart" show NumberValueAccessor;
-import "directives/radio_control_value_accessor.dart"
-    show RadioControlValueAccessor;
 import "directives/ng_control_status.dart" show NgControlStatus;
 import "directives/select_control_value_accessor.dart"
     show SelectControlValueAccessor, NgSelectOption;
@@ -27,8 +25,6 @@ export "directives/ng_form.dart" show NgForm;
 export "directives/default_value_accessor.dart" show DefaultValueAccessor;
 export "directives/checkbox_value_accessor.dart"
     show CheckboxControlValueAccessor;
-export "directives/radio_control_value_accessor.dart"
-    show RadioControlValueAccessor, RadioButtonState;
 export "directives/number_value_accessor.dart" show NumberValueAccessor;
 export "directives/ng_control_status.dart" show NgControlStatus;
 export "directives/select_control_value_accessor.dart"
@@ -66,7 +62,6 @@ const List<Type> FORM_DIRECTIVES = const [
   NumberValueAccessor,
   CheckboxControlValueAccessor,
   SelectControlValueAccessor,
-  RadioControlValueAccessor,
   NgControlStatus,
   RequiredValidator,
   MinLengthValidator,

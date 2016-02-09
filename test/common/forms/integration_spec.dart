@@ -14,7 +14,6 @@ import "package:angular2/testing_internal.dart"
         dispatchEvent,
         fakeAsync,
         tick,
-        flushMicrotasks,
         expect,
         it,
         inject,
@@ -35,8 +34,7 @@ import "package:angular2/common.dart"
         NgFor,
         NgForm,
         Validators,
-        Validator,
-        RadioButtonState;
+        Validator;
 import "package:angular2/core.dart" show Provider, Input;
 import "package:angular2/platform/browser.dart" show By;
 import "package:angular2/src/facade/collection.dart" show ListWrapper;
@@ -292,31 +290,6 @@ main() {
               dispatchEvent(input.nativeElement, "input");
               expect(fixture.debugElement.componentInstance.form.value)
                   .toEqual({"num": 20});
-              async.done();
-            });
-          }));
-      it(
-          "should support <type=radio>",
-          inject([TestComponentBuilder, AsyncTestCompleter],
-              (TestComponentBuilder tcb, async) {
-            var t = '''<form [ngFormModel]="form">
-                  <input type="radio" ngControl="foodChicken" name="food">
-                  <input type="radio" ngControl="foodFish" name="food">
-                </form>''';
-            tcb.overrideTemplate(MyComp, t).createAsync(MyComp).then((fixture) {
-              fixture.debugElement.componentInstance.form = new ControlGroup({
-                "foodChicken":
-                    new Control(new RadioButtonState(false, "chicken")),
-                "foodFish": new Control(new RadioButtonState(true, "fish"))
-              });
-              fixture.detectChanges();
-              var input = fixture.debugElement.query(By.css("input"));
-              expect(input.nativeElement.checked).toEqual(false);
-              dispatchEvent(input.nativeElement, "change");
-              fixture.detectChanges();
-              var value = fixture.debugElement.componentInstance.form.value;
-              expect(value["foodChicken"].checked).toEqual(true);
-              expect(value["foodFish"].checked).toEqual(false);
               async.done();
             });
           }));
@@ -758,43 +731,6 @@ main() {
             tick();
             expect(fixture.debugElement.componentInstance.name)
                 .toEqual("updatedValue");
-          })));
-      it(
-          "should support <type=radio>",
-          inject([TestComponentBuilder], fakeAsync((TestComponentBuilder tcb) {
-            var t = '''<form>
-                  <input type="radio" name="food" ngControl="chicken" [(ngModel)]="data[\'chicken1\']">
-                  <input type="radio" name="food" ngControl="fish" [(ngModel)]="data[\'fish1\']">
-                </form>
-
-                <form>
-                  <input type="radio" name="food" ngControl="chicken" [(ngModel)]="data[\'chicken2\']">
-                  <input type="radio" name="food" ngControl="fish" [(ngModel)]="data[\'fish2\']">
-                </form>''';
-            ComponentFixture fixture;
-            tcb.overrideTemplate(MyComp, t).createAsync(MyComp).then((f) {
-              fixture = f;
-            });
-            tick();
-            fixture.debugElement.componentInstance.data = {
-              "chicken1": new RadioButtonState(false, "chicken"),
-              "fish1": new RadioButtonState(true, "fish"),
-              "chicken2": new RadioButtonState(false, "chicken"),
-              "fish2": new RadioButtonState(true, "fish")
-            };
-            fixture.detectChanges();
-            tick();
-            var input = fixture.debugElement.query(By.css("input"));
-            expect(input.nativeElement.checked).toEqual(false);
-            dispatchEvent(input.nativeElement, "change");
-            tick();
-            var data = fixture.debugElement.componentInstance.data;
-            expect(data["chicken1"])
-                .toEqual(new RadioButtonState(true, "chicken"));
-            expect(data["fish1"]).toEqual(new RadioButtonState(false, "fish"));
-            expect(data["chicken2"])
-                .toEqual(new RadioButtonState(false, "chicken"));
-            expect(data["fish2"]).toEqual(new RadioButtonState(true, "fish"));
           })));
     });
     describe("setting status classes", () {
