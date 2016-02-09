@@ -195,6 +195,45 @@ main() {
         expect(car).toBeAnInstanceOf(SportsCar);
         expect(car.engine).toBeAnInstanceOf(Engine);
       });
+      it("should throw when using a factory with more than 20 dependencies",
+          () {
+        factoryWithTooManyArgs() {
+          return new Car(null);
+        }
+        var injector = createInjector([
+          Engine,
+          provide(Car, useFactory: factoryWithTooManyArgs, deps: [
+            Engine,
+            Engine,
+            Engine,
+            Engine,
+            Engine,
+            Engine,
+            Engine,
+            Engine,
+            Engine,
+            Engine,
+            Engine,
+            Engine,
+            Engine,
+            Engine,
+            Engine,
+            Engine,
+            Engine,
+            Engine,
+            Engine,
+            Engine,
+            Engine
+          ])
+        ]);
+        try {
+          injector.get(Car);
+          throw "Must throw";
+        } catch (e, e_stack) {
+          expect(e.message).toContain(
+              '''Cannot instantiate \'Car\' because it has more than 20 dependencies''');
+        }
+      });
       it("should supporting provider to null", () {
         var injector = createInjector([provide(Engine, useValue: null)]);
         var engine = injector.get(Engine);
