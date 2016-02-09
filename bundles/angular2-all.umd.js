@@ -2563,7 +2563,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var provider_1 = __webpack_require__(13);
 	var exceptions_1 = __webpack_require__(21);
 	var lang_1 = __webpack_require__(5);
-	var exceptions_2 = __webpack_require__(14);
 	var key_1 = __webpack_require__(19);
 	var metadata_1 = __webpack_require__(7);
 	// Threshold for the dynamic version
@@ -3375,8 +3374,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                case 20:
 	                    obj = factory(d0, d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12, d13, d14, d15, d16, d17, d18, d19);
 	                    break;
-	                default:
-	                    throw new exceptions_2.BaseException("Cannot instantiate '" + provider.key.displayName + "' because it has more than 20 dependencies");
 	            }
 	        }
 	        catch (e) {
@@ -5339,7 +5336,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * var t = new OpaqueToken("value");
 	 *
 	 * var injector = Injector.resolveAndCreate([
-	 *   provide(t, {useValue: "bindingValue"})
+	 *   provide(t, {useValue: "providedValue"})
 	 * ]);
 	 *
 	 * expect(injector.get(t)).toEqual("bindingValue");
@@ -6218,8 +6215,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @Directive({selector: '[ngModel]'})
 	 * class NgModelStatus {
 	 *   constructor(public control:NgModel) {}
-	 *   @HostBinding('class.valid') get valid { return this.control.valid; }
-	 *   @HostBinding('class.invalid') get invalid { return this.control.invalid; }
+	 *   @HostBinding('[class.valid]') get valid { return this.control.valid; }
+	 *   @HostBinding('[class.invalid]') get invalid { return this.control.invalid; }
 	 * }
 	 *
 	 * @Component({
@@ -12812,9 +12809,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	        return completer.promise.then(function (_) {
 	            var c = _this._injector.get(console_1.Console);
-	            if (lang_1.assertionsEnabled()) {
-	                c.log("Angular 2 is running in the development mode. Call enableProdMode() to enable the production mode.");
-	            }
+	            var modeDescription = lang_1.assertionsEnabled() ?
+	                "in the development mode. Call enableProdMode() to enable the production mode." :
+	                "in the production mode. Call enableDevMode() to enable the development mode.";
+	            c.log("Angular 2 is running " + modeDescription);
 	            return _;
 	        });
 	    };
@@ -31789,7 +31787,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	                    var emitPath = instruction.toUrlPath();
 	                    var emitQuery = instruction.toUrlQuery();
-	                    if (emitPath.length > 0 && emitPath[0] != '/') {
+	                    if (emitPath.length > 0) {
 	                        emitPath = '/' + emitPath;
 	                    }
 	                    // Because we've opted to use All hashchange events occur outside Angular.
@@ -31816,7 +31814,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (_skipLocationChange === void 0) { _skipLocationChange = false; }
 	        var emitPath = instruction.toUrlPath();
 	        var emitQuery = instruction.toUrlQuery();
-	        if (emitPath.length > 0 && emitPath[0] != '/') {
+	        if (emitPath.length > 0) {
 	            emitPath = '/' + emitPath;
 	        }
 	        var promise = _super.prototype.commit.call(this, instruction);
@@ -32384,10 +32382,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * ### Example
 	 * ```
-	 * import {RouteConfig, Route} from 'angular2/router';
+	 * import {RouteConfig} from 'angular2/router';
 	 *
 	 * @RouteConfig([
-	 *   new Route({path: '/home', component: HomeCmp, name: 'HomeCmp' })
+	 *   {path: '/home', component: HomeCmp, name: 'HomeCmp' }
 	 * ])
 	 * class MyApp {}
 	 * ```
@@ -32467,11 +32465,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * ### Example
 	 * ```
-	 * import {RouteConfig, AsyncRoute} from 'angular2/router';
+	 * import {RouteConfig} from 'angular2/router';
 	 *
 	 * @RouteConfig([
-	 *   new AsyncRoute({path: '/home', loader: () => Promise.resolve(MyLoadedCmp), name:
-	 * 'MyLoadedCmp'})
+	 *   {path: '/home', loader: () => Promise.resolve(MyLoadedCmp), name: 'MyLoadedCmp'}
 	 * ])
 	 * class MyApp {}
 	 * ```
@@ -32505,11 +32502,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * ### Example
 	 * ```
-	 * import {RouteConfig, Route, Redirect} from 'angular2/router';
+	 * import {RouteConfig} from 'angular2/router';
 	 *
 	 * @RouteConfig([
-	 *   new Redirect({path: '/', redirectTo: ['/Home'] }),
-	 *   new Route({path: '/home', component: HomeCmp, name: 'Home'})
+	 *   {path: '/', redirectTo: ['/Home'] },
+	 *   {path: '/home', component: HomeCmp, name: 'Home'}
 	 * ])
 	 * class MyApp {}
 	 * ```
@@ -32673,12 +32670,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * ```
 	 * import {Component} from 'angular2/core';
 	 * import {bootstrap} from 'angular2/platform/browser';
-	 * import {Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteConfig, RouteParams} from
-	 * 'angular2/router';
+	 * import {Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteConfig} from 'angular2/router';
 	 *
 	 * @Component({directives: [ROUTER_DIRECTIVES]})
 	 * @RouteConfig([
-	 *  {path: '/user/:id', component: UserCmp, name: 'UserCmp'},
+	 *  {path: '/user/:id', component: UserCmp, as: 'UserCmp'},
 	 * ])
 	 * class AppCmp {}
 	 *
@@ -32709,14 +32705,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * ### Example
 	 *
 	 * ```
-	 * import {Component} from 'angular2/core';
+	 * import {Component, View} from 'angular2/core';
 	 * import {bootstrap} from 'angular2/platform/browser';
-	 * import {Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteConfig, RouteData} from
-	 * 'angular2/router';
+	 * import {Router, ROUTER_DIRECTIVES, routerBindings, RouteConfig} from 'angular2/router';
 	 *
-	 * @Component({directives: [ROUTER_DIRECTIVES]})
+	 * @Component({...})
+	 * @View({directives: [ROUTER_DIRECTIVES]})
 	 * @RouteConfig([
-	 *  {path: '/user/:id', component: UserCmp, name: 'UserCmp', data: {isAdmin: true}},
+	 *  {path: '/user/:id', component: UserCmp, as: 'UserCmp', data: {isAdmin: true}},
 	 * ])
 	 * class AppCmp {}
 	 *
@@ -32729,7 +32725,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *   }
 	 * }
 	 *
-	 * bootstrap(AppCmp, ROUTER_PROVIDERS);
+	 * bootstrap(AppCmp, routerBindings(AppCmp));
 	 * ```
 	 */
 	var RouteData = (function () {
@@ -33918,7 +33914,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * `LocationStrategy` is responsible for representing and reading route state
 	 * from the browser's URL. Angular provides two strategies:
-	 * {@link HashLocationStrategy} and {@link PathLocationStrategy} (default).
+	 * {@link HashLocationStrategy} (default) and {@link PathLocationStrategy}.
 	 *
 	 * This is used under the hood of the {@link Location} service.
 	 *
@@ -33961,6 +33957,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * bootstrap(AppCmp, [
 	 *   ROUTER_PROVIDERS,
+	 *   PathLocationStrategy,
 	 *   provide(APP_BASE_HREF, {useValue: '/my/app'})
 	 * ]);
 	 * ```
