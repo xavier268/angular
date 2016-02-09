@@ -424,83 +424,31 @@ main() {
             async.done();
           });
         }));
-    describe("track by", () {
-      it(
-          "should not replace tracked items",
-          inject([TestComponentBuilder, AsyncTestCompleter],
-              (TestComponentBuilder tcb, async) {
-            var template =
-                '''<template ngFor #item [ngForOf]="items" [ngForTrackBy]="customTrackBy" #i="index">
+    it(
+        "should use custom track by if function is provided",
+        inject([TestComponentBuilder, AsyncTestCompleter],
+            (TestComponentBuilder tcb, async) {
+          var template =
+              '''<template ngFor #item [ngForOf]="items" [ngForTrackBy]="customTrackBy" #i="index">
                <p>{{items[i]}}</p>
               </template>''';
-            tcb
-                .overrideTemplate(TestComponent, template)
-                .createAsync(TestComponent)
-                .then((fixture) {
-              var buildItemList = () {
-                fixture.debugElement.componentInstance.items = [
-                  {"id": "a"}
-                ];
-                fixture.detectChanges();
-                return fixture.debugElement.queryAll(By.css("p"))[0];
-              };
-              var firstP = buildItemList();
-              var finalP = buildItemList();
-              expect(finalP.nativeElement).toBe(firstP.nativeElement);
-              async.done();
-            });
-          }));
-      it(
-          "should update implicit local variable on view",
-          inject([TestComponentBuilder, AsyncTestCompleter],
-              (TestComponentBuilder tcb, async) {
-            var template =
-                '''<div><template ngFor #item [ngForOf]="items" [ngForTrackBy]="customTrackBy">{{item[\'color\']}}</template></div>''';
-            tcb
-                .overrideTemplate(TestComponent, template)
-                .createAsync(TestComponent)
-                .then((fixture) {
+          tcb
+              .overrideTemplate(TestComponent, template)
+              .createAsync(TestComponent)
+              .then((fixture) {
+            var buildItemList = () {
               fixture.debugElement.componentInstance.items = [
-                {"id": "a", "color": "blue"}
+                {"id": "a"}
               ];
               fixture.detectChanges();
-              expect(fixture.debugElement.nativeElement).toHaveText("blue");
-              fixture.debugElement.componentInstance.items = [
-                {"id": "a", "color": "red"}
-              ];
-              fixture.detectChanges();
-              expect(fixture.debugElement.nativeElement).toHaveText("red");
-              async.done();
-            });
-          }));
-      it(
-          "should move items around and keep them updated ",
-          inject([TestComponentBuilder, AsyncTestCompleter],
-              (TestComponentBuilder tcb, async) {
-            var template =
-                '''<div><template ngFor #item [ngForOf]="items" [ngForTrackBy]="customTrackBy">{{item[\'color\']}}</template></div>''';
-            tcb
-                .overrideTemplate(TestComponent, template)
-                .createAsync(TestComponent)
-                .then((fixture) {
-              fixture.debugElement.componentInstance.items = [
-                {"id": "a", "color": "blue"},
-                {"id": "b", "color": "yellow"}
-              ];
-              fixture.detectChanges();
-              expect(fixture.debugElement.nativeElement)
-                  .toHaveText("blueyellow");
-              fixture.debugElement.componentInstance.items = [
-                {"id": "b", "color": "orange"},
-                {"id": "a", "color": "red"}
-              ];
-              fixture.detectChanges();
-              expect(fixture.debugElement.nativeElement)
-                  .toHaveText("orangered");
-              async.done();
-            });
-          }));
-    });
+              return fixture.debugElement.queryAll(By.css("p"))[0];
+            };
+            var firstP = buildItemList();
+            var finalP = buildItemList();
+            expect(finalP.nativeElement).toBe(firstP.nativeElement);
+            async.done();
+          });
+        }));
   });
 }
 

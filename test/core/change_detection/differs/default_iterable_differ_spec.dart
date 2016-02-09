@@ -17,15 +17,6 @@ class ItemWithId {
   }
 }
 
-class ComplexItem {
-  String id;
-  String color;
-  ComplexItem(this.id, this.color) {}
-  toString() {
-    return '''{id: ${ this . id}, color: ${ this . color}}''';
-  }
-}
-
 // todo(vicb): UnmodifiableListView / frozen object when implemented
 main() {
   describe("iterable differ", () {
@@ -273,11 +264,7 @@ main() {
       beforeEach(() {
         differ = new DefaultIterableDiffer(trackByItemId);
       });
-      it("should treat the collection as dirty if identity changes", () {
-        differ.diff(buildItemList(["a"]));
-        expect(differ.diff(buildItemList(["a"]))).toBe(differ);
-      });
-      it("should treat seen records as identity changes, not additions", () {
+      it("should not treat maps as new with track by function", () {
         var l = buildItemList(["a", "b", "c"]);
         differ.check(l);
         expect(differ.toString()).toEqual(iterableChangesAsString(collection: [
@@ -293,49 +280,31 @@ main() {
         differ.check(l);
         expect(differ.toString()).toEqual(iterableChangesAsString(
             collection: ['''{id: a}''', '''{id: b}''', '''{id: c}'''],
-            identityChanges: ['''{id: a}''', '''{id: b}''', '''{id: c}'''],
             previous: ['''{id: a}''', '''{id: b}''', '''{id: c}''']));
       });
-      it("should have updated properties in identity change collection", () {
-        var l = [new ComplexItem("a", "blue"), new ComplexItem("b", "yellow")];
-        differ.check(l);
-        l = [new ComplexItem("a", "orange"), new ComplexItem("b", "red")];
-        differ.check(l);
-        expect(differ.toString()).toEqual(iterableChangesAsString(collection: [
-          '''{id: a, color: orange}''',
-          '''{id: b, color: red}'''
-        ], identityChanges: [
-          '''{id: a, color: orange}''',
-          '''{id: b, color: red}'''
-        ], previous: [
-          '''{id: a, color: orange}''',
-          '''{id: b, color: red}'''
-        ]));
-      });
-      it("should track moves normally", () {
+      it("should track moves normally with track by function", () {
         var l = buildItemList(["a", "b", "c"]);
         differ.check(l);
         l = buildItemList(["b", "a", "c"]);
         differ.check(l);
         expect(differ.toString()).toEqual(iterableChangesAsString(
             collection: ["{id: b}[1->0]", "{id: a}[0->1]", "{id: c}"],
-            identityChanges: ["{id: b}[1->0]", "{id: a}[0->1]", "{id: c}"],
             previous: ["{id: a}[0->1]", "{id: b}[1->0]", "{id: c}"],
             moves: ["{id: b}[1->0]", "{id: a}[0->1]"]));
       });
-      it("should track duplicate reinsertion normally", () {
+      it("should track duplicate reinsertion normally with track by function",
+          () {
         var l = buildItemList(["a", "a"]);
         differ.check(l);
         l = buildItemList(["b", "a", "a"]);
         differ.check(l);
         expect(differ.toString()).toEqual(iterableChangesAsString(
             collection: ["{id: b}[null->0]", "{id: a}[0->1]", "{id: a}[1->2]"],
-            identityChanges: ["{id: a}[0->1]", "{id: a}[1->2]"],
             previous: ["{id: a}[0->1]", "{id: a}[1->2]"],
             moves: ["{id: a}[0->1]", "{id: a}[1->2]"],
             additions: ["{id: b}[null->0]"]));
       });
-      it("should track removals normally", () {
+      it("should track removals normally with track by function", () {
         var l = buildItemList(["a", "b", "c"]);
         differ.check(l);
         ListWrapper.removeAt(l, 2);
