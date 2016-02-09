@@ -6215,8 +6215,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @Directive({selector: '[ngModel]'})
 	 * class NgModelStatus {
 	 *   constructor(public control:NgModel) {}
-	 *   @HostBinding('[class.valid]') get valid { return this.control.valid; }
-	 *   @HostBinding('[class.invalid]') get invalid { return this.control.invalid; }
+	 *   @HostBinding('class.valid') get valid { return this.control.valid; }
+	 *   @HostBinding('class.invalid') get invalid { return this.control.invalid; }
 	 * }
 	 *
 	 * @Component({
