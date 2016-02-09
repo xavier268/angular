@@ -33876,6 +33876,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            path: config.path,
 	            loader: wrappedLoader,
 	            name: config.name,
+	            data: config.data,
 	            useAsDefault: config.useAsDefault
 	        });
 	    }
@@ -33899,6 +33900,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    path: config.path,
 	                    loader: componentDefinitionObject.loader,
 	                    name: config.name,
+	                    data: config.data,
 	                    useAsDefault: config.useAsDefault
 	                });
 	            }
