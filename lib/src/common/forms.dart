@@ -34,10 +34,30 @@ export "forms/directives/checkbox_value_accessor.dart"
     show CheckboxControlValueAccessor;
 export "forms/directives/select_control_value_accessor.dart"
     show NgSelectOption, SelectControlValueAccessor;
-export "forms/directives.dart" show FORM_DIRECTIVES;
+export "forms/directives.dart" show FORM_DIRECTIVES, RadioButtonState;
 export "forms/validators.dart"
     show NG_VALIDATORS, NG_ASYNC_VALIDATORS, Validators;
 export "forms/directives/validators.dart"
     show RequiredValidator, MinLengthValidator, MaxLengthValidator, Validator;
-export "forms/form_builder.dart"
-    show FormBuilder, FORM_PROVIDERS, FORM_BINDINGS;
+export "forms/form_builder.dart" show FormBuilder;
+import "forms/form_builder.dart" show FormBuilder;
+import "forms/directives/radio_control_value_accessor.dart"
+    show RadioControlRegistry;
+import "package:angular2/src/facade/lang.dart" show Type;
+
+/**
+ * Shorthand set of providers used for building Angular forms.
+ *
+ * ### Example
+ *
+ * ```typescript
+ * bootstrap(MyApp, [FORM_PROVIDERS]);
+ * ```
+ */
+const List<Type> FORM_PROVIDERS = const [FormBuilder, RadioControlRegistry];
+/**
+ * See [FORM_PROVIDERS] instead.
+ *
+ * @deprecated
+ */
+const FORM_BINDINGS = FORM_PROVIDERS;

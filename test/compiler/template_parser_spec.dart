@@ -390,15 +390,6 @@ Invalid property name \'bar.foo\' ("<p [ERROR ->][bar.foo]>"): TestComp@0:3''');
             [DirectiveAst, dirA]
           ]);
         });
-        it("should locate directives in event bindings", () {
-          var dirA = CompileDirectiveMetadata.create(
-              selector: "[a]", type: new CompileTypeMetadata(name: "DirB"));
-          expect(humanizeTplAst(parse("<div (a)=\"b\">", [dirA]))).toEqual([
-            [ElementAst, "div"],
-            [BoundEventAst, "a", null, "b"],
-            [DirectiveAst, dirA]
-          ]);
-        });
         it("should parse directive host properties", () {
           var dirA = CompileDirectiveMetadata.create(
               selector: "div",

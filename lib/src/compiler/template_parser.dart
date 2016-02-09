@@ -505,9 +505,8 @@ class TemplateParseVisitor implements HtmlAstVisitor {
     var parts = splitAtColon(name, [null, name]);
     var target = parts[0];
     var eventName = parts[1];
-    var ast = this._parseAction(expression, sourceSpan);
-    targetMatchableAttrs.add([name, ast.source]);
-    targetEvents.add(new BoundEventAst(eventName, target, ast, sourceSpan));
+    targetEvents.add(new BoundEventAst(eventName, target,
+        this._parseAction(expression, sourceSpan), sourceSpan));
   }
 
   _parseLiteralAttr(String name, String value, ParseSourceSpan sourceSpan,
