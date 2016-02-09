@@ -1,4 +1,14 @@
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 import { unimplemented } from 'angular2/src/facade/exceptions';
+import { Injectable } from 'angular2/src/core/di';
 /**
  * Represents a location in a View that has an injection, change-detection and render context
  * associated with it.
@@ -9,7 +19,7 @@ import { unimplemented } from 'angular2/src/facade/exceptions';
  * An `ElementRef` is backed by a render-specific element. In the browser, this is usually a DOM
  * element.
  */
-export class ElementRef {
+export let ElementRef = class {
     /**
      * The underlying native element or `null` if direct access to native elements is not supported
      * (e.g. when the application runs in a web worker).
@@ -30,7 +40,11 @@ export class ElementRef {
      * </div>
      */
     get nativeElement() { return unimplemented(); }
-}
+};
+ElementRef = __decorate([
+    Injectable(), 
+    __metadata('design:paramtypes', [])
+], ElementRef);
 export class ElementRef_ {
     constructor(_appElement) {
         this._appElement = _appElement;

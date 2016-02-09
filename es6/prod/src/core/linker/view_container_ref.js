@@ -1,5 +1,15 @@
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 import { ListWrapper } from 'angular2/src/facade/collection';
 import { unimplemented } from 'angular2/src/facade/exceptions';
+import { Injectable } from 'angular2/src/core/di';
 import { isPresent } from 'angular2/src/facade/lang';
 /**
  * Represents a container where one or more Views can be attached.
@@ -21,7 +31,7 @@ import { isPresent } from 'angular2/src/facade/lang';
  *
  * <!-- TODO(i): we are also considering ElementRef#viewContainer api -->
  */
-export class ViewContainerRef {
+export let ViewContainerRef = class {
     /**
      * Anchor element that specifies the location of this container in the containing View.
      * <!-- TODO: rename to anchorElement -->
@@ -40,7 +50,11 @@ export class ViewContainerRef {
      */
     get length() { return unimplemented(); }
     ;
-}
+};
+ViewContainerRef = __decorate([
+    Injectable(), 
+    __metadata('design:paramtypes', [])
+], ViewContainerRef);
 export class ViewContainerRef_ extends ViewContainerRef {
     constructor(_element) {
         super();
