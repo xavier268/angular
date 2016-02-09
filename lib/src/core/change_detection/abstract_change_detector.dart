@@ -88,7 +88,7 @@ class AbstractChangeDetector<T> implements ChangeDetector {
 
   bool handleEvent(String eventName, num elIndex, dynamic event) {
     if (!this.hydrated()) {
-      this.throwDehydratedError();
+      this.throwDehydratedError('''${ this . id} -> ${ eventName}''');
     }
     try {
       var locals = new Map<String, dynamic>();
@@ -149,7 +149,7 @@ class AbstractChangeDetector<T> implements ChangeDetector {
   // facilitate error reporting.
   void detectChangesInRecords(bool throwOnChange) {
     if (!this.hydrated()) {
-      this.throwDehydratedError();
+      this.throwDehydratedError(this.id);
     }
     try {
       this.detectChangesInRecordsInternal(throwOnChange);
@@ -395,8 +395,8 @@ class AbstractChangeDetector<T> implements ChangeDetector {
         this._currentBinding().debug, oldValue, newValue, null);
   }
 
-  void throwDehydratedError() {
-    throw new DehydratedException();
+  void throwDehydratedError(String detail) {
+    throw new DehydratedException(detail);
   }
 
   BindingTarget _currentBinding() {
