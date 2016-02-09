@@ -465,10 +465,10 @@ class ApplicationRef_ extends ApplicationRef {
     });
     return completer.promise.then((_) {
       var c = this._injector.get(Console);
-      var modeDescription = assertionsEnabled()
-          ? "in the development mode. Call enableProdMode() to enable the production mode."
-          : "in the production mode. Call enableDevMode() to enable the development mode.";
-      c.log('''Angular 2 is running ${ modeDescription}''');
+      if (assertionsEnabled()) {
+        c.log(
+            "Angular 2 is running in the development mode. Call enableProdMode() to enable the production mode.");
+      }
       return _;
     });
   }
