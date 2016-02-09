@@ -345,7 +345,7 @@ System.register("angular2/src/router/route_config_impl", ["angular2/src/facade/l
   return module.exports;
 });
 
-System.register("angular2/src/router/instruction", ["angular2/src/facade/collection", "angular2/src/facade/lang", "angular2/src/facade/async", "angular2/core"], true, function(require, exports, module) {
+System.register("angular2/src/router/instruction", ["angular2/src/facade/collection", "angular2/src/facade/lang", "angular2/src/facade/async"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -358,26 +358,9 @@ System.register("angular2/src/router/instruction", ["angular2/src/facade/collect
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
   };
-  var __decorate = (this && this.__decorate) || function(decorators, target, key, desc) {
-    var c = arguments.length,
-        r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-        d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function")
-      r = Reflect.decorate(decorators, target, key, desc);
-    else
-      for (var i = decorators.length - 1; i >= 0; i--)
-        if (d = decorators[i])
-          r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-  };
-  var __metadata = (this && this.__metadata) || function(k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
-      return Reflect.metadata(k, v);
-  };
   var collection_1 = require("angular2/src/facade/collection");
   var lang_1 = require("angular2/src/facade/lang");
   var async_1 = require("angular2/src/facade/async");
-  var core_1 = require("angular2/core");
   var RouteParams = (function() {
     function RouteParams(params) {
       this.params = params;
@@ -385,7 +368,6 @@ System.register("angular2/src/router/instruction", ["angular2/src/facade/collect
     RouteParams.prototype.get = function(param) {
       return lang_1.normalizeBlank(collection_1.StringMapWrapper.get(this.params, param));
     };
-    RouteParams = __decorate([core_1.Injectable(), __metadata('design:paramtypes', [Object])], RouteParams);
     return RouteParams;
   })();
   exports.RouteParams = RouteParams;
@@ -1507,12 +1489,13 @@ System.register("angular2/src/router/path_recognizer", ["angular2/src/facade/lan
           break;
         }
         if (lang_1.isPresent(currentSegment)) {
-          captured.push(currentSegment.path);
           if (segment instanceof StarSegment) {
             positionalParams[segment.name] = currentSegment.toString();
+            captured.push(currentSegment.toString());
             nextSegment = null;
             break;
           }
+          captured.push(currentSegment.path);
           if (segment instanceof DynamicSegment) {
             positionalParams[segment.name] = currentSegment.path;
           } else if (!segment.match(currentSegment.path)) {
@@ -2958,7 +2941,6 @@ System.register("angular2/src/router/router", ["angular2/src/facade/async", "ang
       var ancestorInstructions = this._getAncestorInstructions();
       return this.registry.generate(linkParams, ancestorInstructions);
     };
-    Router = __decorate([core_1.Injectable(), __metadata('design:paramtypes', [route_registry_1.RouteRegistry, Router, Object])], Router);
     return Router;
   })();
   exports.Router = Router;
@@ -2976,7 +2958,7 @@ System.register("angular2/src/router/router", ["angular2/src/facade/async", "ang
             }
             var emitPath = instruction.toUrlPath();
             var emitQuery = instruction.toUrlQuery();
-            if (emitPath.length > 0) {
+            if (emitPath.length > 0 && emitPath[0] != '/') {
               emitPath = '/' + emitPath;
             }
             if (change['type'] == 'hashchange') {
@@ -2999,7 +2981,7 @@ System.register("angular2/src/router/router", ["angular2/src/facade/async", "ang
       }
       var emitPath = instruction.toUrlPath();
       var emitQuery = instruction.toUrlQuery();
-      if (emitPath.length > 0) {
+      if (emitPath.length > 0 && emitPath[0] != '/') {
         emitPath = '/' + emitPath;
       }
       var promise = _super.prototype.commit.call(this, instruction);

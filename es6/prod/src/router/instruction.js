@@ -1,16 +1,6 @@
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
 import { StringMapWrapper } from 'angular2/src/facade/collection';
 import { isPresent, isBlank, normalizeBlank, CONST_EXPR } from 'angular2/src/facade/lang';
 import { PromiseWrapper } from 'angular2/src/facade/async';
-import { Injectable } from 'angular2/core';
 /**
  * `RouteParams` is an immutable map of parameters for the given route
  * based on the url matcher and optional parameters for that route.
@@ -22,11 +12,12 @@ import { Injectable } from 'angular2/core';
  * ```
  * import {Component} from 'angular2/core';
  * import {bootstrap} from 'angular2/platform/browser';
- * import {Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteConfig} from 'angular2/router';
+ * import {Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteConfig, RouteParams} from
+ * 'angular2/router';
  *
  * @Component({directives: [ROUTER_DIRECTIVES]})
  * @RouteConfig([
- *  {path: '/user/:id', component: UserCmp, as: 'UserCmp'},
+ *  {path: '/user/:id', component: UserCmp, name: 'UserCmp'},
  * ])
  * class AppCmp {}
  *
@@ -41,16 +32,12 @@ import { Injectable } from 'angular2/core';
  * bootstrap(AppCmp, ROUTER_PROVIDERS);
  * ```
  */
-export let RouteParams = class {
+export class RouteParams {
     constructor(params) {
         this.params = params;
     }
     get(param) { return normalizeBlank(StringMapWrapper.get(this.params, param)); }
-};
-RouteParams = __decorate([
-    Injectable(), 
-    __metadata('design:paramtypes', [Object])
-], RouteParams);
+}
 /**
  * `RouteData` is an immutable map of additional data you can configure in your {@link Route}.
  *
@@ -59,14 +46,14 @@ RouteParams = __decorate([
  * ### Example
  *
  * ```
- * import {Component, View} from 'angular2/core';
+ * import {Component} from 'angular2/core';
  * import {bootstrap} from 'angular2/platform/browser';
- * import {Router, ROUTER_DIRECTIVES, routerBindings, RouteConfig} from 'angular2/router';
+ * import {Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteConfig, RouteData} from
+ * 'angular2/router';
  *
- * @Component({...})
- * @View({directives: [ROUTER_DIRECTIVES]})
+ * @Component({directives: [ROUTER_DIRECTIVES]})
  * @RouteConfig([
- *  {path: '/user/:id', component: UserCmp, as: 'UserCmp', data: {isAdmin: true}},
+ *  {path: '/user/:id', component: UserCmp, name: 'UserCmp', data: {isAdmin: true}},
  * ])
  * class AppCmp {}
  *
@@ -79,7 +66,7 @@ RouteParams = __decorate([
  *   }
  * }
  *
- * bootstrap(AppCmp, routerBindings(AppCmp));
+ * bootstrap(AppCmp, ROUTER_PROVIDERS);
  * ```
  */
 export class RouteData {

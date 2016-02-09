@@ -37,7 +37,7 @@ let _resolveToFalse = PromiseWrapper.resolve(false);
  * `Instruction`.
  * The router uses the `RouteRegistry` to get an `Instruction`.
  */
-export let Router = class {
+export class Router {
     constructor(registry, parent, hostComponent) {
         this.registry = registry;
         this.parent = parent;
@@ -362,11 +362,7 @@ export let Router = class {
         var ancestorInstructions = this._getAncestorInstructions();
         return this.registry.generate(linkParams, ancestorInstructions);
     }
-};
-Router = __decorate([
-    Injectable(), 
-    __metadata('design:paramtypes', [RouteRegistry, Router, Object])
-], Router);
+}
 export let RootRouter = class extends Router {
     constructor(registry, location, primaryComponent) {
         super(registry, null, primaryComponent);
@@ -383,7 +379,7 @@ export let RootRouter = class extends Router {
                     }
                     var emitPath = instruction.toUrlPath();
                     var emitQuery = instruction.toUrlQuery();
-                    if (emitPath.length > 0) {
+                    if (emitPath.length > 0 && emitPath[0] != '/') {
                         emitPath = '/' + emitPath;
                     }
                     // Because we've opted to use All hashchange events occur outside Angular.
@@ -408,7 +404,7 @@ export let RootRouter = class extends Router {
     commit(instruction, _skipLocationChange = false) {
         var emitPath = instruction.toUrlPath();
         var emitQuery = instruction.toUrlQuery();
-        if (emitPath.length > 0) {
+        if (emitPath.length > 0 && emitPath[0] != '/') {
             emitPath = '/' + emitPath;
         }
         var promise = super.commit(instruction);
