@@ -67,6 +67,6 @@ export declare class AbstractChangeDetector<T> implements ChangeDetector {
     };
     private _throwError(exception, stack);
     throwOnChangeError(oldValue: any, newValue: any): void;
-    throwDehydratedError(detail: string): void;
+    throwDehydratedError(): void;
     private _currentBinding();
 }

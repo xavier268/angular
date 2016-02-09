@@ -49,7 +49,7 @@ export class AbstractChangeDetector {
     remove() { this.parent.removeContentChild(this); }
     handleEvent(eventName, elIndex, event) {
         if (!this.hydrated()) {
-            this.throwDehydratedError(`${this.id} -> ${eventName}`);
+            this.throwDehydratedError();
         }
         try {
             var locals = new Map();
@@ -98,7 +98,7 @@ export class AbstractChangeDetector {
     // facilitate error reporting.
     detectChangesInRecords(throwOnChange) {
         if (!this.hydrated()) {
-            this.throwDehydratedError(this.id);
+            this.throwDehydratedError();
         }
         try {
             this.detectChangesInRecordsInternal(throwOnChange);
@@ -298,7 +298,7 @@ export class AbstractChangeDetector {
     throwOnChangeError(oldValue, newValue) {
         throw new ExpressionChangedAfterItHasBeenCheckedException(this._currentBinding().debug, oldValue, newValue, null);
     }
-    throwDehydratedError(detail) { throw new DehydratedException(detail); }
+    throwDehydratedError() { throw new DehydratedException(); }
     _currentBinding() {
         return this.bindingTargets[this.propertyBindingIndex];
     }

@@ -81,7 +81,7 @@ export declare class ChangeDetectionError extends WrappedException {
  * This is an internal Angular error.
  */
 export declare class DehydratedException extends BaseException {
-    constructor(details: string);
+    constructor();
 }
 /**
  * Wraps an exception thrown by an event handler.

@@ -9218,8 +9218,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	var DehydratedException = (function (_super) {
 	    __extends(DehydratedException, _super);
-	    function DehydratedException(details) {
-	        _super.call(this, "Attempt to use a dehydrated detector: " + details);
+	    function DehydratedException() {
+	        _super.call(this, 'Attempt to use a dehydrated detector.');
 	    }
 	    return DehydratedException;
 	})(exceptions_1.BaseException);
@@ -10655,7 +10655,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    AbstractChangeDetector.prototype.remove = function () { this.parent.removeContentChild(this); };
 	    AbstractChangeDetector.prototype.handleEvent = function (eventName, elIndex, event) {
 	        if (!this.hydrated()) {
-	            this.throwDehydratedError(this.id + " -> " + eventName);
+	            this.throwDehydratedError();
 	        }
 	        try {
 	            var locals = new Map();
@@ -10704,7 +10704,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // facilitate error reporting.
 	    AbstractChangeDetector.prototype.detectChangesInRecords = function (throwOnChange) {
 	        if (!this.hydrated()) {
-	            this.throwDehydratedError(this.id);
+	            this.throwDehydratedError();
 	        }
 	        try {
 	            this.detectChangesInRecordsInternal(throwOnChange);
@@ -10907,7 +10907,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    AbstractChangeDetector.prototype.throwOnChangeError = function (oldValue, newValue) {
 	        throw new exceptions_1.ExpressionChangedAfterItHasBeenCheckedException(this._currentBinding().debug, oldValue, newValue, null);
 	    };
-	    AbstractChangeDetector.prototype.throwDehydratedError = function (detail) { throw new exceptions_1.DehydratedException(detail); };
+	    AbstractChangeDetector.prototype.throwDehydratedError = function () { throw new exceptions_1.DehydratedException(); };
 	    AbstractChangeDetector.prototype._currentBinding = function () {
 	        return this.bindingTargets[this.propertyBindingIndex];
 	    };
@@ -12812,9 +12812,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	        return completer.promise.then(function (_) {
 	            var c = _this._injector.get(console_1.Console);
-	            if (lang_1.assertionsEnabled()) {
-	                c.log("Angular 2 is running in the development mode. Call enableProdMode() to enable the production mode.");
-	            }
+	            var modeDescription = lang_1.assertionsEnabled() ?
+	                "in the development mode. Call enableProdMode() to enable the production mode." :
+	                "in the production mode. Call enableDevMode() to enable the development mode.";
+	            c.log("Angular 2 is running " + modeDescription);
 	            return _;
 	        });
 	    };
@@ -35409,7 +35410,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            '$rootScope',
 	            function (injector, rootScope) {
 	                ng1Injector = injector;
-	                async_1.ObservableWrapper.subscribe(ngZone.onTurnDone, function (_) { return ngZone.runOutsideAngular(function () { return rootScope.$apply(); }); });
+	                async_1.ObservableWrapper.subscribe(ngZone.onTurnDone, function (_) { ngZone.run(function () { return rootScope.$apply(); }); });
 	                ng1compilePromise =
 	                    upgrade_ng1_adapter_1.UpgradeNg1ComponentAdapterBuilder.resolve(_this.downgradedComponents, injector);
 	            }
