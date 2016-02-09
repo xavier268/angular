@@ -2325,6 +2325,8 @@ System.register("angular2/src/core/change_detection/differs/default_iterable_dif
       this._movesTail = null;
       this._removalsHead = null;
       this._removalsTail = null;
+      this._identityChangesHead = null;
+      this._identityChangesTail = null;
       this._trackByFn = lang_2.isPresent(this._trackByFn) ? this._trackByFn : trackByIdentity;
     }
     Object.defineProperty(DefaultIterableDiffer.prototype, "collection", {
@@ -2371,6 +2373,12 @@ System.register("angular2/src/core/change_detection/differs/default_iterable_dif
         fn(record);
       }
     };
+    DefaultIterableDiffer.prototype.forEachIdentityChange = function(fn) {
+      var record;
+      for (record = this._identityChangesHead; record !== null; record = record._nextIdentityChange) {
+        fn(record);
+      }
+    };
     DefaultIterableDiffer.prototype.diff = function(collection) {
       if (lang_2.isBlank(collection))
         collection = [];
@@ -2405,7 +2413,8 @@ System.register("angular2/src/core/change_detection/differs/default_iterable_dif
             if (mayBeDirty) {
               record = this._verifyReinsertion(record, item, itemTrackBy, index);
             }
-            record.item = item;
+            if (!lang_2.looseIdentical(record.item, item))
+              this._addIdentityChange(record, item);
           }
           record = record._next;
         }
@@ -2416,8 +2425,12 @@ System.register("angular2/src/core/change_detection/differs/default_iterable_dif
           if (record === null || !lang_2.looseIdentical(record.trackById, itemTrackBy)) {
             record = _this._mismatch(record, item, itemTrackBy, index);
             mayBeDirty = true;
-          } else if (mayBeDirty) {
-            record = _this._verifyReinsertion(record, item, itemTrackBy, index);
+          } else {
+            if (mayBeDirty) {
+              record = _this._verifyReinsertion(record, item, itemTrackBy, index);
+            }
+            if (!lang_2.looseIdentical(record.item, item))
+              _this._addIdentityChange(record, item);
           }
           record = record._next;
           index++;
@@ -2430,7 +2443,7 @@ System.register("angular2/src/core/change_detection/differs/default_iterable_dif
     };
     Object.defineProperty(DefaultIterableDiffer.prototype, "isDirty", {
       get: function() {
-        return this._additionsHead !== null || this._movesHead !== null || this._removalsHead !== null;
+        return this._additionsHead !== null || this._movesHead !== null || this._removalsHead !== null || this._identityChangesHead !== null;
       },
       enumerable: true,
       configurable: true
@@ -2452,6 +2465,7 @@ System.register("angular2/src/core/change_detection/differs/default_iterable_dif
         }
         this._movesHead = this._movesTail = null;
         this._removalsHead = this._removalsTail = null;
+        this._identityChangesHead = this._identityChangesTail = null;
       }
     };
     DefaultIterableDiffer.prototype._mismatch = function(record, item, itemTrackBy, index) {
@@ -2464,10 +2478,14 @@ System.register("angular2/src/core/change_detection/differs/default_iterable_dif
       }
       record = this._linkedRecords === null ? null : this._linkedRecords.get(itemTrackBy, index);
       if (record !== null) {
+        if (!lang_2.looseIdentical(record.item, item))
+          this._addIdentityChange(record, item);
         this._moveAfter(record, previousRecord, index);
       } else {
         record = this._unlinkedRecords === null ? null : this._unlinkedRecords.get(itemTrackBy);
         if (record !== null) {
+          if (!lang_2.looseIdentical(record.item, item))
+            this._addIdentityChange(record, item);
           this._reinsertAfter(record, previousRecord, index);
         } else {
           record = this._addAfter(new CollectionChangeRecord(item, itemTrackBy), previousRecord, index);
@@ -2483,7 +2501,6 @@ System.register("angular2/src/core/change_detection/differs/default_iterable_dif
         record.currentIndex = index;
         this._addToMoves(record, index);
       }
-      record.item = item;
       return record;
     };
     DefaultIterableDiffer.prototype._truncate = function(record) {
@@ -2612,6 +2629,15 @@ System.register("angular2/src/core/change_detection/differs/default_iterable_dif
       }
       return record;
     };
+    DefaultIterableDiffer.prototype._addIdentityChange = function(record, item) {
+      record.item = item;
+      if (this._identityChangesTail === null) {
+        this._identityChangesTail = this._identityChangesHead = record;
+      } else {
+        this._identityChangesTail = this._identityChangesTail._nextIdentityChange = record;
+      }
+      return record;
+    };
     DefaultIterableDiffer.prototype.toString = function() {
       var list = [];
       this.forEachItem(function(record) {
@@ -2633,7 +2659,11 @@ System.register("angular2/src/core/change_detection/differs/default_iterable_dif
       this.forEachRemovedItem(function(record) {
         return removals.push(record);
       });
-      return "collection: " + list.join(', ') + "\n" + "previous: " + previous.join(', ') + "\n" + "additions: " + additions.join(', ') + "\n" + "moves: " + moves.join(', ') + "\n" + "removals: " + removals.join(', ') + "\n";
+      var identityChanges = [];
+      this.forEachIdentityChange(function(record) {
+        return identityChanges.push(record);
+      });
+      return "collection: " + list.join(', ') + "\n" + "previous: " + previous.join(', ') + "\n" + "additions: " + additions.join(', ') + "\n" + "moves: " + moves.join(', ') + "\n" + "removals: " + removals.join(', ') + "\n" + "identityChanges: " + identityChanges.join(', ') + "\n";
     };
     return DefaultIterableDiffer;
   })();
@@ -2653,6 +2683,7 @@ System.register("angular2/src/core/change_detection/differs/default_iterable_dif
       this._nextRemoved = null;
       this._nextAdded = null;
       this._nextMoved = null;
+      this._nextIdentityChange = null;
     }
     CollectionChangeRecord.prototype.toString = function() {
       return this.previousIndex === this.currentIndex ? lang_2.stringify(this.item) : lang_2.stringify(this.item) + '[' + lang_2.stringify(this.previousIndex) + '->' + lang_2.stringify(this.currentIndex) + ']';
@@ -8035,6 +8066,7 @@ System.register("angular2/src/common/directives/ng_for", ["angular2/core", "angu
       }
     };
     NgFor.prototype._applyChanges = function(changes) {
+      var _this = this;
       var recordViewTuples = [];
       changes.forEachRemovedItem(function(removedRecord) {
         return recordViewTuples.push(new RecordViewTuple(removedRecord, null));
@@ -8055,6 +8087,10 @@ System.register("angular2/src/common/directives/ng_for", ["angular2/core", "angu
         var viewRef = this._viewContainer.get(i);
         viewRef.setLocal('last', i === ilen - 1);
       }
+      changes.forEachIdentityChange(function(record) {
+        var viewRef = _this._viewContainer.get(record.currentIndex);
+        viewRef.setLocal('\$implicit', record.item);
+      });
     };
     NgFor.prototype._perViewChange = function(view, record) {
       view.setLocal('\$implicit', record.item);
