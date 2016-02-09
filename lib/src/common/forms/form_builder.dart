@@ -111,20 +111,3 @@ class FormBuilder {
     }
   }
 }
-
-/**
- * Shorthand set of providers used for building Angular forms.
- *
- * ### Example
- *
- * ```typescript
- * bootstrap(MyApp, [FORM_PROVIDERS]);
- * ```
- */
-const List<Type> FORM_PROVIDERS = const [FormBuilder];
-/**
- * See [FORM_PROVIDERS] instead.
- *
- * @deprecated
- */
-const FORM_BINDINGS = FORM_PROVIDERS;

@@ -230,6 +230,14 @@ abstract class AbstractControl {
     return isPresent(this.getError(errorCode, path));
   }
 
+  AbstractControl get root {
+    AbstractControl x = this;
+    while (isPresent(x._parent)) {
+      x = x._parent;
+    }
+    return x;
+  }
+
   /** @internal */
   void _updateControlsErrors() {
     this._status = this._calculateStatus();

@@ -59,6 +59,7 @@ var NG_COMMON = [
   "AbstractControl.validator",
   "AbstractControl.validator=",
   "AbstractControl.value",
+  "AbstractControl.root",
   "AbstractControl.valueChanges",
   "AbstractControlDirective",
   "AbstractControlDirective.control",
@@ -110,6 +111,7 @@ var NG_COMMON = [
   "Control.validator",
   "Control.validator=",
   "Control.value",
+  "Control.root",
   "Control.valueChanges",
   "ControlArray",
   "ControlArray.asyncValidator",
@@ -142,6 +144,7 @@ var NG_COMMON = [
   "ControlArray.validator",
   "ControlArray.validator=",
   "ControlArray.value",
+  "ControlArray.root",
   "ControlArray.valueChanges",
   "ControlContainer",
   "ControlContainer.control",
@@ -187,6 +190,7 @@ var NG_COMMON = [
   "ControlGroup.validator",
   "ControlGroup.validator=",
   "ControlGroup.value",
+  "ControlGroup.root",
   "ControlGroup.valueChanges",
   "ControlValueAccessor:dart",
   "CurrencyPipe",
@@ -455,7 +459,12 @@ var NG_COMMON = [
   "Validators#maxLength()",
   "Validators#minLength()",
   "Validators#nullValidator()",
-  "Validators#required()"
+  "Validators#required()",
+  "RadioButtonState",
+  "RadioButtonState.checked",
+  "RadioButtonState.checked=",
+  "RadioButtonState.value",
+  "RadioButtonState.value="
 ];
 var NG_COMPILER = [
   "AttrAst.name",
