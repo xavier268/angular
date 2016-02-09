@@ -17,6 +17,7 @@ import "default_value_accessor.dart" show DefaultValueAccessor;
 import "number_value_accessor.dart" show NumberValueAccessor;
 import "checkbox_value_accessor.dart" show CheckboxControlValueAccessor;
 import "select_control_value_accessor.dart" show SelectControlValueAccessor;
+import "radio_control_value_accessor.dart" show RadioControlValueAccessor;
 import "normalize_validator.dart" show normalizeValidator;
 
 List<String> controlPath(String name, ControlContainer parent) {
@@ -88,7 +89,8 @@ ControlValueAccessor selectValueAccessor(
       defaultAccessor = v;
     } else if (v is CheckboxControlValueAccessor ||
         v is NumberValueAccessor ||
-        v is SelectControlValueAccessor) {
+        v is SelectControlValueAccessor ||
+        v is RadioControlValueAccessor) {
       if (isPresent(builtinAccessor))
         _throwError(dir, "More than one built-in value accessor matches");
       builtinAccessor = v;
