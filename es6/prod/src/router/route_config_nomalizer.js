@@ -37,7 +37,6 @@ export function normalizeRouteConfig(config, registry) {
             path: config.path,
             loader: wrappedLoader,
             name: config.name,
-            data: config.data,
             useAsDefault: config.useAsDefault
         });
     }
@@ -61,7 +60,6 @@ export function normalizeRouteConfig(config, registry) {
                     path: config.path,
                     loader: componentDefinitionObject.loader,
                     name: config.name,
-                    data: config.data,
                     useAsDefault: config.useAsDefault
                 });
             }

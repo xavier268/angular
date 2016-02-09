@@ -26035,7 +26035,6 @@ System.register("angular2/src/router/route_config_nomalizer", ["angular2/src/rou
         path: config.path,
         loader: wrappedLoader,
         name: config.name,
-        data: config.data,
         useAsDefault: config.useAsDefault
       });
     }
@@ -26062,7 +26061,6 @@ System.register("angular2/src/router/route_config_nomalizer", ["angular2/src/rou
             path: config.path,
             loader: componentDefinitionObject.loader,
             name: config.name,
-            data: config.data,
             useAsDefault: config.useAsDefault
           });
         } else {
