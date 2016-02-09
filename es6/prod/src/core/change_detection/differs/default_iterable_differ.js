@@ -40,9 +40,6 @@ export class DefaultIterableDiffer {
         this._movesTail = null;
         this._removalsHead = null;
         this._removalsTail = null;
-        // Keeps track of records where custom track by is the same, but item identity has changed
-        this._identityChangesHead = null;
-        this._identityChangesTail = null;
         this._trackByFn = isPresent(this._trackByFn) ? this._trackByFn : trackByIdentity;
     }
     get collection() { return this._collection; }
@@ -74,12 +71,6 @@ export class DefaultIterableDiffer {
     forEachRemovedItem(fn) {
         var record;
         for (record = this._removalsHead; record !== null; record = record._nextRemoved) {
-            fn(record);
-        }
-    }
-    forEachIdentityChange(fn) {
-        var record;
-        for (record = this._identityChangesHead; record !== null; record = record._nextIdentityChange) {
             fn(record);
         }
     }
@@ -120,8 +111,7 @@ export class DefaultIterableDiffer {
                         // TODO(misko): can we limit this to duplicates only?
                         record = this._verifyReinsertion(record, item, itemTrackBy, index);
                     }
-                    if (!looseIdentical(record.item, item))
-                        this._addIdentityChange(record, item);
+                    record.item = item;
                 }
                 record = record._next;
             }
@@ -134,13 +124,9 @@ export class DefaultIterableDiffer {
                     record = this._mismatch(record, item, itemTrackBy, index);
                     mayBeDirty = true;
                 }
-                else {
-                    if (mayBeDirty) {
-                        // TODO(misko): can we limit this to duplicates only?
-                        record = this._verifyReinsertion(record, item, itemTrackBy, index);
-                    }
-                    if (!looseIdentical(record.item, item))
-                        this._addIdentityChange(record, item);
+                else if (mayBeDirty) {
+                    // TODO(misko): can we limit this to duplicates only?
+                    record = this._verifyReinsertion(record, item, itemTrackBy, index);
                 }
                 record = record._next;
                 index++;
@@ -151,12 +137,9 @@ export class DefaultIterableDiffer {
         this._collection = collection;
         return this.isDirty;
     }
-    /* CollectionChanges is considered dirty if it has any additions, moves, removals, or identity
-     * changes.
-     */
+    // CollectionChanges is considered dirty if it has any additions, moves or removals.
     get isDirty() {
-        return this._additionsHead !== null || this._movesHead !== null ||
-            this._removalsHead !== null || this._identityChangesHead !== null;
+        return this._additionsHead !== null || this._movesHead !== null || this._removalsHead !== null;
     }
     /**
      * Reset the state of the change objects to show no changes. This means set previousKey to
@@ -183,7 +166,6 @@ export class DefaultIterableDiffer {
             }
             this._movesHead = this._movesTail = null;
             this._removalsHead = this._removalsTail = null;
-            this._identityChangesHead = this._identityChangesTail = null;
         }
     }
     /**
@@ -211,9 +193,6 @@ export class DefaultIterableDiffer {
         record = this._linkedRecords === null ? null : this._linkedRecords.get(itemTrackBy, index);
         if (record !== null) {
             // We have seen this before, we need to move it forward in the collection.
-            // But first we need to check if identity changed, so we can update in view if necessary
-            if (!looseIdentical(record.item, item))
-                this._addIdentityChange(record, item);
             this._moveAfter(record, previousRecord, index);
         }
         else {
@@ -221,9 +200,6 @@ export class DefaultIterableDiffer {
             record = this._unlinkedRecords === null ? null : this._unlinkedRecords.get(itemTrackBy);
             if (record !== null) {
                 // It is an item which we have evicted earlier: reinsert it back into the list.
-                // But first we need to check if identity changed, so we can update in view if necessary
-                if (!looseIdentical(record.item, item))
-                    this._addIdentityChange(record, item);
                 this._reinsertAfter(record, previousRecord, index);
             }
             else {
@@ -270,6 +246,7 @@ export class DefaultIterableDiffer {
             record.currentIndex = index;
             this._addToMoves(record, index);
         }
+        record.item = item;
         return record;
     }
     /**
@@ -449,17 +426,6 @@ export class DefaultIterableDiffer {
         }
         return record;
     }
-    /** @internal */
-    _addIdentityChange(record, item) {
-        record.item = item;
-        if (this._identityChangesTail === null) {
-            this._identityChangesTail = this._identityChangesHead = record;
-        }
-        else {
-            this._identityChangesTail = this._identityChangesTail._nextIdentityChange = record;
-        }
-        return record;
-    }
     toString() {
         var list = [];
         this.forEachItem((record) => list.push(record));
@@ -471,12 +437,9 @@ export class DefaultIterableDiffer {
         this.forEachMovedItem((record) => moves.push(record));
         var removals = [];
         this.forEachRemovedItem((record) => removals.push(record));
-        var identityChanges = [];
-        this.forEachIdentityChange((record) => identityChanges.push(record));
         return "collection: " + list.join(', ') + "\n" + "previous: " + previous.join(', ') + "\n" +
             "additions: " + additions.join(', ') + "\n" + "moves: " + moves.join(', ') + "\n" +
-            "removals: " + removals.join(', ') + "\n" + "identityChanges: " +
-            identityChanges.join(', ') + "\n";
+            "removals: " + removals.join(', ') + "\n";
     }
 }
 export class CollectionChangeRecord {
@@ -503,8 +466,6 @@ export class CollectionChangeRecord {
         this._nextAdded = null;
         /** @internal */
         this._nextMoved = null;
-        /** @internal */
-        this._nextIdentityChange = null;
     }
     toString() {
         return this.previousIndex === this.currentIndex ?
