@@ -25812,12 +25812,13 @@ System.register("angular2/src/router/path_recognizer", ["angular2/src/facade/lan
           break;
         }
         if (lang_1.isPresent(currentSegment)) {
-          captured.push(currentSegment.path);
           if (segment instanceof StarSegment) {
             positionalParams[segment.name] = currentSegment.toString();
+            captured.push(currentSegment.toString());
             nextSegment = null;
             break;
           }
+          captured.push(currentSegment.path);
           if (segment instanceof DynamicSegment) {
             positionalParams[segment.name] = currentSegment.path;
           } else if (!segment.match(currentSegment.path)) {
@@ -33488,9 +33489,7 @@ System.register("angular2/src/compiler/template_parser", ["angular2/src/facade/c
       var parts = util_1.splitAtColon(name, [null, name]);
       var target = parts[0];
       var eventName = parts[1];
-      var ast = this._parseAction(expression, sourceSpan);
-      targetMatchableAttrs.push([name, ast.source]);
-      targetEvents.push(new template_ast_1.BoundEventAst(eventName, target, ast, sourceSpan));
+      targetEvents.push(new template_ast_1.BoundEventAst(eventName, target, this._parseAction(expression, sourceSpan), sourceSpan));
     };
     TemplateParseVisitor.prototype._parseLiteralAttr = function(name, value, sourceSpan, targetProps) {
       targetProps.push(new BoundElementOrDirectiveProperty(name, this._exprParser.wrapLiteralPrimitive(value, ''), true, sourceSpan));

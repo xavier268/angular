@@ -25069,9 +25069,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var parts = util_1.splitAtColon(name, [null, name]);
 	        var target = parts[0];
 	        var eventName = parts[1];
-	        var ast = this._parseAction(expression, sourceSpan);
-	        targetMatchableAttrs.push([name, ast.source]);
-	        targetEvents.push(new template_ast_1.BoundEventAst(eventName, target, ast, sourceSpan));
+	        targetEvents.push(new template_ast_1.BoundEventAst(eventName, target, this._parseAction(expression, sourceSpan), sourceSpan));
 	        // Don't detect directives for event names for now,
 	        // so don't add the event name to the matchableAttrs
 	    };
@@ -33328,13 +33326,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	                break;
 	            }
 	            if (lang_1.isPresent(currentSegment)) {
-	                captured.push(currentSegment.path);
 	                // the star segment consumes all of the remaining URL, including matrix params
 	                if (segment instanceof StarSegment) {
 	                    positionalParams[segment.name] = currentSegment.toString();
+	                    captured.push(currentSegment.toString());
 	                    nextSegment = null;
 	                    break;
 	                }
+	                captured.push(currentSegment.path);
 	                if (segment instanceof DynamicSegment) {
 	                    positionalParams[segment.name] = currentSegment.path;
 	                }
