@@ -166,11 +166,11 @@ System.register("angular2/src/mock/directive_resolver_mock", ["angular2/src/core
     MockDirectiveResolver.prototype.setViewBindingsOverride = function(type, viewBindings) {
       this.viewProviderOverrides.set(type, viewBindings);
     };
-    MockDirectiveResolver.prototype.setProvidersOverride = function(type, bindings) {
-      this._providerOverrides.set(type, bindings);
+    MockDirectiveResolver.prototype.setProvidersOverride = function(type, providers) {
+      this._providerOverrides.set(type, providers);
     };
-    MockDirectiveResolver.prototype.setViewProvidersOverride = function(type, viewBindings) {
-      this.viewProviderOverrides.set(type, viewBindings);
+    MockDirectiveResolver.prototype.setViewProvidersOverride = function(type, viewProviders) {
+      this.viewProviderOverrides.set(type, viewProviders);
     };
     MockDirectiveResolver = __decorate([di_1.Injectable(), __metadata('design:paramtypes', [])], MockDirectiveResolver);
     return MockDirectiveResolver;

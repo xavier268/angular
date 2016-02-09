@@ -2563,6 +2563,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var provider_1 = __webpack_require__(13);
 	var exceptions_1 = __webpack_require__(21);
 	var lang_1 = __webpack_require__(5);
+	var exceptions_2 = __webpack_require__(14);
 	var key_1 = __webpack_require__(19);
 	var metadata_1 = __webpack_require__(7);
 	// Threshold for the dynamic version
@@ -3374,6 +3375,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                case 20:
 	                    obj = factory(d0, d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12, d13, d14, d15, d16, d17, d18, d19);
 	                    break;
+	                default:
+	                    throw new exceptions_2.BaseException("Cannot instantiate '" + provider.key.displayName + "' because it has more than 20 dependencies");
 	            }
 	        }
 	        catch (e) {
@@ -6215,8 +6218,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @Directive({selector: '[ngModel]'})
 	 * class NgModelStatus {
 	 *   constructor(public control:NgModel) {}
-	 *   @HostBinding('[class.valid]') get valid { return this.control.valid; }
-	 *   @HostBinding('[class.invalid]') get invalid { return this.control.invalid; }
+	 *   @HostBinding('class.valid') get valid { return this.control.valid; }
+	 *   @HostBinding('class.invalid') get invalid { return this.control.invalid; }
 	 * }
 	 *
 	 * @Component({
@@ -31787,7 +31790,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	                    var emitPath = instruction.toUrlPath();
 	                    var emitQuery = instruction.toUrlQuery();
-	                    if (emitPath.length > 0) {
+	                    if (emitPath.length > 0 && emitPath[0] != '/') {
 	                        emitPath = '/' + emitPath;
 	                    }
 	                    // Because we've opted to use All hashchange events occur outside Angular.
@@ -31814,7 +31817,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (_skipLocationChange === void 0) { _skipLocationChange = false; }
 	        var emitPath = instruction.toUrlPath();
 	        var emitQuery = instruction.toUrlQuery();
-	        if (emitPath.length > 0) {
+	        if (emitPath.length > 0 && emitPath[0] != '/') {
 	            emitPath = '/' + emitPath;
 	        }
 	        var promise = _super.prototype.commit.call(this, instruction);

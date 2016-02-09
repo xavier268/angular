@@ -29739,7 +29739,7 @@ System.register("rxjs/observable/fromPromise", ["rxjs/Observable", "rxjs/Subscri
   return module.exports;
 });
 
-System.register("angular2/src/core/di/injector", ["angular2/src/facade/collection", "angular2/src/core/di/provider", "angular2/src/core/di/exceptions", "angular2/src/facade/lang", "angular2/src/core/di/key", "angular2/src/core/di/metadata"], true, function(require, exports, module) {
+System.register("angular2/src/core/di/injector", ["angular2/src/facade/collection", "angular2/src/core/di/provider", "angular2/src/core/di/exceptions", "angular2/src/facade/lang", "angular2/src/facade/exceptions", "angular2/src/core/di/key", "angular2/src/core/di/metadata"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -29747,6 +29747,7 @@ System.register("angular2/src/core/di/injector", ["angular2/src/facade/collectio
   var provider_1 = require("angular2/src/core/di/provider");
   var exceptions_1 = require("angular2/src/core/di/exceptions");
   var lang_1 = require("angular2/src/facade/lang");
+  var exceptions_2 = require("angular2/src/facade/exceptions");
   var key_1 = require("angular2/src/core/di/key");
   var metadata_1 = require("angular2/src/core/di/metadata");
   var _MAX_CONSTRUCTION_COUNTER = 10;
@@ -30299,6 +30300,8 @@ System.register("angular2/src/core/di/injector", ["angular2/src/facade/collectio
           case 20:
             obj = factory(d0, d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12, d13, d14, d15, d16, d17, d18, d19);
             break;
+          default:
+            throw new exceptions_2.BaseException("Cannot instantiate '" + provider.key.displayName + "' because it has more than 20 dependencies");
         }
       } catch (e) {
         throw new exceptions_1.InstantiationError(this, e, e.stack, provider.key);
@@ -35782,7 +35785,7 @@ System.register("angular2/src/router/router", ["angular2/src/facade/async", "ang
             }
             var emitPath = instruction.toUrlPath();
             var emitQuery = instruction.toUrlQuery();
-            if (emitPath.length > 0) {
+            if (emitPath.length > 0 && emitPath[0] != '/') {
               emitPath = '/' + emitPath;
             }
             if (change['type'] == 'hashchange') {
@@ -35805,7 +35808,7 @@ System.register("angular2/src/router/router", ["angular2/src/facade/async", "ang
       }
       var emitPath = instruction.toUrlPath();
       var emitQuery = instruction.toUrlQuery();
-      if (emitPath.length > 0) {
+      if (emitPath.length > 0 && emitPath[0] != '/') {
         emitPath = '/' + emitPath;
       }
       var promise = _super.prototype.commit.call(this, instruction);

@@ -2957,7 +2957,7 @@ System.register("angular2/src/router/router", ["angular2/src/facade/async", "ang
             }
             var emitPath = instruction.toUrlPath();
             var emitQuery = instruction.toUrlQuery();
-            if (emitPath.length > 0) {
+            if (emitPath.length > 0 && emitPath[0] != '/') {
               emitPath = '/' + emitPath;
             }
             if (change['type'] == 'hashchange') {
@@ -2980,7 +2980,7 @@ System.register("angular2/src/router/router", ["angular2/src/facade/async", "ang
       }
       var emitPath = instruction.toUrlPath();
       var emitQuery = instruction.toUrlQuery();
-      if (emitPath.length > 0) {
+      if (emitPath.length > 0 && emitPath[0] != '/') {
         emitPath = '/' + emitPath;
       }
       var promise = _super.prototype.commit.call(this, instruction);
