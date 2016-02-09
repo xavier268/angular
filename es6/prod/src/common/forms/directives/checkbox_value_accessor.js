@@ -36,7 +36,7 @@ CheckboxControlValueAccessor = __decorate([
     Directive({
         selector: 'input[type=checkbox][ngControl],input[type=checkbox][ngFormControl],input[type=checkbox][ngModel]',
         host: { '(change)': 'onChange($event.target.checked)', '(blur)': 'onTouched()' },
-        providers: [CHECKBOX_VALUE_ACCESSOR]
+        bindings: [CHECKBOX_VALUE_ACCESSOR]
     }), 
     __metadata('design:paramtypes', [Renderer, ElementRef])
 ], CheckboxControlValueAccessor);
