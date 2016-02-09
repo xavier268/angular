@@ -40,6 +40,9 @@ class DefaultIterableDiffer implements IterableDiffer {
   CollectionChangeRecord _movesTail = null;
   CollectionChangeRecord _removalsHead = null;
   CollectionChangeRecord _removalsTail = null;
+  // Keeps track of records where custom track by is the same, but item identity has changed
+  CollectionChangeRecord _identityChangesHead = null;
+  CollectionChangeRecord _identityChangesTail = null;
   DefaultIterableDiffer([this._trackByFn]) {
     this._trackByFn =
         isPresent(this._trackByFn) ? this._trackByFn : trackByIdentity;
@@ -97,6 +100,15 @@ class DefaultIterableDiffer implements IterableDiffer {
     }
   }
 
+  forEachIdentityChange(Function fn) {
+    CollectionChangeRecord record;
+    for (record = this._identityChangesHead;
+        !identical(record, null);
+        record = record._nextIdentityChange) {
+      fn(record);
+    }
+  }
+
   DefaultIterableDiffer diff(dynamic collection) {
     if (isBlank(collection)) collection = [];
     if (!isListLikeIterable(collection)) {
@@ -133,7 +145,8 @@ class DefaultIterableDiffer implements IterableDiffer {
             // TODO(misko): can we limit this to duplicates only?
             record = this._verifyReinsertion(record, item, itemTrackBy, index);
           }
-          record.item = item;
+          if (!looseIdentical(record.item, item))
+            this._addIdentityChange(record, item);
         }
         record = record._next;
       }
@@ -145,9 +158,13 @@ class DefaultIterableDiffer implements IterableDiffer {
             !looseIdentical(record.trackById, itemTrackBy)) {
           record = this._mismatch(record, item, itemTrackBy, index);
           mayBeDirty = true;
-        } else if (mayBeDirty) {
-          // TODO(misko): can we limit this to duplicates only?
-          record = this._verifyReinsertion(record, item, itemTrackBy, index);
+        } else {
+          if (mayBeDirty) {
+            // TODO(misko): can we limit this to duplicates only?
+            record = this._verifyReinsertion(record, item, itemTrackBy, index);
+          }
+          if (!looseIdentical(record.item, item))
+            this._addIdentityChange(record, item);
         }
         record = record._next;
         index++;
@@ -159,11 +176,14 @@ class DefaultIterableDiffer implements IterableDiffer {
     return this.isDirty;
   }
 
-  // CollectionChanges is considered dirty if it has any additions, moves or removals.
+  /* CollectionChanges is considered dirty if it has any additions, moves, removals, or identity
+   * changes.
+   */
   bool get isDirty {
     return !identical(this._additionsHead, null) ||
         !identical(this._movesHead, null) ||
-        !identical(this._removalsHead, null);
+        !identical(this._removalsHead, null) ||
+        !identical(this._identityChangesHead, null);
   }
 
   /**
@@ -197,6 +217,7 @@ class DefaultIterableDiffer implements IterableDiffer {
       }
       this._movesHead = this._movesTail = null;
       this._removalsHead = this._removalsTail = null;
+      this._identityChangesHead = this._identityChangesTail = null;
     }
   }
 
@@ -227,6 +248,10 @@ class DefaultIterableDiffer implements IterableDiffer {
         : this._linkedRecords.get(itemTrackBy, index);
     if (!identical(record, null)) {
       // We have seen this before, we need to move it forward in the collection.
+
+      // But first we need to check if identity changed, so we can update in view if necessary
+      if (!looseIdentical(record.item, item))
+        this._addIdentityChange(record, item);
       this._moveAfter(record, previousRecord, index);
     } else {
       // Never seen it, check evicted list.
@@ -235,6 +260,10 @@ class DefaultIterableDiffer implements IterableDiffer {
           : this._unlinkedRecords.get(itemTrackBy);
       if (!identical(record, null)) {
         // It is an item which we have evicted earlier: reinsert it back into the list.
+
+        // But first we need to check if identity changed, so we can update in view if necessary
+        if (!looseIdentical(record.item, item))
+          this._addIdentityChange(record, item);
         this._reinsertAfter(record, previousRecord, index);
       } else {
         // It is a new item: add it.
@@ -284,7 +313,6 @@ class DefaultIterableDiffer implements IterableDiffer {
       record.currentIndex = index;
       this._addToMoves(record, index);
     }
-    record.item = item;
     return record;
   }
 
@@ -487,6 +515,18 @@ class DefaultIterableDiffer implements IterableDiffer {
     return record;
   }
 
+  /** @internal */
+  _addIdentityChange(CollectionChangeRecord record, dynamic item) {
+    record.item = item;
+    if (identical(this._identityChangesTail, null)) {
+      this._identityChangesTail = this._identityChangesHead = record;
+    } else {
+      this._identityChangesTail =
+          this._identityChangesTail._nextIdentityChange = record;
+    }
+    return record;
+  }
+
   String toString() {
     var list = [];
     this.forEachItem((record) => list.add(record));
@@ -498,6 +538,8 @@ class DefaultIterableDiffer implements IterableDiffer {
     this.forEachMovedItem((record) => moves.add(record));
     var removals = [];
     this.forEachRemovedItem((record) => removals.add(record));
+    var identityChanges = [];
+    this.forEachIdentityChange((record) => identityChanges.add(record));
     return "collection: " +
         list.join(", ") +
         "\n" +
@@ -512,6 +554,9 @@ class DefaultIterableDiffer implements IterableDiffer {
         "\n" +
         "removals: " +
         removals.join(", ") +
+        "\n" +
+        "identityChanges: " +
+        identityChanges.join(", ") +
         "\n";
   }
 }
@@ -539,6 +584,8 @@ class CollectionChangeRecord {
   CollectionChangeRecord _nextAdded = null;
   /** @internal */
   CollectionChangeRecord _nextMoved = null;
+  /** @internal */
+  CollectionChangeRecord _nextIdentityChange = null;
   CollectionChangeRecord(this.item, this.trackById) {}
   String toString() {
     return identical(this.previousIndex, this.currentIndex)

@@ -7,7 +7,8 @@ iterableChangesAsString(
     previous: const [],
     additions: const [],
     moves: const [],
-    removals: const []}) {
+    removals: const [],
+    identityChanges: const []}) {
   return "collection: " +
       collection.join(", ") +
       "\n" +
@@ -22,6 +23,9 @@ iterableChangesAsString(
       "\n" +
       "removals: " +
       removals.join(", ") +
+      "\n" +
+      "identityChanges: " +
+      identityChanges.join(", ") +
       "\n";
 }
 
