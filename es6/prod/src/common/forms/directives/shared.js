@@ -6,6 +6,7 @@ import { DefaultValueAccessor } from './default_value_accessor';
 import { NumberValueAccessor } from './number_value_accessor';
 import { CheckboxControlValueAccessor } from './checkbox_value_accessor';
 import { SelectControlValueAccessor } from './select_control_value_accessor';
+import { RadioControlValueAccessor } from './radio_control_value_accessor';
 import { normalizeValidator } from './normalize_validator';
 export function controlPath(name, parent) {
     var p = ListWrapper.clone(parent.path);
@@ -67,7 +68,7 @@ export function selectValueAccessor(dir, valueAccessors) {
             defaultAccessor = v;
         }
         else if (v instanceof CheckboxControlValueAccessor || v instanceof NumberValueAccessor ||
-            v instanceof SelectControlValueAccessor) {
+            v instanceof SelectControlValueAccessor || v instanceof RadioControlValueAccessor) {
             if (isPresent(builtinAccessor))
                 _throwError(dir, "More than one built-in value accessor matches");
             builtinAccessor = v;
