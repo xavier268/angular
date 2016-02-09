@@ -1489,13 +1489,12 @@ System.register("angular2/src/router/path_recognizer", ["angular2/src/facade/lan
           break;
         }
         if (lang_1.isPresent(currentSegment)) {
+          captured.push(currentSegment.path);
           if (segment instanceof StarSegment) {
             positionalParams[segment.name] = currentSegment.toString();
-            captured.push(currentSegment.toString());
             nextSegment = null;
             break;
           }
-          captured.push(currentSegment.path);
           if (segment instanceof DynamicSegment) {
             positionalParams[segment.name] = currentSegment.path;
           } else if (!segment.match(currentSegment.path)) {
