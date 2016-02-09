@@ -4764,8 +4764,8 @@ System.register("angular2/src/core/change_detection/exceptions", ["angular2/src/
   exports.ChangeDetectionError = ChangeDetectionError;
   var DehydratedException = (function(_super) {
     __extends(DehydratedException, _super);
-    function DehydratedException() {
-      _super.call(this, 'Attempt to use a dehydrated detector.');
+    function DehydratedException(details) {
+      _super.call(this, "Attempt to use a dehydrated detector: " + details);
     }
     return DehydratedException;
   })(exceptions_1.BaseException);
@@ -8032,7 +8032,7 @@ System.register("angular2/src/core/change_detection/abstract_change_detector", [
     };
     AbstractChangeDetector.prototype.handleEvent = function(eventName, elIndex, event) {
       if (!this.hydrated()) {
-        this.throwDehydratedError();
+        this.throwDehydratedError(this.id + " -> " + eventName);
       }
       try {
         var locals = new Map();
@@ -8075,7 +8075,7 @@ System.register("angular2/src/core/change_detection/abstract_change_detector", [
     };
     AbstractChangeDetector.prototype.detectChangesInRecords = function(throwOnChange) {
       if (!this.hydrated()) {
-        this.throwDehydratedError();
+        this.throwDehydratedError(this.id);
       }
       try {
         this.detectChangesInRecordsInternal(throwOnChange);
@@ -8261,8 +8261,8 @@ System.register("angular2/src/core/change_detection/abstract_change_detector", [
     AbstractChangeDetector.prototype.throwOnChangeError = function(oldValue, newValue) {
       throw new exceptions_1.ExpressionChangedAfterItHasBeenCheckedException(this._currentBinding().debug, oldValue, newValue, null);
     };
-    AbstractChangeDetector.prototype.throwDehydratedError = function() {
-      throw new exceptions_1.DehydratedException();
+    AbstractChangeDetector.prototype.throwDehydratedError = function(detail) {
+      throw new exceptions_1.DehydratedException(detail);
     };
     AbstractChangeDetector.prototype._currentBinding = function() {
       return this.bindingTargets[this.propertyBindingIndex];
