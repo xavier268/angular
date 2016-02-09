@@ -35409,7 +35409,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            '$rootScope',
 	            function (injector, rootScope) {
 	                ng1Injector = injector;
-	                async_1.ObservableWrapper.subscribe(ngZone.onTurnDone, function (_) { ngZone.run(function () { return rootScope.$apply(); }); });
+	                async_1.ObservableWrapper.subscribe(ngZone.onTurnDone, function (_) { return ngZone.runOutsideAngular(function () { return rootScope.$apply(); }); });
 	                ng1compilePromise =
 	                    upgrade_ng1_adapter_1.UpgradeNg1ComponentAdapterBuilder.resolve(_this.downgradedComponents, injector);
 	            }
