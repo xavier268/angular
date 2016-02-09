@@ -5336,7 +5336,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * var t = new OpaqueToken("value");
 	 *
 	 * var injector = Injector.resolveAndCreate([
-	 *   provide(t, {useValue: "providedValue"})
+	 *   provide(t, {useValue: "bindingValue"})
 	 * ]);
 	 *
 	 * expect(injector.get(t)).toEqual("bindingValue");
@@ -6215,8 +6215,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @Directive({selector: '[ngModel]'})
 	 * class NgModelStatus {
 	 *   constructor(public control:NgModel) {}
-	 *   @HostBinding('[class.valid]') get valid { return this.control.valid; }
-	 *   @HostBinding('[class.invalid]') get invalid { return this.control.invalid; }
+	 *   @HostBinding('class.valid') get valid { return this.control.valid; }
+	 *   @HostBinding('class.invalid') get invalid { return this.control.invalid; }
 	 * }
 	 *
 	 * @Component({
@@ -31787,7 +31787,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	                    var emitPath = instruction.toUrlPath();
 	                    var emitQuery = instruction.toUrlQuery();
-	                    if (emitPath.length > 0) {
+	                    if (emitPath.length > 0 && emitPath[0] != '/') {
 	                        emitPath = '/' + emitPath;
 	                    }
 	                    // Because we've opted to use All hashchange events occur outside Angular.
@@ -31814,7 +31814,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (_skipLocationChange === void 0) { _skipLocationChange = false; }
 	        var emitPath = instruction.toUrlPath();
 	        var emitQuery = instruction.toUrlQuery();
-	        if (emitPath.length > 0) {
+	        if (emitPath.length > 0 && emitPath[0] != '/') {
 	            emitPath = '/' + emitPath;
 	        }
 	        var promise = _super.prototype.commit.call(this, instruction);
@@ -32382,10 +32382,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * ### Example
 	 * ```
-	 * import {RouteConfig} from 'angular2/router';
+	 * import {RouteConfig, Route} from 'angular2/router';
 	 *
 	 * @RouteConfig([
-	 *   {path: '/home', component: HomeCmp, name: 'HomeCmp' }
+	 *   new Route({path: '/home', component: HomeCmp, name: 'HomeCmp' })
 	 * ])
 	 * class MyApp {}
 	 * ```
@@ -32465,10 +32465,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * ### Example
 	 * ```
-	 * import {RouteConfig} from 'angular2/router';
+	 * import {RouteConfig, AsyncRoute} from 'angular2/router';
 	 *
 	 * @RouteConfig([
-	 *   {path: '/home', loader: () => Promise.resolve(MyLoadedCmp), name: 'MyLoadedCmp'}
+	 *   new AsyncRoute({path: '/home', loader: () => Promise.resolve(MyLoadedCmp), name:
+	 * 'MyLoadedCmp'})
 	 * ])
 	 * class MyApp {}
 	 * ```
@@ -32502,11 +32503,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * ### Example
 	 * ```
-	 * import {RouteConfig} from 'angular2/router';
+	 * import {RouteConfig, Route, Redirect} from 'angular2/router';
 	 *
 	 * @RouteConfig([
-	 *   {path: '/', redirectTo: ['/Home'] },
-	 *   {path: '/home', component: HomeCmp, name: 'Home'}
+	 *   new Redirect({path: '/', redirectTo: ['/Home'] }),
+	 *   new Route({path: '/home', component: HomeCmp, name: 'Home'})
 	 * ])
 	 * class MyApp {}
 	 * ```
@@ -32670,11 +32671,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * ```
 	 * import {Component} from 'angular2/core';
 	 * import {bootstrap} from 'angular2/platform/browser';
-	 * import {Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteConfig} from 'angular2/router';
+	 * import {Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteConfig, RouteParams} from
+	 * 'angular2/router';
 	 *
 	 * @Component({directives: [ROUTER_DIRECTIVES]})
 	 * @RouteConfig([
-	 *  {path: '/user/:id', component: UserCmp, as: 'UserCmp'},
+	 *  {path: '/user/:id', component: UserCmp, name: 'UserCmp'},
 	 * ])
 	 * class AppCmp {}
 	 *
@@ -32705,14 +32707,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * ### Example
 	 *
 	 * ```
-	 * import {Component, View} from 'angular2/core';
+	 * import {Component} from 'angular2/core';
 	 * import {bootstrap} from 'angular2/platform/browser';
-	 * import {Router, ROUTER_DIRECTIVES, routerBindings, RouteConfig} from 'angular2/router';
+	 * import {Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteConfig, RouteData} from
+	 * 'angular2/router';
 	 *
-	 * @Component({...})
-	 * @View({directives: [ROUTER_DIRECTIVES]})
+	 * @Component({directives: [ROUTER_DIRECTIVES]})
 	 * @RouteConfig([
-	 *  {path: '/user/:id', component: UserCmp, as: 'UserCmp', data: {isAdmin: true}},
+	 *  {path: '/user/:id', component: UserCmp, name: 'UserCmp', data: {isAdmin: true}},
 	 * ])
 	 * class AppCmp {}
 	 *
@@ -32725,7 +32727,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *   }
 	 * }
 	 *
-	 * bootstrap(AppCmp, routerBindings(AppCmp));
+	 * bootstrap(AppCmp, ROUTER_PROVIDERS);
 	 * ```
 	 */
 	var RouteData = (function () {
@@ -33914,7 +33916,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * `LocationStrategy` is responsible for representing and reading route state
 	 * from the browser's URL. Angular provides two strategies:
-	 * {@link HashLocationStrategy} (default) and {@link PathLocationStrategy}.
+	 * {@link HashLocationStrategy} and {@link PathLocationStrategy} (default).
 	 *
 	 * This is used under the hood of the {@link Location} service.
 	 *
@@ -33957,7 +33959,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * bootstrap(AppCmp, [
 	 *   ROUTER_PROVIDERS,
-	 *   PathLocationStrategy,
 	 *   provide(APP_BASE_HREF, {useValue: '/my/app'})
 	 * ]);
 	 * ```
