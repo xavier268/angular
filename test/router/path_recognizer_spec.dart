@@ -87,15 +87,5 @@ main() {
         expect(match["allParams"]).toEqual({"c": "3"});
       });
     });
-    describe("wildcard segment", () {
-      it("should return a url path which matches the original url path", () {
-        var rec = new PathRecognizer("/wild/*everything");
-        var url =
-            parser.parse("/wild/super;variable=value/anotherPartAfterSlash");
-        var match = rec.recognize(url);
-        expect(match["urlPath"])
-            .toEqual("wild/super;variable=value/anotherPartAfterSlash");
-      });
-    });
   });
 }
