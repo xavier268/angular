@@ -195,7 +195,7 @@ class DomRenderer implements Renderer {
     var attrNs;
     var nsAndName = splitNamespace(attributeName);
     if (isPresent(nsAndName[0])) {
-      attributeName = nsAndName[0] + ":" + nsAndName[1];
+      attributeName = nsAndName[1];
       attrNs = NAMESPACE_URIS[nsAndName[0]];
     }
     if (isPresent(attributeValue)) {
@@ -203,10 +203,14 @@ class DomRenderer implements Renderer {
         DOM.setAttributeNS(
             renderElement, attrNs, attributeName, attributeValue);
       } else {
-        DOM.setAttribute(renderElement, nsAndName[1], attributeValue);
+        DOM.setAttribute(renderElement, attributeName, attributeValue);
       }
     } else {
-      DOM.removeAttribute(renderElement, attributeName);
+      if (isPresent(attrNs)) {
+        DOM.removeAttributeNS(renderElement, attrNs, attributeName);
+      } else {
+        DOM.removeAttribute(renderElement, attributeName);
+      }
     }
   }
 
