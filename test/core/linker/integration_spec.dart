@@ -1982,6 +1982,32 @@ Can\'t bind to \'unknown\' since it isn\'t a known native property ("<div [ERROR
                 async.done();
               });
             }));
+        it(
+            "should support foreignObjects",
+            inject([TestComponentBuilder, AsyncTestCompleter],
+                (TestComponentBuilder tcb, async) {
+              tcb
+                  .overrideView(
+                      MyComp,
+                      new ViewMetadata(
+                          template:
+                              "<svg><foreignObject><xhtml:div><p>Test</p></xhtml:div></foreignObject></svg>"))
+                  .createAsync(MyComp)
+                  .then((fixture) {
+                var el = fixture.debugElement.nativeElement;
+                var svg = DOM.childNodes(el)[0];
+                var foreignObject = DOM.childNodes(svg)[0];
+                var p = DOM.childNodes(foreignObject)[0];
+                expect(DOM.getProperty((svg as dynamic), "namespaceURI"))
+                    .toEqual("http://www.w3.org/2000/svg");
+                expect(DOM.getProperty(
+                        (foreignObject as dynamic), "namespaceURI"))
+                    .toEqual("http://www.w3.org/2000/svg");
+                expect(DOM.getProperty((p as dynamic), "namespaceURI"))
+                    .toEqual("http://www.w3.org/1999/xhtml");
+                async.done();
+              });
+            }));
       });
       describe("attributes", () {
         it(
