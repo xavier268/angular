@@ -13,7 +13,7 @@ import { HtmlAttrAst, HtmlTextAst, HtmlElementAst } from './html_ast';
 import { Injectable } from 'angular2/src/core/di';
 import { HtmlTokenType, tokenizeHtml } from './html_lexer';
 import { ParseError, ParseSourceSpan } from './parse_util';
-import { getHtmlTagDefinition, getNsPrefix, mergeNsAndName } from './html_tags';
+import { getHtmlTagDefinition, getNsPrefix } from './html_tags';
 export class HtmlTreeError extends ParseError {
     constructor(elementName, location, msg) {
         super(location, msg);
@@ -217,6 +217,9 @@ class TreeBuilder {
             this.rootNodes.push(node);
         }
     }
+}
+function mergeNsAndName(prefix, localName) {
+    return isPresent(prefix) ? `@${prefix}:${localName}` : localName;
 }
 function getElementFullName(prefix, localName, parentElement) {
     if (isBlank(prefix)) {

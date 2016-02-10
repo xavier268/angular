@@ -25245,12 +25245,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        else {
 	            if (parts[0] == ATTRIBUTE_PREFIX) {
 	                boundPropertyName = parts[1];
-	                var nsSeparatorIdx = boundPropertyName.indexOf(':');
-	                if (nsSeparatorIdx > -1) {
-	                    var ns = boundPropertyName.substring(0, nsSeparatorIdx);
-	                    var name_1 = boundPropertyName.substring(nsSeparatorIdx + 1);
-	                    boundPropertyName = html_tags_1.mergeNsAndName(ns, name_1);
-	                }
 	                bindingType = template_ast_1.PropertyBindingType.Attribute;
 	            }
 	            else if (parts[0] == CLASS_PREFIX) {
@@ -25634,7 +25628,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return false;
 	    };
 	    TreeBuilder.prototype._consumeAttr = function (attrName) {
-	        var fullName = html_tags_1.mergeNsAndName(attrName.parts[0], attrName.parts[1]);
+	        var fullName = mergeNsAndName(attrName.parts[0], attrName.parts[1]);
 	        var end = attrName.sourceSpan.end;
 	        var value = '';
 	        if (this.peek.type === html_lexer_1.HtmlTokenType.ATTR_VALUE) {
@@ -25658,6 +25652,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    return TreeBuilder;
 	})();
+	function mergeNsAndName(prefix, localName) {
+	    return lang_1.isPresent(prefix) ? "@" + prefix + ":" + localName : localName;
+	}
 	function getElementFullName(prefix, localName, parentElement) {
 	    if (lang_1.isBlank(prefix)) {
 	        prefix = html_tags_1.getHtmlTagDefinition(localName).implicitNamespacePrefix;
@@ -25665,7 +25662,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            prefix = html_tags_1.getNsPrefix(parentElement.name);
 	        }
 	    }
-	    return html_tags_1.mergeNsAndName(prefix, localName);
+	    return mergeNsAndName(prefix, localName);
 	}
 
 
@@ -26753,10 +26750,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return splitNsName(elementName)[0];
 	}
 	exports.getNsPrefix = getNsPrefix;
-	function mergeNsAndName(prefix, localName) {
-	    return lang_1.isPresent(prefix) ? "@" + prefix + ":" + localName : localName;
-	}
-	exports.mergeNsAndName = mergeNsAndName;
 
 
 /***/ },
@@ -28080,7 +28073,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var attrNs;
 	        var nsAndName = splitNamespace(attributeName);
 	        if (lang_1.isPresent(nsAndName[0])) {
-	            attributeName = nsAndName[1];
+	            attributeName = nsAndName[0] + ':' + nsAndName[1];
 	            attrNs = NAMESPACE_URIS[nsAndName[0]];
 	        }
 	        if (lang_1.isPresent(attributeValue)) {
@@ -28088,16 +28081,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                dom_adapter_1.DOM.setAttributeNS(renderElement, attrNs, attributeName, attributeValue);
 	            }
 	            else {
-	                dom_adapter_1.DOM.setAttribute(renderElement, attributeName, attributeValue);
+	                dom_adapter_1.DOM.setAttribute(renderElement, nsAndName[1], attributeValue);
 	            }
 	        }
 	        else {
-	            if (lang_1.isPresent(attrNs)) {
-	                dom_adapter_1.DOM.removeAttributeNS(renderElement, attrNs, attributeName);
-	            }
-	            else {
-	                dom_adapter_1.DOM.removeAttribute(renderElement, attributeName);
-	            }
+	            dom_adapter_1.DOM.removeAttribute(renderElement, attributeName);
 	        }
 	    };
 	    DomRenderer.prototype.setBindingDebugInfo = function (renderElement, propertyName, propertyValue) {
@@ -29004,19 +28992,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return res;
 	    };
 	    BrowserDomAdapter.prototype.hasAttribute = function (element, attribute) { return element.hasAttribute(attribute); };
-	    BrowserDomAdapter.prototype.hasAttributeNS = function (element, ns, attribute) {
-	        return element.hasAttributeNS(ns, attribute);
-	    };
 	    BrowserDomAdapter.prototype.getAttribute = function (element, attribute) { return element.getAttribute(attribute); };
-	    BrowserDomAdapter.prototype.getAttributeNS = function (element, ns, name) {
-	        return element.getAttributeNS(ns, name);
-	    };
 	    BrowserDomAdapter.prototype.setAttribute = function (element, name, value) { element.setAttribute(name, value); };
 	    BrowserDomAdapter.prototype.setAttributeNS = function (element, ns, name, value) {
 	        element.setAttributeNS(ns, name, value);
 	    };
 	    BrowserDomAdapter.prototype.removeAttribute = function (element, attribute) { element.removeAttribute(attribute); };
-	    BrowserDomAdapter.prototype.removeAttributeNS = function (element, ns, name) { element.removeAttributeNS(ns, name); };
 	    BrowserDomAdapter.prototype.templateAwareRoot = function (el) { return this.isTemplateElement(el) ? this.content(el) : el; };
 	    BrowserDomAdapter.prototype.createHtmlDocument = function () {
 	        return document.implementation.createHTMLDocument('fakeTitle');
