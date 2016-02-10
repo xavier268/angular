@@ -17,7 +17,7 @@ import { CONST_EXPR } from 'angular2/src/facade/lang';
 import { BaseException } from 'angular2/src/facade/exceptions';
 import { Parser } from 'angular2/src/core/change_detection/change_detection';
 import { HtmlParser } from './html_parser';
-import { splitNsName } from './html_tags';
+import { splitNsName, mergeNsAndName } from './html_tags';
 import { ParseError } from './parse_util';
 import { RecursiveAstVisitor } from 'angular2/src/core/change_detection/parser/ast';
 import { ElementAst, BoundElementPropertyAst, BoundEventAst, VariableAst, templateVisitAll, TextAst, BoundTextAst, EmbeddedTemplateAst, AttrAst, NgContentAst, PropertyBindingType, DirectiveAst, BoundDirectivePropertyAst } from './template_ast';
@@ -474,6 +474,12 @@ class TemplateParseVisitor {
         else {
             if (parts[0] == ATTRIBUTE_PREFIX) {
                 boundPropertyName = parts[1];
+                let nsSeparatorIdx = boundPropertyName.indexOf(':');
+                if (nsSeparatorIdx > -1) {
+                    let ns = boundPropertyName.substring(0, nsSeparatorIdx);
+                    let name = boundPropertyName.substring(nsSeparatorIdx + 1);
+                    boundPropertyName = mergeNsAndName(ns, name);
+                }
                 bindingType = PropertyBindingType.Attribute;
             }
             else if (parts[0] == CLASS_PREFIX) {
