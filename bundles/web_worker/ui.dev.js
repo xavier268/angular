@@ -455,6 +455,10 @@ System.register("angular2/src/facade/lang", [], true, function(require, exports,
     return !isJsObject(obj);
   }
   exports.isPrimitive = isPrimitive;
+  function hasConstructor(value, type) {
+    return value.constructor === type;
+  }
+  exports.hasConstructor = hasConstructor;
   global.define = __define;
   return module.exports;
 });

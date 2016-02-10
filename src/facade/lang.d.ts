@@ -155,3 +155,4 @@ export declare function evalExpression(sourceUrl: string, expr: string, declarat
     [key: string]: any;
 }): any;
 export declare function isPrimitive(obj: any): boolean;
+export declare function hasConstructor(value: Object, type: Type): boolean;

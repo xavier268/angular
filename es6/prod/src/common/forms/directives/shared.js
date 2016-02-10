@@ -1,5 +1,5 @@
 import { ListWrapper, StringMapWrapper } from 'angular2/src/facade/collection';
-import { isBlank, isPresent, looseIdentical } from 'angular2/src/facade/lang';
+import { isBlank, isPresent, looseIdentical, hasConstructor } from 'angular2/src/facade/lang';
 import { BaseException } from 'angular2/src/facade/exceptions';
 import { Validators } from '../validators';
 import { DefaultValueAccessor } from './default_value_accessor';
@@ -64,11 +64,13 @@ export function selectValueAccessor(dir, valueAccessors) {
     var builtinAccessor;
     var customAccessor;
     valueAccessors.forEach(v => {
-        if (v instanceof DefaultValueAccessor) {
+        if (hasConstructor(v, DefaultValueAccessor)) {
             defaultAccessor = v;
         }
-        else if (v instanceof CheckboxControlValueAccessor || v instanceof NumberValueAccessor ||
-            v instanceof SelectControlValueAccessor || v instanceof RadioControlValueAccessor) {
+        else if (hasConstructor(v, CheckboxControlValueAccessor) ||
+            hasConstructor(v, NumberValueAccessor) ||
+            hasConstructor(v, SelectControlValueAccessor) ||
+            hasConstructor(v, RadioControlValueAccessor)) {
             if (isPresent(builtinAccessor))
                 _throwError(dir, "More than one built-in value accessor matches");
             builtinAccessor = v;

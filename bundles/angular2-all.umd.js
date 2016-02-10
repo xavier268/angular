@@ -1867,6 +1867,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return !isJsObject(obj);
 	}
 	exports.isPrimitive = isPrimitive;
+	function hasConstructor(value, type) {
+	    return value.constructor === type;
+	}
+	exports.hasConstructor = hasConstructor;
 
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
@@ -19287,11 +19291,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var builtinAccessor;
 	    var customAccessor;
 	    valueAccessors.forEach(function (v) {
-	        if (v instanceof default_value_accessor_1.DefaultValueAccessor) {
+	        if (lang_1.hasConstructor(v, default_value_accessor_1.DefaultValueAccessor)) {
 	            defaultAccessor = v;
 	        }
-	        else if (v instanceof checkbox_value_accessor_1.CheckboxControlValueAccessor || v instanceof number_value_accessor_1.NumberValueAccessor ||
-	            v instanceof select_control_value_accessor_1.SelectControlValueAccessor || v instanceof radio_control_value_accessor_1.RadioControlValueAccessor) {
+	        else if (lang_1.hasConstructor(v, checkbox_value_accessor_1.CheckboxControlValueAccessor) ||
+	            lang_1.hasConstructor(v, number_value_accessor_1.NumberValueAccessor) ||
+	            lang_1.hasConstructor(v, select_control_value_accessor_1.SelectControlValueAccessor) ||
+	            lang_1.hasConstructor(v, radio_control_value_accessor_1.RadioControlValueAccessor)) {
 	            if (lang_1.isPresent(builtinAccessor))
 	                _throwError(dir, "More than one built-in value accessor matches");
 	            builtinAccessor = v;

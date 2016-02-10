@@ -344,3 +344,6 @@ export function evalExpression(sourceUrl, expr, declarations, vars) {
 export function isPrimitive(obj) {
     return !isJsObject(obj);
 }
+export function hasConstructor(value, type) {
+    return value.constructor === type;
+}
