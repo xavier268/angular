@@ -3,7 +3,7 @@ library angular2.src.common.forms.directives.shared;
 import "package:angular2/src/facade/collection.dart"
     show ListWrapper, StringMapWrapper;
 import "package:angular2/src/facade/lang.dart"
-    show isBlank, isPresent, looseIdentical;
+    show isBlank, isPresent, looseIdentical, hasConstructor;
 import "package:angular2/src/facade/exceptions.dart"
     show BaseException, WrappedException;
 import "control_container.dart" show ControlContainer;
@@ -85,12 +85,12 @@ ControlValueAccessor selectValueAccessor(
   var builtinAccessor;
   var customAccessor;
   valueAccessors.forEach((v) {
-    if (v is DefaultValueAccessor) {
+    if (hasConstructor(v, DefaultValueAccessor)) {
       defaultAccessor = v;
-    } else if (v is CheckboxControlValueAccessor ||
-        v is NumberValueAccessor ||
-        v is SelectControlValueAccessor ||
-        v is RadioControlValueAccessor) {
+    } else if (hasConstructor(v, CheckboxControlValueAccessor) ||
+        hasConstructor(v, NumberValueAccessor) ||
+        hasConstructor(v, SelectControlValueAccessor) ||
+        hasConstructor(v, RadioControlValueAccessor)) {
       if (isPresent(builtinAccessor))
         _throwError(dir, "More than one built-in value accessor matches");
       builtinAccessor = v;
