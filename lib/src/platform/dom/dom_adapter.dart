@@ -100,10 +100,13 @@ abstract class DomAdapter {
   String tagName(element);
   Map<String, String> attributeMap(element);
   bool hasAttribute(element, String attribute);
+  bool hasAttributeNS(element, String ns, String attribute);
   String getAttribute(element, String attribute);
+  String getAttributeNS(element, String ns, String attribute);
   setAttribute(element, String name, String value);
   setAttributeNS(element, String ns, String name, String value);
   removeAttribute(element, String attribute);
+  removeAttributeNS(element, String ns, String attribute);
   templateAwareRoot(el);
   dynamic createHtmlDocument();
   dynamic defaultDoc();

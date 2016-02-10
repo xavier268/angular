@@ -1971,7 +1971,7 @@ Can\'t bind to \'unknown\' since it isn\'t a known native property ("<div [ERROR
                 if (!IS_DART) {
                   var firstAttribute =
                       DOM.getProperty((use as dynamic), "attributes")[0];
-                  expect(firstAttribute.name).toEqual("xlink:href");
+                  expect(firstAttribute.name).toEqual("href");
                   expect(firstAttribute.namespaceURI)
                       .toEqual("http://www.w3.org/1999/xlink");
                 } else {
@@ -1982,29 +1982,49 @@ Can\'t bind to \'unknown\' since it isn\'t a known native property ("<div [ERROR
                 async.done();
               });
             }));
+      });
+      describe("attributes", () {
         it(
-            "should support foreignObjects",
+            "should support attributes with namespace",
             inject([TestComponentBuilder, AsyncTestCompleter],
                 (TestComponentBuilder tcb, async) {
               tcb
                   .overrideView(
-                      MyComp,
+                      SomeCmp,
                       new ViewMetadata(
-                          template:
-                              "<svg><foreignObject><xhtml:div><p>Test</p></xhtml:div></foreignObject></svg>"))
-                  .createAsync(MyComp)
+                          template: "<svg:use xlink:href=\"#id\" />"))
+                  .createAsync(SomeCmp)
                   .then((fixture) {
-                var el = fixture.debugElement.nativeElement;
-                var svg = DOM.childNodes(el)[0];
-                var foreignObject = DOM.childNodes(svg)[0];
-                var p = DOM.childNodes(foreignObject)[0];
-                expect(DOM.getProperty((svg as dynamic), "namespaceURI"))
-                    .toEqual("http://www.w3.org/2000/svg");
-                expect(DOM.getProperty(
-                        (foreignObject as dynamic), "namespaceURI"))
-                    .toEqual("http://www.w3.org/2000/svg");
-                expect(DOM.getProperty((p as dynamic), "namespaceURI"))
-                    .toEqual("http://www.w3.org/1999/xhtml");
+                var useEl = DOM.firstChild(fixture.debugElement.nativeElement);
+                expect(DOM.getAttributeNS(
+                        useEl, "http://www.w3.org/1999/xlink", "href"))
+                    .toEqual("#id");
+                async.done();
+              });
+            }));
+        it(
+            "should support binding to attributes with namespace",
+            inject([TestComponentBuilder, AsyncTestCompleter],
+                (TestComponentBuilder tcb, async) {
+              tcb
+                  .overrideView(
+                      SomeCmp,
+                      new ViewMetadata(
+                          template: "<svg:use [attr.xlink:href]=\"value\" />"))
+                  .createAsync(SomeCmp)
+                  .then((fixture) {
+                var cmp = fixture.debugElement.componentInstance;
+                var useEl = DOM.firstChild(fixture.debugElement.nativeElement);
+                cmp.value = "#id";
+                fixture.detectChanges();
+                expect(DOM.getAttributeNS(
+                        useEl, "http://www.w3.org/1999/xlink", "href"))
+                    .toEqual("#id");
+                cmp.value = null;
+                fixture.detectChanges();
+                expect(DOM.hasAttributeNS(
+                        useEl, "http://www.w3.org/1999/xlink", "href"))
+                    .toEqual(false);
                 async.done();
               });
             }));
@@ -2623,4 +2643,9 @@ class DirectiveWithPropDecorators {
   fireEvent(msg) {
     ObservableWrapper.callEmit(this.event, msg);
   }
+}
+
+@Component(selector: "some-cmp")
+class SomeCmp {
+  dynamic value;
 }

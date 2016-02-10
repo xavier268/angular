@@ -25,8 +25,7 @@ import "util.dart" show camelCaseToDashCase;
 
 const NAMESPACE_URIS = const {
   "xlink": "http://www.w3.org/1999/xlink",
-  "svg": "http://www.w3.org/2000/svg",
-  "xhtml": "http://www.w3.org/1999/xhtml"
+  "svg": "http://www.w3.org/2000/svg"
 };
 const TEMPLATE_COMMENT_TEXT = "template bindings={}";
 var TEMPLATE_BINDINGS_EXP = new RegExp(r'^template bindings=(.*)$');
@@ -196,7 +195,7 @@ class DomRenderer implements Renderer {
     var attrNs;
     var nsAndName = splitNamespace(attributeName);
     if (isPresent(nsAndName[0])) {
-      attributeName = nsAndName[0] + ":" + nsAndName[1];
+      attributeName = nsAndName[1];
       attrNs = NAMESPACE_URIS[nsAndName[0]];
     }
     if (isPresent(attributeValue)) {
@@ -204,10 +203,14 @@ class DomRenderer implements Renderer {
         DOM.setAttributeNS(
             renderElement, attrNs, attributeName, attributeValue);
       } else {
-        DOM.setAttribute(renderElement, nsAndName[1], attributeValue);
+        DOM.setAttribute(renderElement, attributeName, attributeValue);
       }
     } else {
-      DOM.removeAttribute(renderElement, attributeName);
+      if (isPresent(attrNs)) {
+        DOM.removeAttributeNS(renderElement, attrNs, attributeName);
+      } else {
+        DOM.removeAttribute(renderElement, attributeName);
+      }
     }
   }
 
