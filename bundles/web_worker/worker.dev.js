@@ -19625,7 +19625,8 @@ System.register("angular2/src/compiler/schema/dom_element_schema_registry", ["an
   var element_schema_registry_1 = require("angular2/src/compiler/schema/element_schema_registry");
   var NAMESPACE_URIS = lang_1.CONST_EXPR({
     'xlink': 'http://www.w3.org/1999/xlink',
-    'svg': 'http://www.w3.org/2000/svg'
+    'svg': 'http://www.w3.org/2000/svg',
+    'xhtml': 'http://www.w3.org/1999/xhtml'
   });
   var DomElementSchemaRegistry = (function(_super) {
     __extends(DomElementSchemaRegistry, _super);
@@ -34984,7 +34985,8 @@ System.register("angular2/src/platform/dom/dom_renderer", ["angular2/src/core/di
   var util_1 = require("angular2/src/platform/dom/util");
   var NAMESPACE_URIS = lang_1.CONST_EXPR({
     'xlink': 'http://www.w3.org/1999/xlink',
-    'svg': 'http://www.w3.org/2000/svg'
+    'svg': 'http://www.w3.org/2000/svg',
+    'xhtml': 'http://www.w3.org/1999/xhtml'
   });
   var TEMPLATE_COMMENT_TEXT = 'template bindings={}';
   var TEMPLATE_BINDINGS_EXP = /^template bindings=(.*)$/g;

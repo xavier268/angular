@@ -27207,7 +27207,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	var dom_adapter_1 = __webpack_require__(173);
 	var html_tags_1 = __webpack_require__(166);
 	var element_schema_registry_1 = __webpack_require__(167);
-	var NAMESPACE_URIS = lang_1.CONST_EXPR({ 'xlink': 'http://www.w3.org/1999/xlink', 'svg': 'http://www.w3.org/2000/svg' });
+	var NAMESPACE_URIS = lang_1.CONST_EXPR({
+	    'xlink': 'http://www.w3.org/1999/xlink',
+	    'svg': 'http://www.w3.org/2000/svg',
+	    'xhtml': 'http://www.w3.org/1999/xhtml'
+	});
 	var DomElementSchemaRegistry = (function (_super) {
 	    __extends(DomElementSchemaRegistry, _super);
 	    function DomElementSchemaRegistry() {
@@ -27931,7 +27935,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	var metadata_1 = __webpack_require__(3);
 	var dom_adapter_1 = __webpack_require__(173);
 	var util_1 = __webpack_require__(189);
-	var NAMESPACE_URIS = lang_1.CONST_EXPR({ 'xlink': 'http://www.w3.org/1999/xlink', 'svg': 'http://www.w3.org/2000/svg' });
+	var NAMESPACE_URIS = lang_1.CONST_EXPR({
+	    'xlink': 'http://www.w3.org/1999/xlink',
+	    'svg': 'http://www.w3.org/2000/svg',
+	    'xhtml': 'http://www.w3.org/1999/xhtml'
+	});
 	var TEMPLATE_COMMENT_TEXT = 'template bindings={}';
 	var TEMPLATE_BINDINGS_EXP = /^template bindings=(.*)$/g;
 	var DomRootRenderer = (function () {
