@@ -14,7 +14,7 @@ import "package:angular2/src/core/change_detection/parser/ast.dart"
 import "directive_metadata.dart"
     show CompileDirectiveMetadata, CompilePipeMetadata;
 import "html_parser.dart" show HtmlParser;
-import "html_tags.dart" show splitNsName, mergeNsAndName;
+import "html_tags.dart" show splitNsName;
 import "parse_util.dart" show ParseSourceSpan, ParseError, ParseLocation;
 import "package:angular2/src/core/change_detection/parser/ast.dart"
     show RecursiveAstVisitor, BindingPipe;
@@ -666,12 +666,6 @@ class TemplateParseVisitor implements HtmlAstVisitor {
     } else {
       if (parts[0] == ATTRIBUTE_PREFIX) {
         boundPropertyName = parts[1];
-        var nsSeparatorIdx = boundPropertyName.indexOf(":");
-        if (nsSeparatorIdx > -1) {
-          var ns = boundPropertyName.substring(0, nsSeparatorIdx);
-          var name = boundPropertyName.substring(nsSeparatorIdx + 1);
-          boundPropertyName = mergeNsAndName(ns, name);
-        }
         bindingType = PropertyBindingType.Attribute;
       } else if (parts[0] == CLASS_PREFIX) {
         boundPropertyName = parts[1];

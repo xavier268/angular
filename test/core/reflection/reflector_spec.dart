@@ -30,7 +30,8 @@ class ClassWithDecorators {
   @PropDecorator("p2")
   var a;
   var b;
-  @PropDecorator("p3") set c(value) {}
+  @PropDecorator("p3")
+  set c(value) {}
   ClassWithDecorators(
       @ParamDecorator("a") AType a, @ParamDecorator("b") AType b) {
     this.a = a;

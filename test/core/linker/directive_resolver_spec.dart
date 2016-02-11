@@ -29,21 +29,26 @@ class SomeChildDirective extends SomeDirective {}
 
 @Directive(selector: "someDirective", inputs: const ["c"])
 class SomeDirectiveWithInputs {
-  @Input() var a;
-  @Input("renamed") var b;
+  @Input()
+  var a;
+  @Input("renamed")
+  var b;
   var c;
 }
 
 @Directive(selector: "someDirective", outputs: const ["c"])
 class SomeDirectiveWithOutputs {
-  @Output() var a;
-  @Output("renamed") var b;
+  @Output()
+  var a;
+  @Output("renamed")
+  var b;
   var c;
 }
 
 @Directive(selector: "someDirective", outputs: const ["a"])
 class SomeDirectiveWithDuplicateOutputs {
-  @Output() var a;
+  @Output()
+  var a;
 }
 
 @Directive(selector: "someDirective", properties: const ["a"])
@@ -54,55 +59,65 @@ class SomeDirectiveWithEvents {}
 
 @Directive(selector: "someDirective")
 class SomeDirectiveWithSetterProps {
-  @Input("renamed") set a(value) {}
+  @Input("renamed")
+  set a(value) {}
 }
 
 @Directive(selector: "someDirective")
 class SomeDirectiveWithGetterOutputs {
-  @Output("renamed") get a {
+  @Output("renamed")
+  get a {
     return null;
   }
 }
 
 @Directive(selector: "someDirective", host: const {"[c]": "c"})
 class SomeDirectiveWithHostBindings {
-  @HostBinding() var a;
-  @HostBinding("renamed") var b;
+  @HostBinding()
+  var a;
+  @HostBinding("renamed")
+  var b;
   var c;
 }
 
 @Directive(selector: "someDirective", host: const {"(c)": "onC()"})
 class SomeDirectiveWithHostListeners {
-  @HostListener("a") onA() {}
-  @HostListener("b", const ["\$event.value"]) onB(value) {}
+  @HostListener("a")
+  onA() {}
+  @HostListener("b", const ["\$event.value"])
+  onB(value) {}
 }
 
 @Directive(
     selector: "someDirective",
     queries: const {"cs": const ContentChildren("c")})
 class SomeDirectiveWithContentChildren {
-  @ContentChildren("a") dynamic as;
+  @ContentChildren("a")
+  dynamic as;
   var c;
 }
 
 @Directive(
     selector: "someDirective", queries: const {"cs": const ViewChildren("c")})
 class SomeDirectiveWithViewChildren {
-  @ViewChildren("a") dynamic as;
+  @ViewChildren("a")
+  dynamic as;
   var c;
 }
 
 @Directive(
     selector: "someDirective", queries: const {"c": const ContentChild("c")})
 class SomeDirectiveWithContentChild {
-  @ContentChild("a") dynamic a;
+  @ContentChild("a")
+  dynamic a;
   var c;
 }
 
 @Directive(
     selector: "someDirective", queries: const {"c": const ViewChild("c")})
 class SomeDirectiveWithViewChild {
-  @ViewChild("a") dynamic a;
+  @ViewChild("a")
+  dynamic a;
   var c;
 }
 
