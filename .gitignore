@@ -22,8 +22,7 @@ tmp
 *.js.map
 
 # Or type definitions we mirror from github
-**/typings/**/*.d.ts
-**/typings/tsd.cached.json
+# (NB: these lines are removed in publish-build-artifacts.sh)
 
 # Include when developing application packages.
 pubspec.lock
