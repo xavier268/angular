@@ -417,7 +417,3 @@ List<String> splitNsName(String elementName) {
 String getNsPrefix(String elementName) {
   return splitNsName(elementName)[0];
 }
-
-String mergeNsAndName(String prefix, String localName) {
-  return isPresent(prefix) ? '''@${ prefix}:${ localName}''' : localName;
-}
