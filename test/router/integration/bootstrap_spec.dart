@@ -273,10 +273,8 @@ class AppCmp {
 class AppWithViewChildren implements AfterViewInit {
   Router router;
   LocationStrategy location;
-  @ViewChild(HelloCmp)
-  HelloCmp helloCmp;
-  @ViewChild(Hello2Cmp)
-  Hello2Cmp hello2Cmp;
+  @ViewChild(HelloCmp) HelloCmp helloCmp;
+  @ViewChild(Hello2Cmp) Hello2Cmp hello2Cmp;
   AppWithViewChildren(this.router, this.location) {}
   ngAfterViewInit() {
     this.helloCmp.message = "Ahoy";
