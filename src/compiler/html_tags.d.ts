@@ -283,4 +283,3 @@ export declare class HtmlTagDefinition {
 export declare function getHtmlTagDefinition(tagName: string): HtmlTagDefinition;
 export declare function splitNsName(elementName: string): string[];
 export declare function getNsPrefix(elementName: string): string;
-export declare function mergeNsAndName(prefix: string, localName: string): string;
