@@ -20,7 +20,11 @@ import { DOCUMENT } from './dom_tokens';
 import { ViewEncapsulation } from 'angular2/src/core/metadata';
 import { DOM } from 'angular2/src/platform/dom/dom_adapter';
 import { camelCaseToDashCase } from './util';
-const NAMESPACE_URIS = CONST_EXPR({ 'xlink': 'http://www.w3.org/1999/xlink', 'svg': 'http://www.w3.org/2000/svg' });
+const NAMESPACE_URIS = CONST_EXPR({
+    'xlink': 'http://www.w3.org/1999/xlink',
+    'svg': 'http://www.w3.org/2000/svg',
+    'xhtml': 'http://www.w3.org/1999/xhtml'
+});
 const TEMPLATE_COMMENT_TEXT = 'template bindings={}';
 var TEMPLATE_BINDINGS_EXP = /^template bindings=(.*)$/g;
 export class DomRootRenderer {
@@ -157,7 +161,7 @@ export class DomRenderer {
         var attrNs;
         var nsAndName = splitNamespace(attributeName);
         if (isPresent(nsAndName[0])) {
-            attributeName = nsAndName[0] + ':' + nsAndName[1];
+            attributeName = nsAndName[1];
             attrNs = NAMESPACE_URIS[nsAndName[0]];
         }
         if (isPresent(attributeValue)) {
@@ -165,11 +169,16 @@ export class DomRenderer {
                 DOM.setAttributeNS(renderElement, attrNs, attributeName, attributeValue);
             }
             else {
-                DOM.setAttribute(renderElement, nsAndName[1], attributeValue);
+                DOM.setAttribute(renderElement, attributeName, attributeValue);
             }
         }
         else {
-            DOM.removeAttribute(renderElement, attributeName);
+            if (isPresent(attrNs)) {
+                DOM.removeAttributeNS(renderElement, attrNs, attributeName);
+            }
+            else {
+                DOM.removeAttribute(renderElement, attributeName);
+            }
         }
     }
     setBindingDebugInfo(renderElement, propertyName, propertyValue) {
