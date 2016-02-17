@@ -43,10 +43,6 @@ export declare class QueryList<T> {
      */
     reduce<U>(fn: (acc: U, item: T) => U, init: U): U;
     /**
-     * executes function for each element in a query.
-     */
-    forEach(fn: (item: T) => void): void;
-    /**
      * converts QueryList into an array
      */
     toArray(): T[];
