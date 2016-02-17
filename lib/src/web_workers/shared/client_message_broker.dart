@@ -1,16 +1,12 @@
 library angular2.src.web_workers.shared.client_message_broker;
 
+import "dart:async";
 import "package:angular2/src/web_workers/shared/message_bus.dart"
     show MessageBus;
 import "package:angular2/src/facade/lang.dart"
     show print, isPresent, DateWrapper, stringify;
 import "package:angular2/src/facade/async.dart"
-    show
-        Future,
-        PromiseCompleter,
-        PromiseWrapper,
-        ObservableWrapper,
-        EventEmitter;
+    show PromiseCompleter, PromiseWrapper, ObservableWrapper, EventEmitter;
 import "package:angular2/src/facade/collection.dart"
     show StringMapWrapper, MapWrapper;
 import "package:angular2/src/web_workers/shared/serializer.dart"

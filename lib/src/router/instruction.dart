@@ -1,9 +1,10 @@
 library angular2.src.router.instruction;
 
+import "dart:async";
 import "package:angular2/src/facade/collection.dart"
     show Map, MapWrapper, StringMapWrapper, ListWrapper;
 import "package:angular2/src/facade/lang.dart" show isPresent, isBlank, Type;
-import "package:angular2/src/facade/async.dart" show Future, PromiseWrapper;
+import "package:angular2/src/facade/async.dart" show PromiseWrapper;
 
 /**
  * `RouteParams` is an immutable map of parameters for the given route

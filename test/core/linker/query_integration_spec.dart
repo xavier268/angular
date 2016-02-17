@@ -672,7 +672,8 @@ class TextDirective {
 @Component(selector: "needs-content-children")
 @View(template: "")
 class NeedsContentChildren implements AfterContentInit {
-  @ContentChildren(TextDirective) QueryList<TextDirective> textDirChildren;
+  @ContentChildren(TextDirective)
+  QueryList<TextDirective> textDirChildren;
   num numberOfChildrenAfterContentInit;
   ngAfterContentInit() {
     this.numberOfChildrenAfterContentInit = this.textDirChildren.length;
@@ -682,7 +683,8 @@ class NeedsContentChildren implements AfterContentInit {
 @Component(selector: "needs-view-children")
 @View(template: "<div text></div>", directives: const [TextDirective])
 class NeedsViewChildren implements AfterViewInit {
-  @ViewChildren(TextDirective) QueryList<TextDirective> textDirChildren;
+  @ViewChildren(TextDirective)
+  QueryList<TextDirective> textDirChildren;
   num numberOfChildrenAfterViewInit;
   ngAfterViewInit() {
     this.numberOfChildrenAfterViewInit = this.textDirChildren.length;
@@ -693,7 +695,8 @@ class NeedsViewChildren implements AfterViewInit {
 @View(template: "")
 class NeedsContentChild implements AfterContentInit, AfterContentChecked {
   TextDirective _child;
-  @ContentChild(TextDirective) set child(value) {
+  @ContentChild(TextDirective)
+  set child(value) {
     this._child = value;
     this.log.add(["setter", isPresent(value) ? value.text : null]);
   }
@@ -721,7 +724,8 @@ class NeedsContentChild implements AfterContentInit, AfterContentChecked {
 class NeedsViewChild implements AfterViewInit, AfterViewChecked {
   bool shouldShow = true;
   TextDirective _child;
-  @ViewChild(TextDirective) set child(value) {
+  @ViewChild(TextDirective)
+  set child(value) {
     this._child = value;
     this.log.add(["setter", isPresent(value) ? value.text : null]);
   }
@@ -762,10 +766,14 @@ class NeedsQuery {
 @Component(selector: "needs-four-queries")
 @View(template: "")
 class NeedsFourQueries {
-  @ContentChild(TextDirective) TextDirective query1;
-  @ContentChild(TextDirective) TextDirective query2;
-  @ContentChild(TextDirective) TextDirective query3;
-  @ContentChild(TextDirective) TextDirective query4;
+  @ContentChild(TextDirective)
+  TextDirective query1;
+  @ContentChild(TextDirective)
+  TextDirective query2;
+  @ContentChild(TextDirective)
+  TextDirective query3;
+  @ContentChild(TextDirective)
+  TextDirective query4;
 }
 
 @Component(selector: "needs-query-desc")

@@ -93,7 +93,8 @@ class RadioControlValueAccessor
   Injector _injector;
   RadioButtonState _state;
   NgControl _control;
-  @Input() String name;
+  @Input()
+  String name;
   Function _fn;
   var onChange = () {};
   var onTouched = () {};

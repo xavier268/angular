@@ -1,11 +1,12 @@
 library angular2.src.router.component_recognizer;
 
+import "dart:async";
 import "package:angular2/src/facade/lang.dart" show isBlank, isPresent;
 import "package:angular2/src/facade/exceptions.dart"
     show BaseException, WrappedException;
 import "package:angular2/src/facade/collection.dart"
     show Map, MapWrapper, ListWrapper, StringMapWrapper;
-import "package:angular2/src/facade/async.dart" show Future, PromiseWrapper;
+import "package:angular2/src/facade/async.dart" show PromiseWrapper;
 import "route_recognizer.dart"
     show
         AbstractRecognizer,

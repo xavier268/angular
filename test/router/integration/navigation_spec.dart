@@ -18,7 +18,7 @@ import "package:angular2/testing_internal.dart"
         xit;
 import "package:angular2/core.dart"
     show provide, Component, View, Injector, Inject;
-import "package:angular2/src/facade/async.dart" show Future, PromiseWrapper;
+import "package:angular2/src/facade/async.dart" show PromiseWrapper;
 import "package:angular2/router.dart"
     show Router, RouterOutlet, RouterLink, RouteParams, RouteData, Location;
 import "package:angular2/src/router/route_config_decorator.dart"

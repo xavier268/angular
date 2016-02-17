@@ -1,8 +1,9 @@
 library angular2.src.router.route_recognizer;
 
+import "dart:async";
 import "package:angular2/src/facade/lang.dart" show isPresent, isBlank;
 import "package:angular2/src/facade/exceptions.dart" show BaseException;
-import "package:angular2/src/facade/promise.dart" show PromiseWrapper, Future;
+import "package:angular2/src/facade/promise.dart" show PromiseWrapper;
 import "package:angular2/src/facade/collection.dart" show Map;
 import "route_handler.dart" show RouteHandler;
 import "url_parser.dart" show Url;

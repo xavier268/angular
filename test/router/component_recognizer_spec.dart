@@ -1,5 +1,6 @@
 library angular2.test.router.component_recognizer_spec;
 
+import "dart:async";
 import "package:angular2/testing_internal.dart"
     show
         AsyncTestCompleter,
@@ -19,7 +20,7 @@ import "package:angular2/src/router/component_recognizer.dart"
 import "package:angular2/src/router/route_config_decorator.dart"
     show Route, Redirect;
 import "package:angular2/src/router/url_parser.dart" show parser;
-import "package:angular2/src/facade/promise.dart" show Future, PromiseWrapper;
+import "package:angular2/src/facade/promise.dart" show PromiseWrapper;
 
 main() {
   describe("ComponentRecognizer", () {

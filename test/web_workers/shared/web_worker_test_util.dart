@@ -1,5 +1,6 @@
 library angular2.test.web_workers.shared.web_worker_test_util;
 
+import "dart:async";
 import "package:angular2/src/facade/collection.dart"
     show StringMapWrapper, ListWrapper;
 import "package:angular2/src/facade/async.dart" show PromiseWrapper;
@@ -17,6 +18,7 @@ import "package:angular2/src/facade/exceptions.dart"
     show BaseException, WrappedException;
 import "package:angular2/src/core/zone/ng_zone.dart" show NgZone;
 
+Future<dynamic> ___unused;
 /**
  * Returns two MessageBus instances that are attached to each other.
  * Such that whatever goes into one's sink comes out the others source.

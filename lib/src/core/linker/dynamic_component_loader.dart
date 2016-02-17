@@ -1,11 +1,11 @@
 library angular2.src.core.linker.dynamic_component_loader;
 
+import "dart:async";
 import "package:angular2/src/core/di.dart"
     show Key, Injector, ResolvedProvider, Provider, provide, Injectable;
 import "compiler.dart" show Compiler;
 import "package:angular2/src/facade/lang.dart"
     show isType, Type, stringify, isPresent;
-import "package:angular2/src/facade/async.dart" show Future;
 import "package:angular2/src/core/linker/view_manager.dart" show AppViewManager;
 import "element_ref.dart" show ElementRef, ElementRef_;
 import "view_ref.dart" show HostViewRef;

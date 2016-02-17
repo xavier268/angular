@@ -1,5 +1,6 @@
 library angular2.test.router.integration.lifecycle_hook_spec;
 
+import "dart:async";
 import "package:angular2/testing_internal.dart"
     show
         ComponentFixture,
@@ -20,12 +21,7 @@ import "package:angular2/core.dart"
     show provide, Component, Injector, Inject, View;
 import "package:angular2/src/facade/lang.dart" show isPresent;
 import "package:angular2/src/facade/async.dart"
-    show
-        Future,
-        PromiseWrapper,
-        PromiseCompleter,
-        EventEmitter,
-        ObservableWrapper;
+    show PromiseWrapper, PromiseCompleter, EventEmitter, ObservableWrapper;
 import "package:angular2/router.dart"
     show Router, RouterOutlet, RouterLink, RouteParams;
 import "package:angular2/src/router/route_config_decorator.dart"

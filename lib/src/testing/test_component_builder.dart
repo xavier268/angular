@@ -1,5 +1,6 @@
 library angular2.src.testing.test_component_builder;
 
+import "dart:async";
 import "package:angular2/core.dart"
     show
         ComponentRef,
@@ -13,7 +14,6 @@ import "package:angular2/core.dart"
         ViewResolver,
         provide;
 import "package:angular2/src/facade/lang.dart" show Type, isPresent, isBlank;
-import "package:angular2/src/facade/async.dart" show Future;
 import "package:angular2/src/facade/collection.dart"
     show ListWrapper, MapWrapper;
 import "package:angular2/src/core/linker/view_ref.dart" show ViewRef_;

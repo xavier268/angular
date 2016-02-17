@@ -1,8 +1,9 @@
 library angular2.src.router.route_registry;
 
+import "dart:async";
 import "package:angular2/src/facade/collection.dart"
     show ListWrapper, Map, MapWrapper, StringMapWrapper;
-import "package:angular2/src/facade/async.dart" show Future, PromiseWrapper;
+import "package:angular2/src/facade/async.dart" show PromiseWrapper;
 import "package:angular2/src/facade/lang.dart"
     show
         isPresent,

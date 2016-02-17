@@ -1,5 +1,6 @@
 library angular2.test.compiler.style_compiler_spec;
 
+import "dart:async";
 import "package:angular2/testing_internal.dart"
     show
         ddescribe,
@@ -21,7 +22,7 @@ import "package:angular2/src/facade/exceptions.dart"
     show BaseException, WrappedException;
 import "package:angular2/src/facade/lang.dart"
     show isPresent, isBlank, StringWrapper, isArray, IS_DART;
-import "package:angular2/src/facade/async.dart" show PromiseWrapper, Future;
+import "package:angular2/src/facade/async.dart" show PromiseWrapper;
 import "eval_module.dart" show evalModule;
 import "package:angular2/src/compiler/style_compiler.dart" show StyleCompiler;
 import "package:angular2/src/compiler/directive_metadata.dart"

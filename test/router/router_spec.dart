@@ -1,5 +1,6 @@
 library angular2.test.router.router_spec;
 
+import "dart:async";
 import "package:angular2/testing_internal.dart"
     show
         AsyncTestCompleter,
@@ -15,7 +16,7 @@ import "package:angular2/testing_internal.dart"
 import "spies.dart" show SpyRouterOutlet;
 import "package:angular2/src/facade/lang.dart" show Type;
 import "package:angular2/src/facade/async.dart"
-    show Future, PromiseWrapper, ObservableWrapper;
+    show PromiseWrapper, ObservableWrapper;
 import "package:angular2/src/facade/collection.dart" show ListWrapper;
 import "package:angular2/src/router/router.dart" show Router, RootRouter;
 import "package:angular2/src/mock/location_mock.dart" show SpyLocation;

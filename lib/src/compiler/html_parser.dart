@@ -15,7 +15,7 @@ import "package:angular2/src/core/di.dart" show Injectable;
 import "html_lexer.dart" show HtmlToken, HtmlTokenType, tokenizeHtml;
 import "parse_util.dart" show ParseError, ParseLocation, ParseSourceSpan;
 import "html_tags.dart"
-    show HtmlTagDefinition, getHtmlTagDefinition, getNsPrefix, mergeNsAndName;
+    show HtmlTagDefinition, getHtmlTagDefinition, getNsPrefix;
 
 class HtmlTreeError extends ParseError {
   String elementName;
@@ -250,6 +250,10 @@ class TreeBuilder {
       this.rootNodes.add(node);
     }
   }
+}
+
+String mergeNsAndName(String prefix, String localName) {
+  return isPresent(prefix) ? '''@${ prefix}:${ localName}''' : localName;
 }
 
 String getElementFullName(

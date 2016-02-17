@@ -81,7 +81,8 @@ const List<dynamic> WORKER_RENDER_PLATFORM = const [
  */
 const List<dynamic> WORKER_RENDER_ROUTER = const [BrowserPlatformLocation];
 const List<dynamic> WORKER_RENDER_APPLICATION_COMMON = const [
-  APPLICATION_COMMON_PROVIDERS, WORKER_RENDER_MESSAGING_PROVIDERS,
+  APPLICATION_COMMON_PROVIDERS,
+  WORKER_RENDER_MESSAGING_PROVIDERS,
   const Provider(ExceptionHandler,
       useFactory: _exceptionHandler, deps: const []),
   const Provider(DOCUMENT, useFactory: _document, deps: const []),
@@ -90,12 +91,25 @@ const List<dynamic> WORKER_RENDER_APPLICATION_COMMON = const [
   // #5298
   const Provider(EVENT_MANAGER_PLUGINS, useClass: DomEventsPlugin, multi: true),
   const Provider(EVENT_MANAGER_PLUGINS, useClass: KeyEventsPlugin, multi: true),
-  const Provider(EVENT_MANAGER_PLUGINS, useClass: HammerGesturesPlugin, multi: true),
-  const Provider(DomRootRenderer, useClass: DomRootRenderer_), const Provider(RootRenderer, useExisting: DomRootRenderer),
-  const Provider(SharedStylesHost, useExisting: DomSharedStylesHost), const Provider(XHR, useClass: XHRImpl), MessageBasedXHRImpl,
-  const Provider(ServiceMessageBrokerFactory, useClass: ServiceMessageBrokerFactory_),
-  const Provider(ClientMessageBrokerFactory, useClass: ClientMessageBrokerFactory_), Serializer, const Provider(ON_WEB_WORKER, useValue: false), RenderStore,
-  DomSharedStylesHost, Testability, BrowserDetails, AnimationBuilder, EventManager
+  const Provider(EVENT_MANAGER_PLUGINS,
+      useClass: HammerGesturesPlugin, multi: true),
+  const Provider(DomRootRenderer, useClass: DomRootRenderer_),
+  const Provider(RootRenderer, useExisting: DomRootRenderer),
+  const Provider(SharedStylesHost, useExisting: DomSharedStylesHost),
+  const Provider(XHR, useClass: XHRImpl),
+  MessageBasedXHRImpl,
+  const Provider(ServiceMessageBrokerFactory,
+      useClass: ServiceMessageBrokerFactory_),
+  const Provider(ClientMessageBrokerFactory,
+      useClass: ClientMessageBrokerFactory_),
+  Serializer,
+  const Provider(ON_WEB_WORKER, useValue: false),
+  RenderStore,
+  DomSharedStylesHost,
+  Testability,
+  BrowserDetails,
+  AnimationBuilder,
+  EventManager
 ];
 initializeGenericWorkerRenderer(Injector injector) {
   var bus = injector.get(MessageBus);

@@ -1,5 +1,6 @@
 library angular2.test.compiler.template_compiler_spec;
 
+import "dart:async";
 import "package:angular2/testing_internal.dart"
     show
         ddescribe,
@@ -14,7 +15,7 @@ import "package:angular2/testing_internal.dart"
         AsyncTestCompleter,
         inject,
         beforeEachProviders;
-import "package:angular2/src/facade/async.dart" show Future, PromiseWrapper;
+import "package:angular2/src/facade/async.dart" show PromiseWrapper;
 import "package:angular2/src/facade/lang.dart"
     show Type, isPresent, isBlank, stringify, isString, IS_DART;
 import "package:angular2/src/facade/collection.dart"

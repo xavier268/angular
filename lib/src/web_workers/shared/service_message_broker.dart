@@ -1,5 +1,6 @@
 library angular2.src.web_workers.shared.service_message_broker;
 
+import "dart:async";
 import "package:angular2/src/core/di.dart" show Injectable;
 import "package:angular2/src/facade/collection.dart"
     show ListWrapper, Map, MapWrapper;
@@ -10,7 +11,7 @@ import "package:angular2/src/facade/lang.dart"
 import "package:angular2/src/web_workers/shared/message_bus.dart"
     show MessageBus;
 import "package:angular2/src/facade/async.dart"
-    show EventEmitter, Future, PromiseWrapper, ObservableWrapper;
+    show EventEmitter, PromiseWrapper, ObservableWrapper;
 
 abstract class ServiceMessageBrokerFactory {
   /**

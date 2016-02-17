@@ -1,5 +1,6 @@
 library angular2.test.compiler.xhr_mock_spec;
 
+import "dart:async";
 import "package:angular2/testing_internal.dart"
     show
         AsyncTestCompleter,
@@ -12,7 +13,7 @@ import "package:angular2/testing_internal.dart"
         inject,
         it;
 import "package:angular2/src/compiler/xhr_mock.dart" show MockXHR;
-import "package:angular2/src/facade/async.dart" show PromiseWrapper, Future;
+import "package:angular2/src/facade/async.dart" show PromiseWrapper;
 import "package:angular2/src/facade/lang.dart" show isPresent;
 
 main() {

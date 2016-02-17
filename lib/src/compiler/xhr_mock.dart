@@ -1,5 +1,6 @@
 library angular2.src.compiler.xhr_mock;
 
+import "dart:async";
 import "package:angular2/src/compiler/xhr.dart" show XHR;
 import "package:angular2/src/facade/collection.dart"
     show ListWrapper, Map, MapWrapper;
@@ -7,7 +8,7 @@ import "package:angular2/src/facade/lang.dart" show isBlank, isPresent;
 import "package:angular2/src/facade/exceptions.dart"
     show BaseException, WrappedException;
 import "package:angular2/src/facade/async.dart"
-    show PromiseCompleter, PromiseWrapper, Future;
+    show PromiseCompleter, PromiseWrapper;
 
 /**
  * A mock implementation of [XHR] that allows outgoing requests to be mocked

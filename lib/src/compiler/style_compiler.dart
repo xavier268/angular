@@ -1,5 +1,6 @@
 library angular2.src.compiler.style_compiler;
 
+import "dart:async";
 import "directive_metadata.dart"
     show CompileTypeMetadata, CompileTemplateMetadata;
 import "source_module.dart" show SourceModule, SourceExpression, moduleRef;
@@ -7,7 +8,7 @@ import "package:angular2/src/core/metadata/view.dart" show ViewEncapsulation;
 import "package:angular2/src/compiler/xhr.dart" show XHR;
 import "package:angular2/src/facade/lang.dart"
     show IS_DART, StringWrapper, isBlank;
-import "package:angular2/src/facade/async.dart" show PromiseWrapper, Future;
+import "package:angular2/src/facade/async.dart" show PromiseWrapper;
 import "package:angular2/src/compiler/shadow_css.dart" show ShadowCss;
 import "package:angular2/src/compiler/url_resolver.dart" show UrlResolver;
 import "style_url_resolver.dart" show extractStyleUrls;

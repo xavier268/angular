@@ -1,10 +1,11 @@
 library angular2.src.core.linker.compiler;
 
+import "dart:async";
 import "package:angular2/src/core/linker/view_ref.dart" show HostViewFactoryRef;
 import "package:angular2/src/core/di.dart" show Injectable;
 import "package:angular2/src/facade/lang.dart" show Type, isBlank, stringify;
 import "package:angular2/src/facade/exceptions.dart" show BaseException;
-import "package:angular2/src/facade/async.dart" show Future, PromiseWrapper;
+import "package:angular2/src/facade/async.dart" show PromiseWrapper;
 import "package:angular2/src/core/reflection/reflection.dart" show reflector;
 import "package:angular2/src/core/linker/view.dart" show HostViewFactory;
 import "package:angular2/src/core/linker/view_ref.dart"

@@ -1,5 +1,6 @@
 library angular2.src.core.application_ref;
 
+import "dart:async";
 import "package:angular2/src/core/zone/ng_zone.dart" show NgZone;
 import "package:angular2/src/facade/lang.dart"
     show Type, isBlank, isPresent, assertionsEnabled, print, IS_DART;
@@ -13,7 +14,7 @@ import "application_tokens.dart"
         PLATFORM_INITIALIZER,
         APP_INITIALIZER;
 import "package:angular2/src/facade/async.dart"
-    show Future, PromiseWrapper, PromiseCompleter, ObservableWrapper;
+    show PromiseWrapper, PromiseCompleter, ObservableWrapper;
 import "package:angular2/src/facade/collection.dart" show ListWrapper;
 import "package:angular2/src/core/testability/testability.dart"
     show TestabilityRegistry, Testability;

@@ -1,10 +1,11 @@
 library angular2.src.compiler.template_normalizer;
 
+import "dart:async";
 import "directive_metadata.dart"
     show CompileTypeMetadata, CompileDirectiveMetadata, CompileTemplateMetadata;
 import "package:angular2/src/facade/lang.dart" show isPresent, isBlank;
 import "package:angular2/src/facade/exceptions.dart" show BaseException;
-import "package:angular2/src/facade/async.dart" show Future, PromiseWrapper;
+import "package:angular2/src/facade/async.dart" show PromiseWrapper;
 import "package:angular2/src/compiler/xhr.dart" show XHR;
 import "package:angular2/src/compiler/url_resolver.dart" show UrlResolver;
 import "style_url_resolver.dart" show extractStyleUrls, isStyleUrlResolvable;

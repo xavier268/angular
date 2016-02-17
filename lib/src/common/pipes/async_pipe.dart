@@ -1,9 +1,10 @@
 library angular2.src.common.pipes.async_pipe;
 
+import "dart:async";
 import "package:angular2/src/facade/lang.dart"
     show isBlank, isPresent, isPromise;
 import "package:angular2/src/facade/async.dart"
-    show Future, ObservableWrapper, Stream, EventEmitter;
+    show ObservableWrapper, Stream, EventEmitter;
 import "package:angular2/core.dart"
     show
         Pipe,
@@ -41,6 +42,7 @@ class PromiseStrategy {
 
 var _promiseStrategy = new PromiseStrategy();
 var _observableStrategy = new ObservableStrategy();
+Future<dynamic> ___unused;
 
 /**
  * The `async` pipe subscribes to an Observable or Promise and returns the latest value it has

@@ -1,5 +1,6 @@
 library angular2.platform.browser;
 
+import "dart:async";
 export "package:angular2/src/core/angular_entrypoint.dart"
     show AngularEntrypoint;
 export "package:angular2/src/platform/browser_common.dart"
@@ -15,7 +16,6 @@ export "package:angular2/src/platform/browser_common.dart"
         enableDebugTools,
         disableDebugTools;
 import "package:angular2/src/facade/lang.dart" show Type, isPresent;
-import "package:angular2/src/facade/promise.dart" show Future;
 import "package:angular2/src/platform/browser_common.dart"
     show BROWSER_PROVIDERS, BROWSER_APP_COMMON_PROVIDERS;
 import "package:angular2/compiler.dart" show COMPILER_PROVIDERS;

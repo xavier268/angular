@@ -1,5 +1,6 @@
 library angular2.src.web_workers.ui.platform_location;
 
+import "dart:async";
 import "package:angular2/src/router/browser_platform_location.dart"
     show BrowserPlatformLocation;
 import "package:angular2/src/core/di.dart" show Injectable;
@@ -15,7 +16,7 @@ import "package:angular2/src/web_workers/shared/serialized_types.dart"
 import "package:angular2/src/web_workers/shared/message_bus.dart"
     show MessageBus;
 import "package:angular2/src/facade/async.dart"
-    show Future, EventEmitter, ObservableWrapper, PromiseWrapper;
+    show EventEmitter, ObservableWrapper, PromiseWrapper;
 import "package:angular2/src/router/platform_location.dart"
     show UrlChangeListener;
 

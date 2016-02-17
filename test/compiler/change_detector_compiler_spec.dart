@@ -1,5 +1,6 @@
 library angular2.test.compiler.change_detector_compiler_spec;
 
+import "dart:async";
 import "package:angular2/testing_internal.dart"
     show
         ddescribe,
@@ -17,7 +18,6 @@ import "package:angular2/testing_internal.dart"
 import "package:angular2/src/core/di.dart" show provide;
 import "package:angular2/src/facade/lang.dart" show stringify, IS_DART;
 import "package:angular2/src/facade/collection.dart" show MapWrapper;
-import "package:angular2/src/facade/async.dart" show Future;
 import "package:angular2/src/compiler/change_detector_compiler.dart"
     show ChangeDetectionCompiler;
 import "package:angular2/src/compiler/directive_metadata.dart"

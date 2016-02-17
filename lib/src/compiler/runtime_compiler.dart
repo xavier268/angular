@@ -1,5 +1,6 @@
 library angular2.src.compiler.runtime_compiler;
 
+import "dart:async";
 import "package:angular2/src/core/linker/compiler.dart"
     show Compiler, Compiler_;
 import "package:angular2/src/core/linker/view_ref.dart"
@@ -7,7 +8,6 @@ import "package:angular2/src/core/linker/view_ref.dart"
 import "template_compiler.dart" show TemplateCompiler;
 import "package:angular2/src/core/di.dart" show Injectable;
 import "package:angular2/src/facade/lang.dart" show Type;
-import "package:angular2/src/facade/async.dart" show Future, PromiseWrapper;
 
 abstract class RuntimeCompiler extends Compiler {
   Future<HostViewFactoryRef> compileInHost(Type componentType);
