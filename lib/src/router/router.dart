@@ -1,6 +1,5 @@
 library angular2.src.router.router;
 
-import "dart:async";
 import "package:angular2/src/facade/async.dart"
     show PromiseWrapper, EventEmitter, ObservableWrapper;
 import "package:angular2/src/facade/collection.dart"

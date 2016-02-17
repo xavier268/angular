@@ -1,6 +1,5 @@
 library angular2.src.compiler.style_compiler;
 
-import "dart:async";
 import "directive_metadata.dart"
     show CompileTypeMetadata, CompileTemplateMetadata;
 import "source_module.dart" show SourceModule, SourceExpression, moduleRef;

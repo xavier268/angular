@@ -1,6 +1,5 @@
 library angular2.src.core.linker.dynamic_component_loader;
 
-import "dart:async";
 import "package:angular2/src/core/di.dart"
     show Key, Injector, ResolvedProvider, Provider, provide, Injectable;
 import "compiler.dart" show Compiler;

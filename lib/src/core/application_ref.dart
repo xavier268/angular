@@ -1,6 +1,5 @@
 library angular2.src.core.application_ref;
 
-import "dart:async";
 import "package:angular2/src/core/zone/ng_zone.dart" show NgZone;
 import "package:angular2/src/facade/lang.dart"
     show Type, isBlank, isPresent, assertionsEnabled, print, IS_DART;

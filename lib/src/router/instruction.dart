@@ -1,6 +1,5 @@
 library angular2.src.router.instruction;
 
-import "dart:async";
 import "package:angular2/src/facade/collection.dart"
     show Map, MapWrapper, StringMapWrapper, ListWrapper;
 import "package:angular2/src/facade/lang.dart" show isPresent, isBlank, Type;

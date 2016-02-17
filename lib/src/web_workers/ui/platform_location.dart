@@ -1,6 +1,5 @@
 library angular2.src.web_workers.ui.platform_location;
 
-import "dart:async";
 import "package:angular2/src/router/browser_platform_location.dart"
     show BrowserPlatformLocation;
 import "package:angular2/src/core/di.dart" show Injectable;

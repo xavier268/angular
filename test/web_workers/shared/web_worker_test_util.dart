@@ -1,6 +1,5 @@
 library angular2.test.web_workers.shared.web_worker_test_util;
 
-import "dart:async";
 import "package:angular2/src/facade/collection.dart"
     show StringMapWrapper, ListWrapper;
 import "package:angular2/src/facade/async.dart" show PromiseWrapper;

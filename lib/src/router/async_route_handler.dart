@@ -1,6 +1,5 @@
 library angular2.src.router.async_route_handler;
 
-import "dart:async";
 import "package:angular2/src/facade/lang.dart" show isPresent, Type;
 import "route_handler.dart" show RouteHandler;
 import "instruction.dart" show RouteData, BLANK_ROUTE_DATA;

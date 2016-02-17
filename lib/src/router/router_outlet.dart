@@ -1,6 +1,5 @@
 library angular2.src.router.router_outlet;
 
-import "dart:async";
 import "package:angular2/src/facade/async.dart" show PromiseWrapper;
 import "package:angular2/src/facade/collection.dart" show StringMapWrapper;
 import "package:angular2/src/facade/lang.dart" show isBlank, isPresent;

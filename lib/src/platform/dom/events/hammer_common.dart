@@ -5,15 +5,8 @@ import "package:angular2/src/facade/collection.dart" show StringMapWrapper;
 
 var _eventNames = {
   // pan
-  "pan": true,
-  "panstart": true,
-  "panmove": true,
-  "panend": true,
-  "pancancel": true,
-  "panleft": true,
-  "panright": true,
-  "panup": true,
-  "pandown": true,
+  "pan": true, "panstart": true, "panmove": true, "panend": true, "pancancel":
+      true, "panleft": true, "panright": true, "panup": true, "pandown": true,
   // pinch
   "pinch": true, "pinchstart": true, "pinchmove": true, "pinchend": true,
   "pinchcancel": true, "pinchin": true, "pinchout": true,

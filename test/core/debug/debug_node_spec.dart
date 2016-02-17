@@ -167,10 +167,8 @@ class LocalsComp {}
    Account Id: {{id}}
  ''')
 class BankAccount {
-  @Input()
-  String bank;
-  @Input("account")
-  String id;
+  @Input() String bank;
+  @Input("account") String id;
   String normalizedBankName;
 }
 

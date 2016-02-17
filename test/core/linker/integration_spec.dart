@@ -1,6 +1,5 @@
 library angular2.test.core.linker.integration_spec;
 
-import "dart:async";
 import "package:angular2/testing_internal.dart"
     show
         AsyncTestCompleter,
@@ -2310,8 +2309,7 @@ class IdDir {
 @Directive(selector: "[customEvent]")
 @Injectable()
 class EventDir {
-  @Output()
-  var customEvent = new EventEmitter();
+  @Output() var customEvent = new EventEmitter();
   doSomething() {}
 }
 
@@ -2584,14 +2582,10 @@ class ComponentWithTemplate {
 @Directive(selector: "with-prop-decorators")
 class DirectiveWithPropDecorators {
   var target;
-  @Input("elProp")
-  String dirProp;
-  @Output("elEvent")
-  var event = new EventEmitter();
-  @HostBinding("attr.my-attr")
-  String myAttr;
-  @HostListener("click", const ["\$event.target"])
-  onClick(target) {
+  @Input("elProp") String dirProp;
+  @Output("elEvent") var event = new EventEmitter();
+  @HostBinding("attr.my-attr") String myAttr;
+  @HostListener("click", const ["\$event.target"]) onClick(target) {
     this.target = target;
   }
 

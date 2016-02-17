@@ -1,6 +1,5 @@
 library angular2.test.compiler.style_compiler_spec;
 
-import "dart:async";
 import "package:angular2/testing_internal.dart"
     show
         ddescribe,

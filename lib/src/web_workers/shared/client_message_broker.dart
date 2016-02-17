@@ -1,6 +1,5 @@
 library angular2.src.web_workers.shared.client_message_broker;
 
-import "dart:async";
 import "package:angular2/src/web_workers/shared/message_bus.dart"
     show MessageBus;
 import "package:angular2/src/facade/lang.dart"

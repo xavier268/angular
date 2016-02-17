@@ -1,6 +1,5 @@
 library angular2.src.compiler.template_compiler;
 
-import "dart:async";
 import "package:angular2/src/facade/lang.dart"
     show IS_DART, Type, Json, isBlank, isPresent, stringify, evalExpression;
 import "package:angular2/src/facade/exceptions.dart" show BaseException;
