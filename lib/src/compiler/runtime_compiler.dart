@@ -1,5 +1,6 @@
 library angular2.src.compiler.runtime_compiler;
 
+import "dart:async";
 import "package:angular2/src/core/linker/compiler.dart"
     show Compiler, Compiler_;
 import "package:angular2/src/core/linker/view_ref.dart"

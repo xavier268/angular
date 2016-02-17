@@ -1,5 +1,6 @@
 library angular2.src.router.sync_route_handler;
 
+import "dart:async";
 import "package:angular2/src/facade/async.dart" show PromiseWrapper;
 import "package:angular2/src/facade/lang.dart" show isPresent, Type;
 import "route_handler.dart" show RouteHandler;

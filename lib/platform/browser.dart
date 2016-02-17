@@ -1,5 +1,6 @@
 library angular2.platform.browser;
 
+import "dart:async";
 export "package:angular2/src/core/angular_entrypoint.dart"
     show AngularEntrypoint;
 export "package:angular2/src/platform/browser_common.dart"

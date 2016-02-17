@@ -1,5 +1,6 @@
 library angular2.src.web_workers.worker.platform_location;
 
+import "dart:async";
 import "package:angular2/src/core/di.dart" show Injectable;
 import "package:angular2/src/router/platform_location.dart"
     show PlatformLocation, UrlChangeEvent, UrlChangeListener;

@@ -1,5 +1,6 @@
 library angular2.src.compiler.template_normalizer;
 
+import "dart:async";
 import "directive_metadata.dart"
     show CompileTypeMetadata, CompileDirectiveMetadata, CompileTemplateMetadata;
 import "package:angular2/src/facade/lang.dart" show isPresent, isBlank;

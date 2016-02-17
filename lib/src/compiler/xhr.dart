@@ -6,6 +6,8 @@
  */
 library angular2.src.compiler.xhr;
 
+import "dart:async";
+
 class XHR {
   Future<String> get(String url) {
     return null;

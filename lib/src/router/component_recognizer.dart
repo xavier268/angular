@@ -1,5 +1,6 @@
 library angular2.src.router.component_recognizer;
 
+import "dart:async";
 import "package:angular2/src/facade/lang.dart" show isBlank, isPresent;
 import "package:angular2/src/facade/exceptions.dart"
     show BaseException, WrappedException;

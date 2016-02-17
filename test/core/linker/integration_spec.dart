@@ -1,5 +1,6 @@
 library angular2.test.core.linker.integration_spec;
 
+import "dart:async";
 import "package:angular2/testing_internal.dart"
     show
         AsyncTestCompleter,
@@ -1978,6 +1979,52 @@ Can\'t bind to \'unknown\' since it isn\'t a known native property ("<div [ERROR
               });
             }));
       });
+      describe("attributes", () {
+        it(
+            "should support attributes with namespace",
+            inject([TestComponentBuilder, AsyncTestCompleter],
+                (TestComponentBuilder tcb, async) {
+              tcb
+                  .overrideView(
+                      SomeCmp,
+                      new ViewMetadata(
+                          template: "<svg:use xlink:href=\"#id\" />"))
+                  .createAsync(SomeCmp)
+                  .then((fixture) {
+                var useEl = DOM.firstChild(fixture.debugElement.nativeElement);
+                expect(DOM.getAttributeNS(
+                        useEl, "http://www.w3.org/1999/xlink", "href"))
+                    .toEqual("#id");
+                async.done();
+              });
+            }));
+        it(
+            "should support binding to attributes with namespace",
+            inject([TestComponentBuilder, AsyncTestCompleter],
+                (TestComponentBuilder tcb, async) {
+              tcb
+                  .overrideView(
+                      SomeCmp,
+                      new ViewMetadata(
+                          template: "<svg:use [attr.xlink:href]=\"value\" />"))
+                  .createAsync(SomeCmp)
+                  .then((fixture) {
+                var cmp = fixture.debugElement.componentInstance;
+                var useEl = DOM.firstChild(fixture.debugElement.nativeElement);
+                cmp.value = "#id";
+                fixture.detectChanges();
+                expect(DOM.getAttributeNS(
+                        useEl, "http://www.w3.org/1999/xlink", "href"))
+                    .toEqual("#id");
+                cmp.value = null;
+                fixture.detectChanges();
+                expect(DOM.hasAttributeNS(
+                        useEl, "http://www.w3.org/1999/xlink", "href"))
+                    .toEqual(false);
+                async.done();
+              });
+            }));
+      });
     }
   });
 }
@@ -2309,7 +2356,8 @@ class IdDir {
 @Directive(selector: "[customEvent]")
 @Injectable()
 class EventDir {
-  @Output() var customEvent = new EventEmitter();
+  @Output()
+  var customEvent = new EventEmitter();
   doSomething() {}
 }
 
@@ -2582,14 +2630,23 @@ class ComponentWithTemplate {
 @Directive(selector: "with-prop-decorators")
 class DirectiveWithPropDecorators {
   var target;
-  @Input("elProp") String dirProp;
-  @Output("elEvent") var event = new EventEmitter();
-  @HostBinding("attr.my-attr") String myAttr;
-  @HostListener("click", const ["\$event.target"]) onClick(target) {
+  @Input("elProp")
+  String dirProp;
+  @Output("elEvent")
+  var event = new EventEmitter();
+  @HostBinding("attr.my-attr")
+  String myAttr;
+  @HostListener("click", const ["\$event.target"])
+  onClick(target) {
     this.target = target;
   }
 
   fireEvent(msg) {
     ObservableWrapper.callEmit(this.event, msg);
   }
+}
+
+@Component(selector: "some-cmp")
+class SomeCmp {
+  dynamic value;
 }

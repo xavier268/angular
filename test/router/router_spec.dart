@@ -1,5 +1,6 @@
 library angular2.test.router.router_spec;
 
+import "dart:async";
 import "package:angular2/testing_internal.dart"
     show
         AsyncTestCompleter,
