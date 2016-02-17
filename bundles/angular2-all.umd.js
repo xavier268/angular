@@ -15308,6 +15308,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	    QueryList.prototype.reduce = function (fn, init) { return this._results.reduce(fn, init); };
 	    /**
+	     * executes function for each element in a query.
+	     */
+	    QueryList.prototype.forEach = function (fn) { this._results.forEach(fn); };
+	    /**
 	     * converts QueryList into an array
 	     */
 	    QueryList.prototype.toArray = function () { return collection_1.ListWrapper.clone(this._results); };

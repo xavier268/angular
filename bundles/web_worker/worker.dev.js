@@ -6421,6 +6421,9 @@ System.register("angular2/src/core/linker/query_list", ["angular2/src/facade/col
     QueryList.prototype.reduce = function(fn, init) {
       return this._results.reduce(fn, init);
     };
+    QueryList.prototype.forEach = function(fn) {
+      this._results.forEach(fn);
+    };
     QueryList.prototype.toArray = function() {
       return collection_1.ListWrapper.clone(this._results);
     };
