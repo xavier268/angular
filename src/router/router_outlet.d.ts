@@ -1,4 +1,3 @@
-import { Promise } from 'angular2/src/facade/async';
 import { DynamicComponentLoader, ElementRef } from 'angular2/core';
 import * as routerMod from './router';
 import { ComponentInstruction } from './instruction';

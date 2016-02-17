@@ -1,4 +1,3 @@
-import { Promise } from 'angular2/src/facade/async';
 import { ComponentInstruction } from './instruction';
 export { routerCanReuse, routerCanDeactivate, routerOnActivate, routerOnReuse, routerOnDeactivate } from './lifecycle_annotations_impl';
 /**

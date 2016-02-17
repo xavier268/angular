@@ -1,4 +1,3 @@
-import { Promise } from 'angular2/src/facade/promise';
 import { RouteHandler } from './route_handler';
 import { Url } from './url_parser';
 import { ComponentInstruction } from './instruction';

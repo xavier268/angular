@@ -1,4 +1,3 @@
-export { Promise };
 export interface PromiseCompleter<R> {
     promise: Promise<R>;
     resolve: (value?: R | PromiseLike<R>) => void;

@@ -1,4 +1,3 @@
-import { Promise } from 'angular2/src/facade/async';
 /**
  * `RouteParams` is an immutable map of parameters for the given route
  * based on the url matcher and optional parameters for that route.

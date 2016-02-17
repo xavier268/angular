@@ -1,4 +1,3 @@
-import { Promise } from 'angular2/src/facade/async';
 import { AbstractRecognizer, RouteRecognizer, RouteMatch } from './route_recognizer';
 import { RouteDefinition } from './route_config_impl';
 import { Url } from './url_parser';

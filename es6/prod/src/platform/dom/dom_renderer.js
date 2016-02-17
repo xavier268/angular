@@ -165,16 +165,11 @@ export class DomRenderer {
                 DOM.setAttributeNS(renderElement, attrNs, attributeName, attributeValue);
             }
             else {
-                DOM.setAttribute(renderElement, attributeName, attributeValue);
+                DOM.setAttribute(renderElement, nsAndName[1], attributeValue);
             }
         }
         else {
-            if (isPresent(attrNs)) {
-                DOM.removeAttributeNS(renderElement, attrNs, nsAndName[1]);
-            }
-            else {
-                DOM.removeAttribute(renderElement, attributeName);
-            }
+            DOM.removeAttribute(renderElement, attributeName);
         }
     }
     setBindingDebugInfo(renderElement, propertyName, propertyValue) {

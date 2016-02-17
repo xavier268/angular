@@ -27,6 +27,7 @@ class PromiseStrategy {
 }
 var _promiseStrategy = new PromiseStrategy();
 var _observableStrategy = new ObservableStrategy();
+var __unused; // avoid unused import when Promise union types are erased
 /**
  * The `async` pipe subscribes to an Observable or Promise and returns the latest value it has
  * emitted.
@@ -119,6 +120,7 @@ export let AsyncPipe = class {
     }
 };
 AsyncPipe = __decorate([
+    // avoid unused import when Promise union types are erased
     Pipe({ name: 'async', pure: false }),
     Injectable(), 
     __metadata('design:paramtypes', [ChangeDetectorRef])
