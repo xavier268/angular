@@ -273,7 +273,7 @@ commonTests() {
           }, resultTimer);
         }),
         testTimeout);
-    it(
+    xit(
         "should run subscriber listeners in the subscription zone (outside)",
         inject([AsyncTestCompleter], (async) {
           // Each subscriber fires a microtask outside the Angular zone. The test
