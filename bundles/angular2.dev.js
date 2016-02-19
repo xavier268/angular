@@ -9974,9 +9974,11 @@ System.register("angular2/src/core/change_detection/dynamic_change_detector", ["
         if (proto.isSkipRecord()) {
           protoIdx += this._computeSkipLength(protoIdx, proto, values);
         } else {
-          var res = this._calculateCurrValue(proto, values, locals);
           if (proto.lastInBinding) {
             this._markPathAsCheckOnce(proto);
+          }
+          var res = this._calculateCurrValue(proto, values, locals);
+          if (proto.lastInBinding) {
             return res;
           } else {
             this._writeSelf(proto, res, values);
@@ -10433,7 +10435,7 @@ System.register("angular2/src/core/change_detection/change_detection_jit_generat
         var evalRecord = this._logic.genEventBindingEvalValue(eb, r);
         var markPath = this._genMarkPathToRootAsCheckOnce(r);
         var prevDefault = this._genUpdatePreventDefault(eb, r);
-        return evalRecord + "\n" + markPath + "\n" + prevDefault;
+        return markPath + "\n" + evalRecord + "\n" + prevDefault;
       } else {
         return this._logic.genEventBindingEvalValue(eb, r);
       }
