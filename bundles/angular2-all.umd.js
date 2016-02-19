@@ -10256,11 +10256,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                protoIdx += this._computeSkipLength(protoIdx, proto, values);
 	            }
 	            else {
-	                if (proto.lastInBinding) {
-	                    this._markPathAsCheckOnce(proto);
-	                }
 	                var res = this._calculateCurrValue(proto, values, locals);
 	                if (proto.lastInBinding) {
+	                    this._markPathAsCheckOnce(proto);
 	                    return res;
 	                }
 	                else {
@@ -12464,7 +12462,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var evalRecord = this._logic.genEventBindingEvalValue(eb, r);
 	            var markPath = this._genMarkPathToRootAsCheckOnce(r);
 	            var prevDefault = this._genUpdatePreventDefault(eb, r);
-	            return markPath + "\n" + evalRecord + "\n" + prevDefault;
+	            return evalRecord + "\n" + markPath + "\n" + prevDefault;
 	        }
 	        else {
 	            return this._logic.genEventBindingEvalValue(eb, r);

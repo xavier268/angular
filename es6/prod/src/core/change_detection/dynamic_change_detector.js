@@ -42,11 +42,9 @@ export class DynamicChangeDetector extends AbstractChangeDetector {
                 protoIdx += this._computeSkipLength(protoIdx, proto, values);
             }
             else {
-                if (proto.lastInBinding) {
-                    this._markPathAsCheckOnce(proto);
-                }
                 var res = this._calculateCurrValue(proto, values, locals);
                 if (proto.lastInBinding) {
+                    this._markPathAsCheckOnce(proto);
                     return res;
                 }
                 else {
