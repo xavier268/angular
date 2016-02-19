@@ -808,38 +808,6 @@ declareTests() {
                 async.done();
               });
             }));
-        if (DOM.supportsDOMEvents()) {
-          it(
-              "should allow to destroy a component from within a host event handler",
-              inject([TestComponentBuilder],
-                  fakeAsync((TestComponentBuilder tcb) {
-                ComponentFixture fixture;
-                tcb
-                    .overrideView(
-                        MyComp,
-                        new ViewMetadata(
-                            template:
-                                "<push-cmp-with-host-event></push-cmp-with-host-event>",
-                            directives: [
-                              [
-                                [PushCmpWithHostEvent]
-                              ]
-                            ]))
-                    .createAsync(MyComp)
-                    .then((root) {
-                  fixture = root;
-                });
-                tick();
-                fixture.detectChanges();
-                var cmpEl = fixture.debugElement.children[0];
-                PushCmpWithHostEvent cmp = cmpEl.inject(PushCmpWithHostEvent);
-                cmp.ctxCallback = (_) => fixture.destroy();
-                expect(() =>
-                        cmpEl.triggerEventHandler("click", ({} as dynamic)))
-                    .not
-                    .toThrow();
-              })));
-        }
         it(
             "should not affect updating properties on the component",
             inject([TestComponentBuilder, AsyncTestCompleter],
@@ -2111,15 +2079,6 @@ class PushCmpWithRef {
   propagate() {
     this.ref.markForCheck();
   }
-}
-
-@Component(
-    selector: "push-cmp-with-host-event",
-    host: const {"(click)": "ctxCallback(\$event)"},
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    template: "")
-class PushCmpWithHostEvent {
-  Function ctxCallback = (_) {};
 }
 
 @Component(
