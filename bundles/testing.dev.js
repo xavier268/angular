@@ -1858,6 +1858,10 @@ System.register("angular2/src/testing/test_injector", ["angular2/core", "angular
       return this._injector;
     };
     TestInjector.prototype.execute = function(fn) {
+      var additionalProviders = fn.additionalProviders();
+      if (additionalProviders.length > 0) {
+        this.addProviders(additionalProviders);
+      }
       if (!this._instantiated) {
         this.createInjector();
       }
@@ -1902,15 +1906,39 @@ System.register("angular2/src/testing/test_injector", ["angular2/core", "angular
     return new FunctionWithParamTokens(tokens, fn, false);
   }
   exports.inject = inject;
+  var InjectSetupWrapper = (function() {
+    function InjectSetupWrapper(_providers) {
+      this._providers = _providers;
+    }
+    InjectSetupWrapper.prototype.inject = function(tokens, fn) {
+      return new FunctionWithParamTokens(tokens, fn, false, this._providers);
+    };
+    InjectSetupWrapper.prototype.injectAsync = function(tokens, fn) {
+      return new FunctionWithParamTokens(tokens, fn, true, this._providers);
+    };
+    return InjectSetupWrapper;
+  })();
+  exports.InjectSetupWrapper = InjectSetupWrapper;
+  function withProviders(providers) {
+    return new InjectSetupWrapper(providers);
+  }
+  exports.withProviders = withProviders;
   function injectAsync(tokens, fn) {
     return new FunctionWithParamTokens(tokens, fn, true);
   }
   exports.injectAsync = injectAsync;
+  function emptyArray() {
+    return [];
+  }
   var FunctionWithParamTokens = (function() {
-    function FunctionWithParamTokens(_tokens, _fn, isAsync) {
+    function FunctionWithParamTokens(_tokens, _fn, isAsync, additionalProviders) {
+      if (additionalProviders === void 0) {
+        additionalProviders = emptyArray;
+      }
       this._tokens = _tokens;
       this._fn = _fn;
       this.isAsync = isAsync;
+      this.additionalProviders = additionalProviders;
     }
     FunctionWithParamTokens.prototype.execute = function(injector) {
       var params = this._tokens.map(function(t) {
