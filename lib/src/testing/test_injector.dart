@@ -40,6 +40,10 @@ class TestInjector {
   }
 
   dynamic execute(FunctionWithParamTokens fn) {
+    var additionalProviders = fn.additionalProviders();
+    if (additionalProviders.length > 0) {
+      this.addProviders(additionalProviders);
+    }
     if (!this._instantiated) {
       this.createInjector();
     }
@@ -126,6 +130,22 @@ FunctionWithParamTokens inject(List<dynamic> tokens, Function fn) {
   return new FunctionWithParamTokens(tokens, fn, false);
 }
 
+class InjectSetupWrapper {
+  dynamic /* () => any */ _providers;
+  InjectSetupWrapper(this._providers) {}
+  FunctionWithParamTokens inject(List<dynamic> tokens, Function fn) {
+    return new FunctionWithParamTokens(tokens, fn, false, this._providers);
+  }
+
+  FunctionWithParamTokens injectAsync(List<dynamic> tokens, Function fn) {
+    return new FunctionWithParamTokens(tokens, fn, true, this._providers);
+  }
+}
+
+withProviders(dynamic /* () => any */ providers) {
+  return new InjectSetupWrapper(providers);
+}
+
 /**
  * Allows injecting dependencies in `beforeEach()` and `it()`. The test must return
  * a promise which will resolve when all asynchronous activity is complete.
@@ -148,11 +168,17 @@ FunctionWithParamTokens injectAsync(List<dynamic> tokens, Function fn) {
   return new FunctionWithParamTokens(tokens, fn, true);
 }
 
+List<dynamic> emptyArray() {
+  return [];
+}
+
 class FunctionWithParamTokens {
   List<dynamic> _tokens;
   Function _fn;
   bool isAsync;
-  FunctionWithParamTokens(this._tokens, this._fn, this.isAsync) {}
+  dynamic /* () => any */ additionalProviders;
+  FunctionWithParamTokens(this._tokens, this._fn, this.isAsync,
+      [this.additionalProviders = emptyArray]) {}
   /**
    * Returns the value of the executed function.
    */
